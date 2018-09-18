@@ -1,0 +1,63 @@
+/* Base Application Styles */
+
+// Import Bootstrap Compass integration
+// Import Bootstrap for Sass
+
+//@import "bootstrap-sprockets";
+// Import custom Bootstrap variables
+//@import "bootstrap-variables";
+
+//@import "bootstrap-custom";
+//@import "bootstrap-custom";
+
+
+@import "~bootstrap/scss/bootstrap";
+@import "compass/layout/stretching";
+
+
+$bavbar-height:50px;
+$list-group-width:250px;
+
+//main container of main page
+#web-console-ui{
+    width: 100%;
+    padding: 0;
+    @include stretch(0,0,0,0);
+}
+
+div.app-context-body{
+    @include stretch($bavbar-height,0,0,0);
+
+    .list-group-container{
+        width: $list-group-width;
+        @include stretch(0,0,0,0);
+        background-color: whitesmoke;
+        border-right: 1px solid #cccccc;
+        li.list-group-item{
+            border: none;
+            background: none;
+            &.active{
+                color: black;
+                font-weight: bold;
+            }
+        }
+        div.application-summary-couter{
+            padding: 20px;
+            border-bottom: 1px solid #cccccc;
+            span.applicaton-couter{
+                float: right;
+            }
+            span.applicaton-couter-title{
+                text-transform: uppercase;
+            }
+        }
+    }
+    .content-body{
+        @include stretch(0,0,0,$list-group-width); 
+    }
+}
+
+nav.navbar-custom{
+    border-bottom: 1px solid #cccccc;
+    height: $bavbar-height;
+}

@@ -1,0 +1,1 @@
+-Dspringloaded=verbose;explain -javaagent:D:\git-home\microservices\lib\springloaded-1.2.5.RELEASE.jar -noverify
