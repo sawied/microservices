@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    database: MYSQL
+    show-sql: true
+  datasource:
+    name: trade
+    data-username: trade
+    username: trade
+    password: password
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/trade?useSSL=false
