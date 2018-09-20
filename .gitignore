@@ -1,0 +1,13 @@
+**/target/
+**/WEB-INF/classes/
+**/WEB-INF/lib/
+**/.settings/**/*.*
+**/.classpath
+*.jar
+**/.idea/**
+**/*.iml
+**/bin/
+**/dojo/**
+**/*.log
+.mvn
+Servers*/**
