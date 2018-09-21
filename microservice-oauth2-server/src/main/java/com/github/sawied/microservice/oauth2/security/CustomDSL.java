@@ -7,10 +7,10 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class CustomDSL extends AbstractHttpConfigurer<CustomDSL, HttpSecurity> {
 
 	@Override
-	public void configure(HttpSecurity builder) throws Exception {
-		
-		//builder.formLogin().authenticationDetailsSource(new CustomWebAuthenticationDetailsSource());
-		
+	public void init(HttpSecurity builder) throws Exception {
+		builder.httpBasic().authenticationDetailsSource(new CustomWebAuthenticationDetailsSource());
 	}
+	
+	
 
 }

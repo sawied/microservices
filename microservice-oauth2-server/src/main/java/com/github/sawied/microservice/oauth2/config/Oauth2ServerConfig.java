@@ -1,7 +1,6 @@
 package com.github.sawied.microservice.oauth2.config;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -38,6 +29,9 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
+import com.github.sawied.microservice.oauth2.jpa.service.AccountService;
+import com.github.sawied.microservice.oauth2.security.AccountAuthenticationDetailService;
+import com.github.sawied.microservice.oauth2.security.AdditionInfoTokenEnhancer;
 import com.github.sawied.microservice.oauth2.security.JpaAuthenticationProvider;
 
 
@@ -56,6 +50,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Autowired
 	@Qualifier("tokenServices")
 	private AuthorizationServerTokenServices tokenServices;
+	@Autowired
+	@Qualifier("jpaAuthenticationProvider")
+	private AuthenticationProvider jpaAuthenticationProvider;
 	
 
 	
@@ -71,12 +68,27 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		List<AuthenticationProvider> AuthenticationProviders = new ArrayList<AuthenticationProvider>();
-		AuthenticationProviders.add(jpaAuthenticationProvider());
+		AuthenticationProviders.add(jpaAuthenticationProvider);
 		ProviderManager pm = new ProviderManager(AuthenticationProviders);
 		endpoints.tokenStore(tokenStore).userApprovalHandler(approvalHandler).authenticationManager(pm).tokenServices(tokenServices);
 	}
-
 	
+	
+	
+	@Bean
+	public AccountAuthenticationDetailService userDetailService(AccountService accountService){
+		AccountAuthenticationDetailService userDetailService = new AccountAuthenticationDetailService();
+		userDetailService.setAccountService(accountService);
+		return userDetailService;
+	}
+
+	@Bean
+	public JpaAuthenticationProvider jpaAuthenticationProvider(AccountAuthenticationDetailService userDetailService) {
+		JpaAuthenticationProvider jpaAuthenticationProvider = new JpaAuthenticationProvider();
+		jpaAuthenticationProvider.setUserDetailsService(userDetailService);
+		return jpaAuthenticationProvider;
+	}
+	/**
 	public JpaAuthenticationProvider jpaAuthenticationProvider(){
 		JpaAuthenticationProvider jpaAuthenticationProvider= new JpaAuthenticationProvider();
 		jpaAuthenticationProvider.setUserDetailsService(new UserDetailsService() {
@@ -88,7 +100,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 			}
 		});
 		return jpaAuthenticationProvider;
-	}
+	}**/
 
 	/**
 	 * specific client detail service
@@ -101,8 +113,8 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Bean
     public TokenEnhancerChain tokenEnhancerChain(){
       List<TokenEnhancer> list = new ArrayList<>();
+      list.add(new AdditionInfoTokenEnhancer());
       list.add(jwtAccessTokenConverter());
-      //list.add(new AdditionInfoTokenEnhancer());
       TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
       tokenEnhancerChain.setTokenEnhancers(list);
       return tokenEnhancerChain;
