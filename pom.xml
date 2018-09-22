@@ -33,6 +33,7 @@
 
 	<modules>
 		<module>microservice-application-web</module>
+		<module>microservice-oauth2-server</module>
 	</modules>
 
 	<properties>

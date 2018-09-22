@@ -1,3 +1,5 @@
+server:
+  port: 9000 
 spring:
   jpa:
     database: MYSQL
@@ -10,4 +12,4 @@ spring:
     username: trade
     password: password
     driver-class-name:  com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/trade?useSSL=false
+    url: jdbc:mysql://localhost:3306/trade?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
