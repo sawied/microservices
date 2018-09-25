@@ -1,0 +1,17 @@
+= trade API document
+
+== Overview
+trade api document,for production environemnt, this document will be removed automaticly
+
+=== Version information
+Version: v 1.0
+
+=== URI scheme
+Host: localhost
+BasePath: /
+
+=== Tags
+
+* trades-api: Trades Api
+
+
