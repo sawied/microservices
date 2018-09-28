@@ -46,6 +46,8 @@
 		<sonar.language>java</sonar.language>
 		<spring.boot.version>2.0.5.RELEASE</spring.boot.version>
 		
+		<httpclient.version>4.5.2</httpclient.version>
+		
 		<swagger.markup.version>1.3.3</swagger.markup.version>
 		<swagger2markup.plugin.version>1.2.0</swagger2markup.plugin.version>
 		<springfox.version>2.9.2</springfox.version>
@@ -64,6 +66,22 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
+			<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<version>${spring.boot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 			
 			<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -88,6 +106,19 @@
 				<version>Finchley.SR1</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			
+			<!-- httpclient -->
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>${httpclient.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient-cache</artifactId>
+				<version>${httpclient.version}</version>
 			</dependency>
 
 			<!-- mysql driver -->

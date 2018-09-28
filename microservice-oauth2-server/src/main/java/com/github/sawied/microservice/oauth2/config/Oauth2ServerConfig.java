@@ -165,7 +165,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Bean
 	public ClientDetailsService clientDetailsService() throws Exception {
 		InMemoryClientDetailsServiceBuilder clientDetailsBuilder = new InMemoryClientDetailsServiceBuilder();
-		clientDetailsBuilder.withClient("api-gateway").resourceIds("OAUTH2_RESOURCE_ID").autoApprove(true).authorities("ROLE_CLIENT")
+		clientDetailsBuilder.withClient("api-gateway").resourceIds("OAUTH2_RESOURCE_ID","API_GATEWAY_RESOURCE").autoApprove(true).authorities("ROLE_CLIENT")
 				.authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("read", "write", "user")
 				.secret("{noop}secret");
 		return clientDetailsBuilder.build();
