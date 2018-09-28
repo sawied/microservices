@@ -60,4 +60,10 @@ div.app-context-body{
 nav.navbar-custom{
     border-bottom: 1px solid #cccccc;
     height: $bavbar-height;
+    a.nav-link{
+        color: black;
+        &.active{
+            color: blue;
+        }
+    }
 }

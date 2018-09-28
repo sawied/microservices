@@ -1,7 +1,7 @@
 import React from 'react';
 export default()=>(<>
   <div className="application-summary-couter">
-      <span class="badge badge-primary badge-pill applicaton-couter">14</span>
+      <span className="badge badge-primary badge-pill applicaton-couter">14</span>
       <span className="applicaton-couter-title">Applications</span> 
   </div>
   <ul className="list-group">
