@@ -23,6 +23,7 @@ public class JpaAuthenticationProvider extends DaoAuthenticationProvider{
 	@SuppressWarnings("unchecked")
 	protected void additionalAuthenticationChecks(UserDetails userDetails,
 			UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
+		
 		super.additionalAuthenticationChecks(userDetails, authentication);
 		
 		//additional check for timestamp

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.RestTemplate;
 
+import com.github.sawied.microservice.gateway.web.AuthenticationHeaderZuulFilter;
 import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterceptor;
 
 @Configuration
@@ -26,5 +27,11 @@ public class GatewayConfig {
 		 restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(oauth2_username,oauth2_password));
 		 restTemplate.getInterceptors().add(new ForwardHeaderHttpClientInterceptor());
 		return restTemplate;
+	}
+	
+	
+	@Bean
+	public AuthenticationHeaderZuulFilter authenticationHeaderZuulFilter() {
+		return new AuthenticationHeaderZuulFilter();
 	}
 }
