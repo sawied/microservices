@@ -1,0 +1,161 @@
+package com.github.sawied.microservice.trade.document;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
+
+import com.lowagie.text.DocumentException;
+import com.lowagie.text.Image;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.AcroFields;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfSignatureAppearance;
+import com.lowagie.text.pdf.PdfStamper;
+
+public class ItextDocumentOperator implements InitializingBean, DocumentOperator{
+	
+	private static final Logger log = LoggerFactory.getLogger(ItextDocumentOperator.class);
+	
+	private Resource template;
+	
+	private Resource keyStoreResource;
+	
+	private String storepassword=null;
+	
+	private String alias=null;
+
+	private Certificate[] chain;
+
+	private PrivateKey pk;
+	
+	private int[] positions= {200, 200, 200, 200};
+
+	
+	/* (non-Javadoc)
+	 * @see com.github.sawied.microservice.trade.document.DocumentOperator#fillInForm(java.util.Map, java.io.OutputStream)
+	 */
+	@Override
+	public void fillInForm(Map<String,String> data,OutputStream os) throws Exception {
+		try {
+			PdfReader reader = new PdfReader(template.getInputStream());
+			PdfStamper stamper = new PdfStamper(reader,os);
+			
+			AcroFields  fields=stamper.getAcroFields();
+			Iterator<?> keys = fields.getFields().keySet().iterator();
+			while(keys.hasNext()) {
+				String key=(String) keys.next();
+				String value = data.get(key);
+				if(value!=null) {	
+					fields.setField(key, value);
+				}else {					
+					fields.setField(key, "0");
+				}
+				log.debug("fill in filed {} with value {}",key,value);
+			}
+			stamper.close();
+			reader.close();
+			log.info("write fill in document success");
+		} catch (IOException | DocumentException e) {
+			log.debug("some error occur while fill in e-form",e);
+			throw e;
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.github.sawied.microservice.trade.document.DocumentOperator#esignature(org.springframework.core.io.Resource, org.springframework.core.io.Resource, java.io.OutputStream)
+	 */
+	@Override
+	public void esignature(Resource resource,Resource imageResource,OutputStream os){
+		PdfReader reader=null;
+		PdfStamper stamper=null;
+		try {
+			reader = new PdfReader(resource.getInputStream());
+			stamper = PdfStamper.createSignature(reader, os, '\0', null, true);
+			
+			HashMap<String, String> moreInfo = new HashMap<String, String>();
+			moreInfo.put("Title", "Account openning apply form");
+			moreInfo.put("Creator", "mVTM Application");
+			moreInfo.put("Author", "mVTM");
+			stamper.setMoreInfo(moreInfo);
+			
+			PdfSignatureAppearance appearance = stamper.getSignatureAppearance();
+			appearance.setCrypto(this.pk, this.chain, null, PdfSignatureAppearance.WINCER_SIGNED);
+			Rectangle rectangle = new Rectangle(positions[0],positions[1],positions[2],positions[3]);
+			appearance.setVisibleSignature(rectangle,9, null);
+			Image image = Image.getInstance(imageResource.getURL());
+			appearance.setSignatureGraphic(image);
+			appearance.setCertificationLevel(PdfSignatureAppearance.CERTIFIED_NO_CHANGES_ALLOWED);
+			appearance.setRender(PdfSignatureAppearance.SignatureRenderGraphicAndDescription);
+			appearance.setLayer2Text("");
+			appearance.setLayer4Text("");
+			appearance.setAcro6Layers(true);
+		
+		} catch (IOException | DocumentException e) {
+			e.printStackTrace();
+		}finally {
+			if(stamper!=null) {				
+				try {
+					reader.close();
+					stamper.close();
+				} catch (DocumentException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		try {
+			KeyStore keystore = KeyStore.getInstance("JKS");
+			char[] password = storepassword.toCharArray();
+			keystore.load(keyStoreResource.getInputStream(), password);
+			this.chain = keystore.getCertificateChain(alias);
+			this.pk = (PrivateKey) keystore.getKey(alias, password);
+		}catch (KeyStoreException | NoSuchAlgorithmException | CertificateException | IOException | UnrecoverableKeyException e) {
+			log.error("parse keystore failed,please try config",e);
+			throw e;
+		} 
+	}
+	
+
+	public void setKeyStoreResource(Resource keyStoreResource) {
+		this.keyStoreResource = keyStoreResource;
+	}
+
+
+	public void setStorepassword(String storepassword) {
+		this.storepassword = storepassword;
+	}
+
+
+	public void setAlias(String alias) {
+		this.alias = alias;
+	}
+
+
+	public void setTemplate(Resource template) {
+		this.template = template;
+	}
+
+	
+
+}

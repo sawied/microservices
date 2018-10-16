@@ -1,9 +1,14 @@
 import React from 'react';
-import ListGroup from '../listGroup';
+import { FormattedMessage } from 'react-intl'
+import Menu from './menu';
 export default ()=>(<>
      <div className="list-group-container">
-     <ListGroup></ListGroup>
+     <Menu></Menu>
      </div>
-    <div className="content-body">dashborad</div>
+    <div className="content-body">
+    
+   <FormattedMessage id="greeting"  defaultMessage="你好!" /> 
+    
+    </div>
     </>
 )

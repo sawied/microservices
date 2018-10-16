@@ -25,5 +25,7 @@ public class TradesApi {
 	public Trade delete(@PathVariable("id") Long id) {
 		return new Trade();
 	}
+	
+	
 
 }

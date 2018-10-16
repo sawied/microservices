@@ -45,13 +45,16 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.language>java</sonar.language>
 		<spring.boot.version>2.0.5.RELEASE</spring.boot.version>
-		
+
 		<httpclient.version>4.5.2</httpclient.version>
-		
+
 		<swagger.markup.version>1.3.3</swagger.markup.version>
 		<swagger2markup.plugin.version>1.2.0</swagger2markup.plugin.version>
 		<springfox.version>2.9.2</springfox.version>
-		
+		<itext.version>2.1.7</itext.version>
+		<pdfbox.version>2.0.12</pdfbox.version>
+		<bouncycastle.version>1.54</bouncycastle.version>
+
 	</properties>
 
 
@@ -66,38 +69,38 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			
+
 			<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
-			<version>${spring.boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-			
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter</artifactId>
+				<version>${spring.boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-classic</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+
 			<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-			<version>${spring.boot.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-starter-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-web</artifactId>
+				<version>${spring.boot.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>ch.qos.logback</groupId>
+						<artifactId>logback-classic</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-starter-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
 			<!-- spring cloud major version -->
 			<dependency>
@@ -107,7 +110,7 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-			
+
 			<!-- httpclient -->
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -134,6 +137,37 @@
 				<artifactId>swagger2markup</artifactId>
 				<version>${swagger.markup.version}</version>
 			</dependency>
+
+
+			<!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+			<dependency>
+				<groupId>com.lowagie</groupId>
+				<artifactId>itext</artifactId>
+				<version>${itext.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>pdfbox</artifactId>
+				<version>${pdfbox.version}</version>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.apache.pdfbox/fontbox -->
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>fontbox</artifactId>
+				<version>${pdfbox.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.bouncycastle</groupId>
+				<artifactId>bcmail-jdk15on</artifactId>
+				<version>${bouncycastle.version}</version>
+			</dependency>
+
+
+
 		</dependencies>
 
 	</dependencyManagement>
@@ -247,64 +281,64 @@
 					<artifactId>asciidoctor-maven-plugin</artifactId>
 					<version>1.5.3</version>
 				</plugin>
-				
-				
-				<!-- generate swagger json spec file in test phase -->
-			<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <io.springfox.staticdocs.outputDir>${swagger.output.dir}</io.springfox.staticdocs.outputDir>
-                        <io.springfox.staticdocs.snippetsOutputDir>${swagger.snippetOutput.dir}</io.springfox.staticdocs.snippetsOutputDir>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            
-            
-             <!-- First, use the swagger2markup plugin to generate asciidoc -->
-            <plugin>
-                <groupId>io.github.swagger2markup</groupId>
-                <artifactId>swagger2markup-maven-plugin</artifactId>
-                <version>${swagger2markup.version}</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.github.swagger2markup</groupId>
-                        <artifactId>swagger2markup-import-files-ext</artifactId>
-                        <version>${swagger2markup.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>io.github.swagger2markup</groupId>
-                        <artifactId>swagger2markup-spring-restdocs-ext</artifactId>
-                        <version>${swagger2markup.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-			
-			
-			<!-- generate html output -->
-			
 
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework.restdocs</groupId>
-						<artifactId>spring-restdocs-asciidoctor</artifactId>
-						<version>2.0.2.RELEASE</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-			
-			
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.0.5.RELEASE</version>
-			</plugin>
-				
-				
+
+				<!-- generate swagger json spec file in test phase -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemPropertyVariables>
+							<io.springfox.staticdocs.outputDir>${swagger.output.dir}</io.springfox.staticdocs.outputDir>
+							<io.springfox.staticdocs.snippetsOutputDir>${swagger.snippetOutput.dir}</io.springfox.staticdocs.snippetsOutputDir>
+						</systemPropertyVariables>
+					</configuration>
+				</plugin>
+
+
+				<!-- First, use the swagger2markup plugin to generate asciidoc -->
+				<plugin>
+					<groupId>io.github.swagger2markup</groupId>
+					<artifactId>swagger2markup-maven-plugin</artifactId>
+					<version>${swagger2markup.version}</version>
+					<dependencies>
+						<dependency>
+							<groupId>io.github.swagger2markup</groupId>
+							<artifactId>swagger2markup-import-files-ext</artifactId>
+							<version>${swagger2markup.version}</version>
+						</dependency>
+						<dependency>
+							<groupId>io.github.swagger2markup</groupId>
+							<artifactId>swagger2markup-spring-restdocs-ext</artifactId>
+							<version>${swagger2markup.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
+
+				<!-- generate html output -->
+
+
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<dependencies>
+						<dependency>
+							<groupId>org.springframework.restdocs</groupId>
+							<artifactId>spring-restdocs-asciidoctor</artifactId>
+							<version>2.0.2.RELEASE</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
+
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>2.0.5.RELEASE</version>
+				</plugin>
+
+
 			</plugins>
 		</pluginManagement>
 
@@ -374,6 +408,17 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
+		<repository>
+			<id>openmind</id>
+			<name>openmind</name>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<url>http://repository.openmindonline.it/</url>
+		</repository>
+
 	</repositories>
 
 </project>

@@ -50,8 +50,7 @@ module.exports = require("./make-webpack-config")(rules, {
       "./src/core/index.jsx"
     ],
     "web-components": [
-      "./src/style/main.scss",
-      "./src/components/index.js",
+      "./src/style/main.scss"
     ]
   },
   output: {

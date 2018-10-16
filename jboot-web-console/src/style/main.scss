@@ -67,3 +67,19 @@ nav.navbar-custom{
         }
     }
 }
+// logon form style
+
+div.logon-form{
+    width: 500px;
+    margin: 50px auto;
+    div.logo-container{
+        text-align: center;
+        font-size: 2em;
+    }
+    div.main{
+        margin-top: 20px;
+        input {
+            padding: 10px 0;
+        }
+    }
+}

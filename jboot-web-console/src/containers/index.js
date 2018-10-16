@@ -1,33 +1,33 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {
-    BrowserRouter,
+    HashRouter,
     Route,
     Switch
   } from 'react-router-dom';
 
+
 import System from '../core/system';
-import Navigatior from '../components/navigator';
+
 import Dashboard from '../components/dashboard';
 import logger from '../components/logger';
+import IntlProvider from '../core/intlProvider';
+import App from '../components/app';
 
 let system=new System();
 export default () => (
     <Provider store={system.getStore()}>
-        <BrowserRouter>
-                <>
-                <div className="navigation">
-                 <Navigatior/>
-                </div>
-                <div className="app-context-body">
-                    <Switch>
-                        <Route exact path='/' component={Dashboard} />
-                        <Route path="/logger" component={logger} />
-                        <Route component={NoMatch} />
-                    </Switch>
-                </div>
-                </>
-        </BrowserRouter>
+       <IntlProvider>
+         <HashRouter>
+             <App>
+              <Switch>
+              <Route path="/" exact component={Dashboard}></Route>
+              <Route path="/logger" component={logger}></Route>
+              <Route component={NoMatch} />
+              </Switch>
+             </App>  
+          </HashRouter>
+        </IntlProvider>
     </Provider>
 )
 
