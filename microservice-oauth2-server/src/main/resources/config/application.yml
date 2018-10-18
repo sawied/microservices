@@ -1,6 +1,8 @@
 server:
   port: 8080 
 spring:
+  application:
+    name: microservice-oauth2-server
   jpa:
     database: MYSQL
     show-sql: true
@@ -13,3 +15,8 @@ spring:
     password: password
     driver-class-name:  com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/trade?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:secret@localhost:9081/eureka/

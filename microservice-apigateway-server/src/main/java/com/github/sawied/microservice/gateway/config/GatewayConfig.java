@@ -11,13 +11,14 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.github.sawied.microservice.gateway.web.AuthenticationHeaderZuulFilter;
+import com.github.sawied.microservice.gateway.web.EurekaAuthenticationHeaderZuulFilte;
 import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterceptor;
 
 @Configuration
 @EnableZuulProxy
 public class GatewayConfig {
 	
-	public static final String OAUTH2_SERVICE_NAME="OAUTH2";
+	public static final String OAUTH2_SERVICE_NAME="MICROSERVICE-OAUTH2-SERVER";
 	
 	@Bean
 	public WebMvcConfigurer corsConfig() {
@@ -46,5 +47,12 @@ public class GatewayConfig {
 	@Bean
 	public AuthenticationHeaderZuulFilter authenticationHeaderZuulFilter() {
 		return new AuthenticationHeaderZuulFilter();
+	}
+	
+	
+	@Bean 
+	public EurekaAuthenticationHeaderZuulFilte eurekaAuthenticationZuulFilter(@Value(value="${eureka.service.username:admin}") String username,
+			@Value(value="${eureka.service.password:secret}") String password) {
+		return new EurekaAuthenticationHeaderZuulFilte(username,password);
 	}
 }

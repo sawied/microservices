@@ -18,7 +18,10 @@ export const authReducer=handleActions({
       const auth =state.merge(Map(Object.assign({authenticated:true},action.payload)));
       return auth;
    },
-   throw(state,action){}
+   throw(state,action){
+     state.setIn(["authenticated"],false);
+     return state;
+   }
  }
 },
 defaultState
