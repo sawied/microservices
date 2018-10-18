@@ -1,17 +1,20 @@
 import React from 'react';
 import Navigatior from './navigator';
 import Auth from './auth';
+import Error from './error';
+import { connect } from 'react-redux';
 
 class App extends React.Component{
     
     constructor(props){
         super(props);
-        this.authentication=this.props.authentication;
+       
       }
 
     render(){
-        if(!this.authentication){
-            return <Auth/>
+        let {authenticated}=this.props;
+        if(!authenticated){
+            return <><Error/><Auth/></>
         }
         else{
             return (<>
@@ -25,4 +28,10 @@ class App extends React.Component{
     }
     
 }
-export default App;
+const mapStateToProps = state => ({
+    authenticated:state.getIn(['auth','authenticated']),
+    user_name:state.getIn(['auth','user_name']),
+    authorities:state.getIn(['auth','authorities']),
+    email:state.getIn(['auth','email'])
+  })
+export default connect(mapStateToProps)(App);

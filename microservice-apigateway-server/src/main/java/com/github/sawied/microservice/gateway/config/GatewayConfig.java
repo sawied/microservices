@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.github.sawied.microservice.gateway.web.AuthenticationHeaderZuulFilter;
 import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterceptor;
@@ -17,6 +19,17 @@ public class GatewayConfig {
 	
 	public static final String OAUTH2_SERVICE_NAME="OAUTH2";
 	
+	@Bean
+	public WebMvcConfigurer corsConfig() {
+		return new WebMvcConfigurer(){
+
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
+			}
+			
+		};
+	}
 	
 
 	@Bean

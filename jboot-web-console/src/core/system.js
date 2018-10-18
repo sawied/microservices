@@ -4,7 +4,8 @@ import Im, { fromJS, Map } from "immutable"
 import promiseMiddleware from 'redux-promise';
 
 import deepExtend from "deep-extend"
-import rootReducer from './reducer'
+import rootReducer,{ge} from './reducer'
+import {isPromise} from './utils';
 
 
 export default class Store {
@@ -23,9 +24,26 @@ export default class Store {
 
 }
 
+function globalErrorMiddleware() {
+    return store => next => action => {
+  
+      // If not a promise, continue on
+      if (!isPromise(action.payload)) {
+        return next(action);
+      }
+        return next(action).catch(error => {
+            window.console.warn(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message)}.`);
+            store.dispatch(ge(error.message));
+        });
+    };
+  }
+
+
+
 function configureStore(rootReducer, initialState) {
 
     let middlwares = [
+        globalErrorMiddleware(),
         promiseMiddleware
     ]
 
