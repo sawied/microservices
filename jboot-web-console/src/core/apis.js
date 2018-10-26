@@ -1,6 +1,8 @@
 
+import store from 'store';
+
 //define services list of this function
-let host = "http://localhost:9000";
+let host = "/apis";
 
 
 const services=Object.assign(
@@ -14,7 +16,13 @@ const services=Object.assign(
      "auth":{
          endpoint: host+"/oauth2/simple",
          "method":'POST',
+         emitAuth:true,
          headers:{'Content-Type': 'application/x-www-form-urlencoded'},
+     },
+     "apps":{
+      endpoint: host+"/eureka/apps",
+      "method":'GET',
+      headers:{'Accept': 'application/json'}
      }
    }
  );
@@ -34,6 +42,21 @@ const services=Object.assign(
    if(typeof request.endpoint==='function'){
      request.endpoint=request.endpoint(params);
    }
+
+   //apply authentication token in headers if service config don't claim auth header.
+   if(!serviceConfig.emitAuth){
+    let authentication=store.get('authentication');
+    if(authentication!=null && authentication.authenticated){
+      if(request.headers){
+        request.headers['Authorization']='Bearer '+authentication.access_token;
+      }
+    }else{
+      window.console.warn("it seems authentication is unpresent,the auth header can't set"); 
+    }
+   }
+   
+  
+  
  
     return fetch(request.endpoint,request).then(function(response){
       if(response.ok){

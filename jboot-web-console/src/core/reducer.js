@@ -2,7 +2,8 @@ import {intlReducer} from '../core/intlProvider'
 import { combineReducers } from "redux-immutable"
 import { createAction, handleAction } from 'redux-actions';
 import Immutable from 'immutable';
-import {authReducer} from '../components/auth/actions';
+import {authReducer} from '../components/oauth/actions';
+import {dsReducer} from '../components/dashboard/actions';
 
 export const ge = createAction('GLOBAL_ERROR');
 
@@ -17,7 +18,8 @@ const errorReducer = handleAction(ge,(state,action)=>{
 const rootReducers = combineReducers({
     intl:intlReducer,
     ge:errorReducer,
-    auth:authReducer
+    auth:authReducer,
+    apps:dsReducer
 })
 
 export default rootReducers;

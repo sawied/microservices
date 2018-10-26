@@ -68,6 +68,12 @@ module.exports = require("./make-webpack-config")(rules, {
     open:true,
     openPage:"",
     hot: true,
+    proxy:{
+      '/apis':{
+        target:'http://localhost:9000',
+        pathRewrite: {'^/apis' : ''}
+      }
+    },
     after:function(app){console.log("app started success",app)},
     disableHostCheck: true, // for development within VMs
     stats: {

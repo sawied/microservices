@@ -1,7 +1,7 @@
 import React from 'react';
 import {Provider} from 'react-redux';
 import {
-    HashRouter,
+  BrowserRouter,
     Route,
     Switch
   } from 'react-router-dom';
@@ -13,20 +13,22 @@ import Dashboard from '../components/dashboard';
 import logger from '../components/logger';
 import IntlProvider from '../core/intlProvider';
 import App from '../components/app';
+import OAuth from '../components/oauth';
 
 let system=new System();
 export default () => (
     <Provider store={system.getStore()}>
        <IntlProvider>
-         <HashRouter>
+         <BrowserRouter>
              <App>
               <Switch>
+              <Route path="logon" component={OAuth}></Route>
               <Route path="/" exact component={Dashboard}></Route>
               <Route path="/logger" component={logger}></Route>
               <Route component={NoMatch} />
               </Switch>
              </App>  
-          </HashRouter>
+          </BrowserRouter>
         </IntlProvider>
     </Provider>
 )

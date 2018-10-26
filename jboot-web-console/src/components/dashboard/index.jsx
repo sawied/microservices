@@ -1,14 +1,39 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl'
-import Menu from './menu';
-export default ()=>(<>
-     <div className="list-group-container">
-     <Menu></Menu>
-     </div>
-    <div className="content-body">
-    
-   <FormattedMessage id="greeting"  defaultMessage="你好!" /> 
-    
-    </div>
-    </>
-)
+import { connect } from 'react-redux';
+import Menu from './app-menu';
+import {dsActionCreators} from './actions';
+import Apps from './apps';
+
+
+class Applist extends React.Component{
+
+    constructor(props){
+        super(props);
+        this.dispatch = this.props.dispatch;
+      }
+
+    componentDidMount(){
+        this.dispatch(dsActionCreators.getApps());
+      }
+
+    render(){
+        let {applicationCountNumber,applications} = this.props;
+        return (<>
+            <div className="list-group-container">
+            <Menu applicationCountNumber={applicationCountNumber}></Menu>
+            </div>
+           <div className="content-body">
+             <Apps applications={applications}/>
+           </div>
+           </>
+       )
+    }
+}
+
+const mapStateToProps = state => ({
+    applicationCountNumber: state.getIn(["apps",'applicationCount']),
+    applications:state.getIn(['apps','applications'])
+  })
+
+
+export default connect(mapStateToProps)(Applist);

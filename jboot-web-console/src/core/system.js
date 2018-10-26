@@ -6,6 +6,7 @@ import promiseMiddleware from 'redux-promise';
 import deepExtend from "deep-extend"
 import rootReducer,{ge} from './reducer'
 import {isPromise} from './utils';
+import store from 'store';
 
 
 export default class Store {
@@ -53,4 +54,17 @@ function configureStore(rootReducer, initialState) {
         applyMiddleware(...middlwares)
     ))
 
+}
+
+const defaultLogonState={authenticated:false,user_name:'unknow',authorities:[],email:null,jti:null,access_token:null,expiration:null};
+
+export function auth(){
+   let auth= store.get("authentication");
+   if(auth){
+      let interval= (new Date(auth.expiration).getTime()-new Date().getTime())/(3600*1000);
+      if(!interval>9){
+          return auth;
+      }
+   }
+   return defaultLogonState;
 }

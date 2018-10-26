@@ -5,6 +5,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,6 +17,7 @@ import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterce
 
 @Configuration
 @EnableZuulProxy
+@PropertySource("classpath:config/api-gateway-config.properties")
 public class GatewayConfig {
 	
 	public static final String OAUTH2_SERVICE_NAME="MICROSERVICE-OAUTH2-SERVER";

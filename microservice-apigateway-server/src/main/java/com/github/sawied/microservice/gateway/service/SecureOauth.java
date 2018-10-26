@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,9 @@ public class SecureOauth {
 	@Qualifier("oauth2RestTemplate")
 	private RestTemplate restTemplate;
 	
+	@Value(value="${associate_token_with_session:false}")
+	private Boolean sessionAssociate=false;
+	
 	@Autowired
 	private ResourceServerTokenServices tokenService;
 
@@ -68,7 +72,9 @@ public class SecureOauth {
 		
 		//first,store access token into session
 		String accessToken = parseToken(response.getBody());
-		request.getSession().setAttribute("access_token", accessToken);
+		if(sessionAssociate) {			
+			request.getSession().setAttribute("access_token", accessToken);
+		}
 		
 		//second, expose useful info for client
 		HttpHeaders headers = new HttpHeaders();
@@ -80,7 +86,11 @@ public class SecureOauth {
 		
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.putAll(oauth2AccessToken.getAdditionalInformation());
-		//map.putAll(oauth2AccessToken.)
+		if(!sessionAssociate) {			
+			map.put("access_token", oauth2AccessToken.getValue());
+			map.put("expiration", oauth2AccessToken.getExpiration());
+			map.put("expiresIn", oauth2AccessToken.getExpiresIn());
+		}
 		
 		return new ResponseEntity<>(map,headers, HttpStatus.OK);
 	}
