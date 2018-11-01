@@ -11,6 +11,7 @@ class Applist extends React.Component{
     constructor(props){
         super(props);
         this.dispatch = this.props.dispatch;
+        
       }
 
     componentDidMount(){
