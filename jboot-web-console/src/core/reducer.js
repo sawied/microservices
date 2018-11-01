@@ -1,4 +1,4 @@
-import {intlReducer} from '../core/intlProvider'
+import {intlReducer} from './intl-provider'
 import { combineReducers } from "redux-immutable"
 import { createAction, handleAction } from 'redux-actions';
 import Immutable from 'immutable';
@@ -16,7 +16,7 @@ const errorReducer = handleAction(ge,(state,action)=>{
 },defaultState);
 
 const rootReducers = combineReducers({
-    intl:intlReducer,
+   // intl:intlReducer,
     ge:errorReducer,
     auth:authReducer,
     apps:dsReducer

@@ -1,22 +1,22 @@
-import React from "react"
-import { createStore, applyMiddleware, bindActionCreators, compose } from "redux"
-import Im, { fromJS, Map } from "immutable"
+import { createStore, applyMiddleware, bindActionCreators, compose } from "redux";
+import Im, { fromJS, Map } from "immutable";
 import promiseMiddleware from 'redux-promise';
 
-import deepExtend from "deep-extend"
-import rootReducer,{ge} from './reducer'
+import deepExtend from "deep-extend";
+import rootReducers,{ge} from './reducer';
 import {isPromise} from './utils';
-import store from 'store';
+import createBrowserHistory from "history/createBrowserHistory";
+import {getAuth} from './utils';
 
 
-export default class Store {
+export  class StoreClass {
     constructor(opts = {}) {
         deepExtend(this, {
             state: {
             },//default state of redux 
         }, opts);
 
-        this.store = configureStore(rootReducer, fromJS(this.state))
+        this.store = configureStore(rootReducers, fromJS(this.state))
     }
 
     getStore() {
@@ -56,15 +56,18 @@ function configureStore(rootReducer, initialState) {
 
 }
 
-const defaultLogonState={authenticated:false,user_name:'unknow',authorities:[],email:null,jti:null,access_token:null,expiration:null};
 
-export function auth(){
-   let auth= store.get("authentication");
-   if(auth){
-      let interval= (new Date(auth.expiration).getTime()-new Date().getTime())/(3600*1000);
-      if(!interval>9){
-          return auth;
-      }
-   }
-   return defaultLogonState;
+
+const createHistory = ()=>{
+
+    let history=createBrowserHistory({basename: "", forceRefresh: false});
+    if(!getAuth().authenticated){
+        history.push("/logon",{});
+    }
+    window.console.log("create history ......");
+    return history;
+
 }
+
+export const history = createHistory();
+

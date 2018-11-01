@@ -32,15 +32,15 @@ export const UPDATE = '@@intl/UPDATE'
 
 const languages = {en,zh};
 
-const initialState = {
+const initialState = Map({
     locale: navigator.language,
     messages:languages[navigator.language.split('-')[0]],
-  };
+  });
   
   export function intlReducer(state = initialState, action) {
     if (action.type !== UPDATE) {
       return state
     }
   
-    return { ...state, ...action.payload }
+    return state.setIn(['locale'],action.language);
   }

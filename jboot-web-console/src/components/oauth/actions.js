@@ -2,6 +2,7 @@ import { createActions, handleActions, combineActions } from 'redux-actions';
 import {Map} from 'immutable';
 import apis from '../../core/apis';
 import store from 'store';
+import {getAuth} from '../../core/utils'
 
 const defaultState=Map({authenticated:false,user_name:'unknow',authorities:[],email:null,jti:null,access_token:null,expiration:null});
 
@@ -31,9 +32,10 @@ initDefaultState()
 );
 
 function initDefaultState(){
-  let auth=store.get('authentication');
-  if(auth){
-    return Map(auth);
+  
+  let authentication = getAuth();
+  if(authentication){
+    return Map(authentication);
   }else{
     return defaultState;
   }

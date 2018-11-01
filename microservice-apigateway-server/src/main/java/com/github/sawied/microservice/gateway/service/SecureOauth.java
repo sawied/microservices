@@ -16,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
@@ -72,9 +74,6 @@ public class SecureOauth {
 		
 		//first,store access token into session
 		String accessToken = parseToken(response.getBody());
-		if(sessionAssociate) {			
-			request.getSession().setAttribute("access_token", accessToken);
-		}
 		
 		//second, expose useful info for client
 		HttpHeaders headers = new HttpHeaders();
@@ -90,6 +89,13 @@ public class SecureOauth {
 			map.put("access_token", oauth2AccessToken.getValue());
 			map.put("expiration", oauth2AccessToken.getExpiration());
 			map.put("expiresIn", oauth2AccessToken.getExpiresIn());
+		}
+		else{
+			//save authentication into session
+			OAuth2Authentication authentication=tokenService.loadAuthentication(accessToken);
+			authentication.setAuthenticated(true);
+			authentication.setDetails(oauth2AccessToken);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
 		
 		return new ResponseEntity<>(map,headers, HttpStatus.OK);

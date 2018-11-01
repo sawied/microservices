@@ -90,3 +90,54 @@ div.contont-body{
         margin: 15px auto;
     }
 }
+div.instance-detail{
+
+    div.instance-status{
+        float: right;
+
+    }
+    p.instance-title{
+        text-transform:uppercase;
+        font-size: 16px;
+    }
+    div.instance-item-property{
+        ul{
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            li{
+              float: left;
+              margin-right:5px;
+              label{
+                  font-weight: normal;
+              }
+              span{
+                  padding: 0 5px;
+              }
+            }
+        }
+    }
+}
+
+div.face-board-container{
+    @include stretch(0); 
+    //background-color: #000;
+    //opacity: 0.5;
+}
+div.face-board{
+    width: 300px;
+    z-index: 100;
+    background-color: #ffffff;
+    @include stretch(0,0,0,auto); 
+
+    div.faceboard-title{
+        padding: 10px 20px;
+        border-bottom:1px solid #ccc; 
+        span{
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: capitalize;
+        }
+    }
+    
+}

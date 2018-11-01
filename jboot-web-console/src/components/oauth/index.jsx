@@ -3,7 +3,7 @@ import LogonForm from './logon';
 import {actionCreators} from './actions';
 
 const mapStateToProps = state => ({
-  error: state.get("error")
+  authenticated: state.getIn(["auth","authenticated"])
 })
 
 

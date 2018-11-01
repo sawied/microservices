@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
@@ -31,10 +32,20 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	@Qualifier("tokenService")
 	private ResourceServerTokenServices tokenService;
 	
+	@Autowired
+	private CompoundTokenExtractor compoundTokenExtractor;
+	
 	
 	@Override
 	public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-		resources.tokenServices(tokenService).tokenExtractor(new CompoundTokenExtractor()).resourceId("API_GATEWAY_RESOURCE");
+		resources.tokenServices(tokenService).tokenExtractor(compoundTokenExtractor).resourceId("API_GATEWAY_RESOURCE").stateless(false);
+	}
+	
+	@Bean
+	CompoundTokenExtractor compoundTokenExtractor(@Value(value="${associate_token_with_session:false}") Boolean isAssociate) {
+		 CompoundTokenExtractor extractor = new CompoundTokenExtractor();
+		 extractor.setSessionAssociate(isAssociate);
+		 return extractor;
 	}
 	
 	
@@ -45,7 +56,7 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	public void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
 		http.requestMatcher(new NotOauth2RequestMatcher()).authorizeRequests().antMatchers("/oauth2/**").permitAll().antMatchers("/**").authenticated()
-		.and().sessionManagement().sessionFixation().none();
+		.and().sessionManagement().sessionFixation().none().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 		;
 	}
 
@@ -58,6 +69,8 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	public TokenStore jwtTokenStore(JwtAccessTokenConverter jwtTokenConverter) {
 		return new JwtTokenStore(jwtTokenConverter);
 	}
+	
+	
 
 
 

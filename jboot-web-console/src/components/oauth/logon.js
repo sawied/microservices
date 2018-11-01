@@ -1,4 +1,5 @@
 import React from 'react';
+import {history} from '../../core/system'
 
 class LogonForm extends React.Component{
 
@@ -8,6 +9,19 @@ class LogonForm extends React.Component{
         this.state={username:'',password:''};
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        if(props.authenticated){
+            history.push("/");
+        }
+      }
+
+      
+
+      //if already logon success.
+      componentWillReceiveProps(nextProps){
+        let {authenticated} = this.props;
+        if((nextProps.authenticated&&!authenticated)){
+            history.push("/");
+        }
        
       }
 
@@ -15,9 +29,14 @@ class LogonForm extends React.Component{
 
  render(){
      
-    let {error} = this.props;
+    
     let username = this.state.username;
     let password = this.state.password;
+
+    let {authenticated} = this.props;
+        if(authenticated){
+            return null;
+        }
 
      return (<div className="logon-form">
         <div className="logo-container">
@@ -25,8 +44,6 @@ class LogonForm extends React.Component{
 	    </div>
          
 		<form action="login" method="post" onSubmit={this.handleSubmit}>
-         
-        <div>{error}</div>
         
         <div className="form-group">
         <label htmlFor="login_field">

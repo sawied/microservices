@@ -47,7 +47,7 @@ module.exports = require("./make-webpack-config")(rules, {
   mode:"development",
   entry: {
     "web-core": [
-      "./src/core/index.jsx"
+      "./src/core/index.js"
     ],
     "web-components": [
       "./src/style/main.scss"
@@ -68,6 +68,7 @@ module.exports = require("./make-webpack-config")(rules, {
     open:true,
     openPage:"",
     hot: true,
+    historyApiFallback: true,
     proxy:{
       '/apis':{
         target:'http://localhost:9000',
@@ -76,6 +77,9 @@ module.exports = require("./make-webpack-config")(rules, {
     },
     after:function(app){console.log("app started success",app)},
     disableHostCheck: true, // for development within VMs
+    staticOptions: {
+      redirect: true
+    },
     stats: {
       colors: true
     },

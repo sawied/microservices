@@ -1,4 +1,18 @@
 
+import store from 'store';
+
+
+export function getAuth(){
+    var ath=store.get("authentication");
+    if(ath){
+       let interval= (new Date(ath.expiration).getTime()-new Date().getTime())/(3600*1000);
+       if(interval>0){
+           return ath;
+       }
+    }
+    return {authenticated:false,user_name:'unknow',authorities:[],email:null,jti:null,access_token:null,expiration:null};;
+ }
+
 
 
 
