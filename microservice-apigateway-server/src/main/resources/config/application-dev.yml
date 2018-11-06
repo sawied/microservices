@@ -12,9 +12,8 @@ zuul:
       id: eureka.server
       path: /eureka/**
       strip-prefix: false
-      custom-sensitive-headers: true
-      sensitive-headers:
-      - Cookie,Set-Cookie
+      sensitive-headers: Cookie,Set-Cookie
+
   
   
 eureka:

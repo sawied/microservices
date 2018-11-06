@@ -22,15 +22,13 @@ public class CompoundTokenExtractor extends BearerTokenExtractor {
 		// first try to extract token from session
 		if(sessionAssociate) {	
 			logger.info("session associate model, so ignore token extracat");
-			return null;
+			//return null;
 		}
 
 		// then attempt extract token in header and request parameters.
 
-		else{
-			token = super.extractToken(request);
-		}
-
+		token = super.extractToken(request);
+		
 		return token;
 	}
 

@@ -22,6 +22,7 @@ const services=Object.assign(
      "apps":{
       endpoint: host+"/eureka/apps",
       "method":'GET',
+      emitAuth:true,
       headers:{'Accept': 'application/json'}
      }
    }

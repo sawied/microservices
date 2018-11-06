@@ -70,17 +70,36 @@ public class SecureOauth {
 		String password = requestParam.get("password");
 		Assert.hasText(username, "simple authentication model ,username is required.");
 		Assert.hasText(password, "simple authentication model ,password is required.");
-		ResponseEntity<String> response = requestToken(username,password,String.valueOf(new Date().getTime()));
 		
-		//first,store access token into session
-		String accessToken = parseToken(response.getBody());
+		OAuth2AccessToken oauth2AccessToken = null;
+		if(SecurityContextHolder.getContext().getAuthentication()!=null && SecurityContextHolder.getContext().getAuthentication() instanceof OAuth2Authentication) {
+			
+				OAuth2Authentication authentication = (OAuth2Authentication) SecurityContextHolder.getContext().getAuthentication();
+				oauth2AccessToken = (OAuth2AccessToken) authentication.getDetails();
+		}else {
+			
+			ResponseEntity<String> response = requestToken(username,password,String.valueOf(new Date().getTime()));
+			//first,store access token into session
+			String accessToken = parseToken(response.getBody());
+			//second, expose useful info for client
+			oauth2AccessToken = tokenService.readAccessToken(accessToken);
+			
+			if(sessionAssociate) {
+				//save authentication into session
+				OAuth2Authentication authentication=tokenService.loadAuthentication(accessToken);
+				authentication.setAuthenticated(true);
+				authentication.setDetails(oauth2AccessToken);
+				request.getSession(true);
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		}
 		
-		//second, expose useful info for client
+		
+		
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Cache-Control", "no-store");
 		headers.set("Pragma", "no-cache");
 		
-		OAuth2AccessToken oauth2AccessToken = tokenService.readAccessToken(accessToken);
 		
 		
 		Map<String,Object> map=new HashMap<String,Object>();
@@ -90,13 +109,7 @@ public class SecureOauth {
 			map.put("expiration", oauth2AccessToken.getExpiration());
 			map.put("expiresIn", oauth2AccessToken.getExpiresIn());
 		}
-		else{
-			//save authentication into session
-			OAuth2Authentication authentication=tokenService.loadAuthentication(accessToken);
-			authentication.setAuthenticated(true);
-			authentication.setDetails(oauth2AccessToken);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		}
+		
 		
 		return new ResponseEntity<>(map,headers, HttpStatus.OK);
 	}
