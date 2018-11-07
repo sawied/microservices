@@ -5,10 +5,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.cache.Cache;
 import javax.servlet.http.HttpServletRequest;
 
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -37,6 +35,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.sawied.microservice.gateway.config.GatewayConfig;
+import com.github.sawied.microservice.gateway.security.Account;
 
 @RestController
 @RequestMapping("oauth2")
@@ -51,8 +50,8 @@ public class SecureOauth {
 	private Boolean sessionAssociate=false;
 	
 	@Autowired
-	@Qualifier("customerInfoCache")
-	private Cache<String, User> cache = null;
+	@Qualifier("customerInfo")
+	private Cache<String, Account> cache = null;
 	
 	@Autowired
 	private ResourceServerTokenServices tokenService;
@@ -117,8 +116,8 @@ public class SecureOauth {
 			map.put("expiresIn", oauth2AccessToken.getExpiresIn());
 		}
 		
+		cache.put(username, new Account(username, sessionAssociate?request.getSession(false).getId():oauth2AccessToken.getValue()));
 		
-	
 		return new ResponseEntity<>(map,headers, HttpStatus.OK);
 	}
 	

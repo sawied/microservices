@@ -2,30 +2,35 @@ package com.github.sawied.microservice.gateway.config;
 
 import java.time.Duration;
 
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
+import javax.cache.Cache;
+import javax.cache.CacheManager;
+import javax.cache.Caching;
+import javax.cache.spi.CachingProvider;
+
 import org.ehcache.config.builders.CacheConfigurationBuilder;
-import org.ehcache.config.builders.CacheManagerBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
+import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.github.sawied.microservice.gateway.security.Account;
 import com.github.sawied.microservice.gateway.web.AuthenticationHeaderZuulFilter;
 import com.github.sawied.microservice.gateway.web.EurekaAuthenticationHeaderZuulFilte;
 import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterceptor;
 
 @Configuration
 @EnableZuulProxy
+@EnableCaching
 @PropertySource("classpath:config/api-gateway-config.properties")
 public class GatewayConfig {
 	
@@ -69,16 +74,21 @@ public class GatewayConfig {
 	
 	@Bean
 	public CacheManager  cacheManager(){
-		return CacheManagerBuilder
-				.newCacheManagerBuilder().withCache("customerInfo", CacheConfigurationBuilder
-						.newCacheConfigurationBuilder(String.class, User.class, ResourcePoolsBuilder.heap(100))
-						.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(10)))
-						)
-				.build();
+		
+		CachingProvider provider = Caching.getCachingProvider("org.ehcache.jsr107.EhcacheCachingProvider");
+		CacheManager cacheManager  = provider.getCacheManager();
+		
+		return cacheManager;
+		
 	}
 	
 	@Bean
-	public Cache<String, User> customerInfo(CacheManager cacheManager) {
-		return cacheManager.getCache("customerInfo", String.class, User.class);
+	public Cache<String, Account> customerInfo(CacheManager cacheManager) {
+		
+		CacheConfigurationBuilder<String, Account> cacheConfiguration = CacheConfigurationBuilder.newCacheConfigurationBuilder(String.class, Account.class, ResourcePoolsBuilder.heap(100))
+				.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(10)));
+		
+		return cacheManager.createCache("customerInfo", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfiguration));
+		
 	}
 }
