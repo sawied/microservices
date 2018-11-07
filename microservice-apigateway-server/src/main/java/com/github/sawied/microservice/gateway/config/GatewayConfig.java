@@ -1,5 +1,13 @@
 package com.github.sawied.microservice.gateway.config;
 
+import java.time.Duration;
+
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.CacheManagerBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
@@ -7,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -56,5 +65,20 @@ public class GatewayConfig {
 	public EurekaAuthenticationHeaderZuulFilte eurekaAuthenticationZuulFilter(@Value(value="${eureka.service.username:admin}") String username,
 			@Value(value="${eureka.service.password:secret}") String password) {
 		return new EurekaAuthenticationHeaderZuulFilte(username,password);
+	}
+	
+	@Bean
+	public CacheManager  cacheManager(){
+		return CacheManagerBuilder
+				.newCacheManagerBuilder().withCache("customerInfo", CacheConfigurationBuilder
+						.newCacheConfigurationBuilder(String.class, User.class, ResourcePoolsBuilder.heap(100))
+						.withExpiry(ExpiryPolicyBuilder.timeToIdleExpiration(Duration.ofMinutes(10)))
+						)
+				.build();
+	}
+	
+	@Bean
+	public Cache<String, User> customerInfo(CacheManager cacheManager) {
+		return cacheManager.getCache("customerInfo", String.class, User.class);
 	}
 }

@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -46,6 +49,10 @@ public class SecureOauth {
 	
 	@Value(value="${associate_token_with_session:false}")
 	private Boolean sessionAssociate=false;
+	
+	@Autowired
+	@Qualifier("customerInfoCache")
+	private Cache<String, User> cache = null;
 	
 	@Autowired
 	private ResourceServerTokenServices tokenService;
@@ -111,6 +118,7 @@ public class SecureOauth {
 		}
 		
 		
+	
 		return new ResponseEntity<>(map,headers, HttpStatus.OK);
 	}
 	

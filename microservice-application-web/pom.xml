@@ -209,7 +209,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<phase>test</phase>
+						<phase>deploy</phase>
 						<goals>
 							<goal>convertSwagger2markup</goal>
 						</goals>

@@ -54,6 +54,8 @@
 		<itext.version>2.1.7</itext.version>
 		<pdfbox.version>2.0.12</pdfbox.version>
 		<bouncycastle.version>1.54</bouncycastle.version>
+		<dockerfile.version>1.4.8</dockerfile.version>
+		<ehcache.version>3.6.1</ehcache.version>
 
 	</properties>
 
@@ -172,6 +174,12 @@
 				<version>${bouncycastle.version}</version>
 			</dependency>
 
+				<!-- ehcache -->
+			<dependency>
+				<groupId>org.ehcache</groupId>
+				<artifactId>ehcache</artifactId>
+				<version>${ehcache.version}</version>
+			</dependency> 
 
 
 		</dependencies>
@@ -287,6 +295,14 @@
 					<artifactId>asciidoctor-maven-plugin</artifactId>
 					<version>1.5.3</version>
 				</plugin>
+				
+				<!-- docker file maven plugin version -->
+				
+				<plugin>
+	<groupId>com.spotify</groupId>
+	<artifactId>dockerfile-maven-plugin</artifactId>
+	<version>${dockerfile.version}</version>
+</plugin>
 
 
 				<!-- generate swagger json spec file in test phase -->

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions
+	xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://www.chinasofti.com/mvtm/sc/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	name="appManagment"
+	targetNamespace="http://www.chinasofti.com/mvtm/sc/">
+
+	<wsdl:types>
+		<xsd:schema
+			targetNamespace="http://www.chinasofti.com/mvtm/sc/">
+			<xsd:element name="pushApplicationInfoRequest">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="customerId" type="xsd:string" />
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+			<xsd:element name="pushApplicationInfoResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element name="out" type="xsd:string" />
+						<xsd:element name="status" type="xsd:boolean"></xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="pushApplicationInfoRstMsg">
+		<wsdl:part element="tns:pushApplicationInfoRequest"
+			name="parameters" />
+	</wsdl:message>
+
+	<wsdl:message name="pushApplicationInfoRepMsg">
+		<wsdl:part element="tns:pushApplicationInfoResponse"
+			name="parameters" />
+	</wsdl:message>
+
+
+	<wsdl:portType name="scEndpoint">
+		<wsdl:operation name="pushApplicationInfo"
+			xmlns="default namespace">
+			<wsdl:input message="tns:pushApplicationInfoRstMsg" />
+			<wsdl:output message="tns:pushApplicationInfoRepMsg" />
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="scEndpointBinding" type="tns:scEndpoint">
+		<soap12:binding
+			transport="http://www.w3.org/2003/05/soap/bindings/HTTP/"
+			style="document" />
+		<wsdl:operation name="pushApplicationInfo">
+			<soap12:operation
+				soapAction="http://www.danan.org/appManagment/retrvApplicationInfo" />
+			<wsdl:input>
+				<soap12:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="scEndpointService">
+		<wsdl:port binding="tns:scEndpointBinding" name="scEndpoint">
+			<soap12:address location="http://localhost:9080/" />
+		</wsdl:port>
+	</wsdl:service>
+
+</wsdl:definitions>
