@@ -129,6 +129,21 @@
 				</execution>
 			</executions>
 		</plugin>
+		
+		
+		<plugin>
+			<groupId>com.spotify</groupId>
+            <artifactId>dockerfile-maven-plugin</artifactId>
+            <configuration>
+             
+             <repository>microservice/apigateway</repository>
+             <tag>${project.version}</tag>
+             <buildArgs>
+               <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+             </buildArgs>
+            </configuration>
+			</plugin>
+			
 	</plugins>
 </build>
 
