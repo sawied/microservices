@@ -2,7 +2,7 @@ version: '3.2'
 
 services:
   eureka:
-    image: microservice/eureka-server:${project.version}
+    image: "microservice/eureka-server:${project_version:?err}"
     container_name: microservice-eureka-server
     restart: always
     environment:
@@ -12,7 +12,7 @@ services:
         source: ~/logs
         target: /logs
   oauth2:
-    image: microservice/oauth2-server:${project.version}
+    image: "microservice/oauth2-server:${project_version:?err}"
     container_name: microservice-oauth2-server
     restart: always
     environment:
@@ -22,7 +22,7 @@ services:
         source: ~/logs
         target: /logs
   geteway: 
-    image: microservice/apigateway:${project.version}
+    image: "microservice/apigateway:${project_version:?err}"
     container_name: microservice-apigateway-server
     restart: always
     environment:
