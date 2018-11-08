@@ -106,6 +106,7 @@
             <configuration>
              <repository>microservice/eureka-server</repository>
              <tag>${project.version}</tag>
+             <skip>false</skip>
              <buildArgs>
                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
              </buildArgs>
