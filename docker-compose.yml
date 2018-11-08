@@ -9,7 +9,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${profile}
     volumes:
       - type: bind
-        source: ~/logs
+        source: ${log_dir}/logs
         target: /logs
   oauth2:
     image: "microservice/oauth2-server:${project_version:?err}"
@@ -19,7 +19,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${profile}
     volumes:
       - type: bind
-        source: ~/logs
+        source: ${log_dir}/logs
         target: /logs
   geteway: 
     image: "microservice/apigateway:${project_version:?err}"
@@ -29,7 +29,7 @@ services:
       SPRING_PROFILES_ACTIVE: ${profile}
     volumes:
       - type: bind
-        source: ~/logs
+        source: ${log_dir}/logs
         target: /logs
     ports: 
       - "80:80"
