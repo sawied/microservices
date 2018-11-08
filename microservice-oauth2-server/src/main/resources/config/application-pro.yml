@@ -1,0 +1,22 @@
+server:
+  port: 80 
+spring:
+  application:
+    name: microservice-oauth2-server
+  jpa:
+    database: MYSQL
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    name: trade
+    data-username: trade
+    username: trade
+    password: password
+    driver-class-name:  com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://ghostcompose_db_1:3306/trade?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=GMT%2B8
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:secret@microservice-eureka-server:80/eureka/

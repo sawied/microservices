@@ -6,23 +6,4 @@ spring:
     - dev
 server:
   port: 9000
-
-#
-#zuul:
-#  trace-request-body: true
-#  routes:
-#    trade:
-#      url: http://localhost:8000
-#
-#ribbon:
-#  eureka:
-#   enabled: false
-#eureka:
-#  client:
-#    enabled: false
-#trace: true
-#
-#OAUTH2:
-#  ribbon:
-#    listOfServers: http://localhost:8080
    

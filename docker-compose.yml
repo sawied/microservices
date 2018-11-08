@@ -1,0 +1,36 @@
+version: '3.2'
+
+services:
+  eureka:
+    image: microservice/eureka-server:${project.version}
+    container_name: microservice-eureka-server
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${profile}
+    volumes:
+      - type: bind
+        source: ~/logs
+        target: /logs
+  oauth2:
+    image: microservice/oauth2-server:${project.version}
+    container_name: microservice-oauth2-server
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${profile}
+    volumes:
+      - type: bind
+        source: ~/logs
+        target: /logs
+  geteway: 
+    image: microservice/apigateway:${project.version}
+    container_name: microservice-apigateway-server
+    restart: always
+    environment:
+      SPRING_PROFILES_ACTIVE: ${profile}
+    volumes:
+      - type: bind
+        source: ~/logs
+        target: /logs
+    ports: 
+      - "80:80"
+      - "443:443"

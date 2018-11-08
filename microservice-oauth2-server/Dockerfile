@@ -14,4 +14,6 @@ COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
 COPY ${DEPENDENCY}/META-INF /app/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /app
 
+EXPOSE 80
+
 ENTRYPOINT ["java", "-cp", "app:app/lib/*","com.github.sawied.microservice.oauth2.MicroserviceOauth2ServerApplication"]
