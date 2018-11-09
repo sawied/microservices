@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -25,6 +26,7 @@ import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 
+import com.github.sawied.microservice.gateway.security.AccountUserAuthenticationConverter;
 import com.github.sawied.microservice.gateway.security.CompoundTokenExtractor;
 
 @Configuration
@@ -59,7 +61,7 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		//super.configure(http);
-		http.requestMatcher(new NotOauth2RequestMatcher()).authorizeRequests().antMatchers("/oauth2/**").permitAll().antMatchers("/**").authenticated()
+		http.requestMatcher(new NotOauth2RequestMatcher()).authorizeRequests().antMatchers("/oauth2/simple","/oauth2/secure").permitAll().antMatchers("/**").authenticated()
 		.and().sessionManagement().sessionFixation().none().sessionCreationPolicy(SessionCreationPolicy.NEVER).and().logout().invalidateHttpSession(true).deleteCookies("JSESSIONID").logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).and().setSharedObject(RequestCache.class, new NullRequestCache())
 		;
 		
@@ -87,6 +89,9 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	@Bean
 	public JwtAccessTokenConverter jwtTokenConverter(@Value("${jwt.token.key:secret}") String key ) {
 		JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+		DefaultAccessTokenConverter tokenConverter = new DefaultAccessTokenConverter();
+		tokenConverter.setUserTokenConverter(new AccountUserAuthenticationConverter());
+		jwtAccessTokenConverter.setAccessTokenConverter(tokenConverter);
 		jwtAccessTokenConverter.setSigningKey(key);
 		return jwtAccessTokenConverter;
 	}

@@ -1,6 +1,7 @@
 package com.github.sawied.microservice.gateway.security;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Map;
 
 public class Account implements Serializable {
@@ -15,8 +16,18 @@ public class Account implements Serializable {
 	
 	private String username;
 	
+	private String access_token;
+	
+	private Date expiration;
+	
+	private int expiresIn;
+	
 	private Map<String,Object> additionalInfo;
 
+
+	public Account() {
+		super();
+	}
 
 	public Account(String username,String principle) {
 		super();
@@ -38,6 +49,32 @@ public class Account implements Serializable {
 
 	public String getUsername() {
 		return username;
+	}
+		
+	
+
+	public String getAccess_token() {
+		return access_token;
+	}
+
+	public void setAccess_token(String access_token) {
+		this.access_token = access_token;
+	}
+
+	public Date getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(Date expiration) {
+		this.expiration = expiration;
+	}
+
+	public int getExpiresIn() {
+		return expiresIn;
+	}
+
+	public void setExpiresIn(int expiresIn) {
+		this.expiresIn = expiresIn;
 	}
 
 	@Override

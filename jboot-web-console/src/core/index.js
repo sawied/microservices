@@ -1,6 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Root from "../containers";
+import API from './apis';
+import store from 'store';
 
-ReactDOM.render(
-    <Root/>,document.getElementById('web-console-ui'));
+
+async function launch(){
+    let result = null;
+    
+    try{
+        result = await API('info',{});
+    }catch(e){
+        window.console.error("it seems not logon?",e);
+    }
+    if(!result){
+        store.remove("authentication");
+    }
+    ReactDOM.render(
+        <Root/>,document.getElementById('web-console-ui'));
+}
+
+launch();
+
+

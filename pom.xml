@@ -57,6 +57,9 @@
 		<bouncycastle.version>1.54</bouncycastle.version>
 		<dockerfile.version>1.4.8</dockerfile.version>
 		<ehcache.version>3.6.1</ehcache.version>
+		
+		<fileupload.version>1.3.3</fileupload.version>
+		
 
 	</properties>
 
@@ -140,6 +143,14 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>8.0.12</version>
 			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+			<dependency>
+			    <groupId>commons-fileupload</groupId>
+			    <artifactId>commons-fileupload</artifactId>
+			    <version>${fileupload.version}</version>
+			</dependency>
+			
 
 			<dependency>
 				<groupId>io.github.swagger2markup</groupId>

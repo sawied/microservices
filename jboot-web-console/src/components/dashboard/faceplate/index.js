@@ -1,11 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Octicon, {X} from '@githubprimer/octicons-react'
+
+
+
+/**
+ * 
+ * data construct of this component
+ * 
+ * {
+ * open：boolean  //visiable or disvisiable
+ * type：string   // compenoent type
+ * data：object   //data for render
+ * }
+ * 
+ */
 class Faceboard extends React.Component{
     
     constructor(props){
         super(props);
-        this.state={open:true}
+        this.state={open:false}
         this.closeFaceboard=this.closeFaceboard.bind(this);
       }
 

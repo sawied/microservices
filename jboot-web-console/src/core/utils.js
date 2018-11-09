@@ -6,16 +6,7 @@ export function getAuth(){
     var ath=store.get("authentication");
     
     if(ath){
-      if(ath.expiration){//work on token model or session model
-        let interval= (new Date(ath.expiration).getTime()-new Date().getTime())/(3600*1000);
-        if(interval>0){
-            return ath;
-        }
-      }
-      if(_hasCookie("JSESSIONID")){
-        // work on session model
-        return Object.assign({authenticated:true},ath);
-      }
+      return ath;
     }
     return {authenticated:false,user_name:'unknow',authorities:[],email:null,jti:null,access_token:null,expiration:null};;
  }

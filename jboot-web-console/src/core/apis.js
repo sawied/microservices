@@ -8,7 +8,7 @@ let host = "/apis";
 const services=Object.assign(
     
     { 'info':{
-       endpoint:'/',
+       endpoint:host+"/oauth2/info",
        method:'GET',
        headers:{'Content-Type': 'application/json'},
        options:{timeout:3000}
@@ -16,13 +16,11 @@ const services=Object.assign(
      "auth":{
          endpoint: host+"/oauth2/simple",
          "method":'POST',
-         emitAuth:true,
          headers:{'Content-Type': 'application/x-www-form-urlencoded'},
      },
      "apps":{
       endpoint: host+"/eureka/apps",
       "method":'GET',
-      emitAuth:true,
       headers:{'Accept': 'application/json'}
      }
    }
@@ -45,7 +43,7 @@ const services=Object.assign(
    }
 
    //apply authentication token in headers if service config don't claim auth header.
-   if(!serviceConfig.emitAuth){
+   if(serviceConfig.emitAuth){
     let authentication=store.get('authentication');
     if(authentication!=null && authentication.authenticated){
       if(request.headers){
@@ -70,7 +68,7 @@ const services=Object.assign(
          return response;
        }
       }
-      throw new Error('Network response was not ok.') ;
+      throw new Error('Network response was not ok.'+response.statusText) ;
       //Promise.reject({'error':'Network response was not ok.'});
     },function(e){
        window.console.log('There has been a problem with your fetch operation: ', e.message);
@@ -81,7 +79,7 @@ const services=Object.assign(
  
  var applyParams=(param,request)=>{
    //apply params into request body
-     if(param){
+     if(param && request.method!='GET'){
          if(param&&request.headers&&request.headers['Content-Type']){
              if(request.headers['Content-Type'].indexOf('json')!=-1){
                request.body=JSON.stringify(param);
