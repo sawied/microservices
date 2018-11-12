@@ -1,7 +1,9 @@
 import { createActions, handleActions} from 'redux-actions';
 import {fromJS} from 'immutable';
+import { combineReducers } from "redux-immutable"
 import apis from '../../core/apis';
 import { isArray } from 'util';
+import  facePlateReducer from './faceplate/actions';
 
 const defaultState=fromJS({
     applicationCount:0,
@@ -12,10 +14,13 @@ export const dsActionCreators = createActions({
     getApps: async ()=>{
        const  result = await apis('apps',{});
       return result;
-      }
+      },
+    getInstanceDetails : async (instanceId)=>{
+        const result = await apis('instance-details',{instanceId})
+    }
       }); 
 
-export const dsReducer = handleActions({
+ const bootReducer = handleActions({
     getApps:{
    next(state,action){
      window.console.log("get app data from server :",action.payload);
@@ -34,3 +39,8 @@ export const dsReducer = handleActions({
 },
 defaultState
 );
+
+
+export const dsReducer = combineReducers({ds:bootReducer,faceplate:facePlateReducer});
+
+

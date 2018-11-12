@@ -1,4 +1,5 @@
 import React from 'react';
+import {close,init} from './faceplate/actions';
 
 
 class AppViewer extends React.Component{

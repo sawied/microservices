@@ -19,7 +19,7 @@ class Applist extends React.Component{
       }
 
     render(){
-        let {applicationCountNumber,applications} = this.props;
+        let {applicationCountNumber,applications,faceplate} = this.props;
         return (<>
             <div className="list-group-container">
             <Menu applicationCountNumber={applicationCountNumber}></Menu>
@@ -27,15 +27,20 @@ class Applist extends React.Component{
            <div className="content-body">
              <Apps applications={applications} dispatch={this.dispatch}/>
            </div>
-           <Faceboard/>
+           <Faceboard {...faceplate}/>
            </>
        )
     }
 }
 
 const mapStateToProps = state => ({
-    applicationCountNumber: state.getIn(["apps",'applicationCount']),
-    applications:state.getIn(['apps','applications'])
+    applicationCountNumber: state.getIn(["apps",'ds','applicationCount']),
+    applications:state.getIn(['apps','ds','applications']),
+    faceplate:{
+      open: state.getIn(['apps','faceplate','open']),
+      type: state.getIn(['apps','faceplate','type']),
+      data: state.getIn(['apps','faceplate','data'])
+    }
   })
 
 

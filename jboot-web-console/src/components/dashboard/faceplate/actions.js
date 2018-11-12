@@ -1,15 +1,22 @@
-import { createActions,createAction,handleAction,handleActions, combineActions } from 'redux-actions';
+import { createAction,handleActions } from 'redux-actions';
 import {Map} from 'immutable';
-import apis from '../../core/apis';
 
-let initStatus = {"open":false,"type":null,"data":null};
+let initStatus = Map({"open":false,"type":null,"data":null});
 
+export const CLOSE_FACEPLATE="faceplate/close";
 
-export const close = createAction('toggle');
+export const LOAD_FACEPLATE="faceplate/load";
 
-export const closeReducer =handleAction(toggle,(state,action)=>{return state.setIn(['open'],false)});
-export const dsActionCreators = createActions({
-    toggle: ()=>{
-        null
-      }
-    }); 
+export const close = createAction(CLOSE_FACEPLATE);
+
+export const init = createAction(LOAD_FACEPLATE);
+
+export const facePlateReducer=handleActions({
+  close:(state)=>{
+    return state.setIn(['open'],false)
+  },
+  init:(state,action)=>{
+    return state.setIn(['open'],true).set('data',action.payload.data).set('type',action.payload.type);
+}
+},initStatus);
+

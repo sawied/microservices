@@ -29,13 +29,13 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-oauth2</artifactId>
 		</dependency>
-		
-		
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-cache</artifactId>
@@ -50,19 +50,19 @@
 			<groupId>javax.cache</groupId>
 			<artifactId>cache-api</artifactId>
 		</dependency>
-		
-		
+
+
 		<!-- httpclient -->
-			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpclient</artifactId>
-			</dependency>
-			
-			
-			<dependency>
-				<groupId>org.ehcache</groupId>
-      			<artifactId>ehcache</artifactId>
-			</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+		</dependency>
 
 		<!--logging -->
 		<dependency>
@@ -95,57 +95,50 @@
 
 
 	<build>
-	<plugins>
-		<plugin>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-maven-plugin</artifactId>
-			<executions>
-			 <execution>
-			  <goals>
-			   <goal>repackage</goal>
-			  </goals>
-			 </execution>
-			</executions>
-		</plugin>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-			<executions>
-				<execution>
-				    <id>unpack</id>
-				    <phase>package</phase>
-					<goals>
-						<goal>unpack</goal>
-					</goals>
-					<configuration>
-						<artifactItems>
-							<artifactItem>
-								<groupId>${project.groupId}</groupId>
-								<artifactId>${project.artifactId}</artifactId>
-								<version>${project.version}</version>
-							</artifactItem>
-						</artifactItems>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
-		
-		
-		<plugin>
-			<groupId>com.spotify</groupId>
-            <artifactId>dockerfile-maven-plugin</artifactId>
-            <configuration>
-             <skip>false</skip>
-             <repository>microservice/apigateway</repository>
-             <tag>${project.version}</tag>
-             <buildArgs>
-               <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-             </buildArgs>
-            </configuration>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-			
-	</plugins>
-</build>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<configuration>
+					<skip>false</skip>
+					<repository>microservice/apigateway</repository>
+					<tag>${project.version}</tag>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 
 
 </project>

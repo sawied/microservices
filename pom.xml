@@ -57,9 +57,9 @@
 		<bouncycastle.version>1.54</bouncycastle.version>
 		<dockerfile.version>1.4.8</dockerfile.version>
 		<ehcache.version>3.6.1</ehcache.version>
-		
+
 		<fileupload.version>1.3.3</fileupload.version>
-		
+
 
 	</properties>
 
@@ -123,10 +123,10 @@
 				<artifactId>httpclient</artifactId>
 				<version>${httpclient.version}</version>
 				<exclusions>
-				 <exclusion>
-				  <groupId>commons-logging</groupId>
-          		  <artifactId>commons-logging</artifactId>
-				 </exclusion>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 
@@ -143,14 +143,14 @@
 				<artifactId>mysql-connector-java</artifactId>
 				<version>8.0.12</version>
 			</dependency>
-			
+
 			<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 			<dependency>
-			    <groupId>commons-fileupload</groupId>
-			    <artifactId>commons-fileupload</artifactId>
-			    <version>${fileupload.version}</version>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${fileupload.version}</version>
 			</dependency>
-			
+
 
 			<dependency>
 				<groupId>io.github.swagger2markup</groupId>
@@ -186,12 +186,12 @@
 				<version>${bouncycastle.version}</version>
 			</dependency>
 
-				<!-- ehcache -->
+			<!-- ehcache -->
 			<dependency>
 				<groupId>org.ehcache</groupId>
 				<artifactId>ehcache</artifactId>
 				<version>${ehcache.version}</version>
-			</dependency> 
+			</dependency>
 
 
 		</dependencies>
@@ -256,6 +256,7 @@
 	<build>
 		<finalName>${artifactId}-${project.phase}</finalName>
 		<plugins>
+
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.0.2</version>
@@ -283,11 +284,11 @@
 				<version>3.2</version>
 			</plugin>
 			<plugin>
-			 <groupId>com.spotify</groupId>
-			 <artifactId>dockerfile-maven-plugin</artifactId>
-			 <configuration>
-			  <skip>true</skip>
-			 </configuration>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
 
 
@@ -296,6 +297,28 @@
 		<pluginManagement>
 
 			<plugins>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<inherited>true</inherited>
+					<executions>
+						<execution>
+							<goals>
+								<goal>repackage</goal>
+								<goal>build-info</goal>
+							</goals>
+						</execution>
+					</executions>	
+					<configuration>
+								<additionalProperties>
+									<project.name>${project.groupId}:${project.artifactId}</project.name>
+									<project.version>${project.version}</project.version>
+									<project.description>${project.description}</project.description>
+									<java.target>${compile.version}</java.target>
+								</additionalProperties>
+							</configuration>
+				</plugin>
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
@@ -314,14 +337,14 @@
 					<artifactId>asciidoctor-maven-plugin</artifactId>
 					<version>1.5.3</version>
 				</plugin>
-				
+
 				<!-- docker file maven plugin version -->
-				
+
 				<plugin>
-	<groupId>com.spotify</groupId>
-	<artifactId>dockerfile-maven-plugin</artifactId>
-	<version>${dockerfile.version}</version>
-</plugin>
+					<groupId>com.spotify</groupId>
+					<artifactId>dockerfile-maven-plugin</artifactId>
+					<version>${dockerfile.version}</version>
+				</plugin>
 
 
 				<!-- generate swagger json spec file in test phase -->
@@ -373,17 +396,13 @@
 				</plugin>
 
 
-				<plugin>
-					<groupId>org.springframework.boot</groupId>
-					<artifactId>spring-boot-maven-plugin</artifactId>
-					<version>2.0.5.RELEASE</version>
-				</plugin>
-
-
 			</plugins>
 		</pluginManagement>
 
 	</build>
+
+
+
 
 
 	<distributionManagement>
