@@ -34,6 +34,11 @@
 		 <artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		
+		<dependency>
+		 <groupId>com.github.sawied</groupId>
+		 <artifactId>microservice-commons</artifactId>
+		</dependency>
+		
 			<!--logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>

@@ -20,8 +20,8 @@ public class SignDocConfig {
 			@Value("${sign.keystore.passwd}") String passwd,
 			@Value("${template.path}") String templatePath,
 			@Value("${template.sign.page:0}") int signPage,
-			@Value("${template.sign.rectangle}") int [] position
-			)
+			@Value("${template.sign.rectangle}") int [] position,
+			@Value("${font.resource}") String font)
 			{
 		
 		ResourcePatternResolver resourcePatternResolver =new PathMatchingResourcePatternResolver();
@@ -33,7 +33,7 @@ public class SignDocConfig {
 		docOperator.setTemplate(resourcePatternResolver.getResource(templatePath));
 		docOperator.setPositions(position);
 		docOperator.setSignPage(signPage);
-		
+		docOperator.setFontResource(resourcePatternResolver.getResource(font));
 		return docOperator;
 	}
 	

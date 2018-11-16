@@ -192,6 +192,13 @@
 				<artifactId>ehcache</artifactId>
 				<version>${ehcache.version}</version>
 			</dependency>
+			
+			<!-- dependency to itself -->
+			<dependency>
+			 <groupId>com.github.sawied</groupId>
+			 <artifactId>microservice-commons</artifactId>
+			 <version>${project.version}</version>
+			</dependency>
 
 
 		</dependencies>
