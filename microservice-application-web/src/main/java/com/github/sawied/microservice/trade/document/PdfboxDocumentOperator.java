@@ -32,6 +32,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
@@ -97,6 +98,8 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 		form.setNeedAppearances(false);
 		
 		PDFont font = PDType0Font.load(pdf, fontResource.getInputStream());
+		
+		//PDFont font = PDType1Font.HELVETICA;
 		
 		log.debug("the form sheet is XFA :{}",form.hasXFA());
 		

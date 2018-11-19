@@ -46,6 +46,11 @@
 		</dependency>
 		
 		<dependency>
+		 <groupId>org.springframework.security</groupId>
+		 <artifactId>spring-security-ldap</artifactId>
+		</dependency>
+		
+		<dependency>
 		 <groupId>org.springframework.cloud</groupId>
 		 <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
@@ -92,6 +97,9 @@
 			  </goals>
 			 </execution>
 			</executions>
+			<configuration>
+			 <executable>true</executable>
+			</configuration>
 			</plugin>
 			
 			<plugin>

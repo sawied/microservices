@@ -3,6 +3,7 @@ package com.github.sawied.microservice.trade.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -10,8 +11,13 @@ import com.github.sawied.microservice.trade.document.DocumentOperator;
 import com.github.sawied.microservice.trade.document.PdfboxDocumentOperator;
 
 @Configuration
-@PropertySource("classpath:config/app.config.properties")
+
 public class SignDocConfig {
+	
+	@Configuration
+	@Profile("default")
+	@PropertySource("classpath:config/app.config.properties")
+	static class Dev{}
 
 	@Bean
 	public DocumentOperator documentOperator(
