@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, bindActionCreators, compose } from "redux";
 import Im, { fromJS, Map } from "immutable";
 import promiseMiddleware from 'redux-promise';
+import logger from 'redux-logger';
 
 import deepExtend from "deep-extend";
 import rootReducers,{ge} from './reducer';
@@ -34,7 +35,7 @@ function globalErrorMiddleware() {
       }
         return next(action).catch(error => {
             window.console.warn(`${action.type} caught at middleware with reason: ${JSON.stringify(error.message)}.`);
-            store.dispatch(ge(error.message));
+            store.dispatch(ge(error.message+new Date().getTime().toString()));
         });
     };
   }
@@ -45,7 +46,8 @@ function configureStore(rootReducer, initialState) {
 
     let middlwares = [
         globalErrorMiddleware(),
-        promiseMiddleware
+        promiseMiddleware,
+        logger
     ]
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

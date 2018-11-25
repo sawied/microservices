@@ -1,0 +1,16 @@
+<service>
+	<id>@dist.project.id@</id>
+	<name>@dist.project.name@</name>
+	<description>@dist.project.description@</description>
+	<workingdirectory>%BASE%\</workingdirectory>
+	<logpath>%BASE%\logs</logpath>
+	<logmode>rotate</logmode>
+
+	<executable>java</executable>
+	<startargument>-Xms128m</startargument>
+	<startargument>-Xms1024m</startargument>
+	<startargument>-cp</startargument>
+	<startargument>lib/*</startargument>
+	<startargument>@dist.start.class@</startargument>
+
+</service>

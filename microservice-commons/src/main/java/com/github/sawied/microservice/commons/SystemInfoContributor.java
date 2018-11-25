@@ -12,7 +12,7 @@ public class SystemInfoContributor implements InfoContributor {
 
 
 	public void contribute(Builder builder) {
-		builder.withDetails(systemInfo());
+		builder.withDetail("system", systemInfo());
 	}
 	
 	

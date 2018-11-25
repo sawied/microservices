@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
 import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
@@ -25,7 +26,6 @@ import org.springframework.security.web.authentication.logout.HttpStatusReturnin
 import org.springframework.security.web.savedrequest.NullRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.matcher.RequestMatcher;
-
 import com.github.sawied.microservice.gateway.security.AccountUserAuthenticationConverter;
 import com.github.sawied.microservice.gateway.security.CompoundTokenExtractor;
 
@@ -69,11 +69,6 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 	}
 	
 	
-	
-
-
-    
-
 
 
 	@Bean
@@ -81,9 +76,6 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 		return new JwtTokenStore(jwtTokenConverter);
 	}
 	
-	
-
-
 
 
 	@Bean
@@ -109,9 +101,24 @@ public class SecurityConfig extends ResourceServerConfigurerAdapter{
 
 		@Override
 		public boolean matches(HttpServletRequest request) {
+			String path=getRequestPath(request);
+			if(path!=null) {
+				return !path.startsWith("/actuator");
+			}
+			
 			return true;
 		}
 		
+		
+		private String getRequestPath(HttpServletRequest request) {
+			String url = request.getServletPath();
+
+			if (request.getPathInfo() != null) {
+				url += request.getPathInfo();
+			}
+
+			return url;
+		}
 	}
 	
 	

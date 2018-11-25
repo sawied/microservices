@@ -12,10 +12,9 @@ async function launch(){
         result = await API('info',{});
     }catch(e){
         window.console.error("it seems not logon?",e);
-    }
-    if(!result){
         store.remove("authentication");
     }
+   
     ReactDOM.render(
         <Root/>,document.getElementById('web-console-ui'));
 }

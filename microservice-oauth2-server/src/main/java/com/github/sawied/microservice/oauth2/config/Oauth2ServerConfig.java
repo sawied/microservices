@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -28,6 +29,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import com.github.sawied.microservice.oauth2.jpa.service.AccountService;
 import com.github.sawied.microservice.oauth2.security.AccountAuthenticationDetailService;
@@ -165,9 +167,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Bean
 	public ClientDetailsService clientDetailsService() throws Exception {
 		InMemoryClientDetailsServiceBuilder clientDetailsBuilder = new InMemoryClientDetailsServiceBuilder();
-		clientDetailsBuilder.withClient("api-gateway").resourceIds("OAUTH2_RESOURCE_ID","API_GATEWAY_RESOURCE").autoApprove(true).authorities("ROLE_CLIENT")
+		clientDetailsBuilder.withClient("system").resourceIds("OAUTH2_RESOURCE_ID","API_GATEWAY_RESOURCE").autoApprove(true).authorities("ROLE_CLIENT")
 				.authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("read", "write", "user")
-				.secret("{noop}secret");
+				.secret("{noop}password");
 		return clientDetailsBuilder.build();
 	}
 

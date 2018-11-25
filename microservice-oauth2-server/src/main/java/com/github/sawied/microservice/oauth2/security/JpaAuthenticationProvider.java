@@ -9,6 +9,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.TypeUtils;
 
 public class JpaAuthenticationProvider extends DaoAuthenticationProvider{
 
@@ -27,16 +29,18 @@ public class JpaAuthenticationProvider extends DaoAuthenticationProvider{
 		super.additionalAuthenticationChecks(userDetails, authentication);
 		
 		//additional check for timestamp
-		if(userDetails !=null && userDetails instanceof AccountDetails) {
-			Map<String,String> details = (Map<String, String>) authentication.getDetails();
-			String timestamp = details.get(TIMESTAMP);
-			AccountAuthenticationDetailService service=(AccountAuthenticationDetailService)this.getUserDetailsService();
-			String principal = (String)authentication.getPrincipal();
-			if(!service.check(principal,timestamp)){
-				log.warn("notice: timestamp check failed for user :{} timestamp: {} ",authentication.getPrincipal(),timestamp);
-				throw new BadTimestampException("invaild timestamp for authentication");
-			}else {
-				service.traceLogon(principal,timestamp,accountRequestDetails.getClientIp());
+		if(userDetails !=null && userDetails instanceof AccountDetails ) {
+			if(authentication.getDetails() instanceof Map) {				
+				Map<String,String> details = (Map<String, String>) authentication.getDetails();
+				String timestamp = details.get(TIMESTAMP);
+				AccountAuthenticationDetailService service=(AccountAuthenticationDetailService)this.getUserDetailsService();
+				String principal = (String)authentication.getPrincipal();
+				if(!service.check(principal,timestamp)){
+					log.warn("notice: timestamp check failed for user :{} timestamp: {} ",authentication.getPrincipal(),timestamp);
+					throw new BadTimestampException("invaild timestamp for authentication");
+				}else {
+					service.traceLogon(principal,timestamp,accountRequestDetails.getClientIp());
+				}
 			}
 			
 		}

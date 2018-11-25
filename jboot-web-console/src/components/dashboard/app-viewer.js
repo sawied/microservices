@@ -1,5 +1,6 @@
 import React from 'react';
 import {close,init} from './faceplate/actions';
+import {dsActionCreators} from './actions';
 
 
 class AppViewer extends React.Component{
@@ -7,13 +8,13 @@ class AppViewer extends React.Component{
 
     constructor(props){
         super(props)
-        this.dispatch = this.props.dispatch;
+        this.detailListner = this.props.detailListner;
     }
 
 
     displayInstanceHealth =(e,instanceId) =>{
         e.preventDefault();
-        return this.dispatch;
+        this.detailListner(instanceId);
     }
 
 

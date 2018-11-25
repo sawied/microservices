@@ -22,6 +22,11 @@ const services=Object.assign(
       endpoint: host+"/eureka/apps",
       "method":'GET',
       headers:{'Accept': 'application/json'}
+     },
+     "instance-details":{
+       endpoint: host+"/system/info",
+       method:'GET',
+       header:{'Content-type':'application/x-www-form-urlencoded','Accept': 'application/json'}
      }
    }
  );
@@ -77,21 +82,20 @@ const services=Object.assign(
  }
  
  
- var applyParams=(param,request)=>{
+ var applyParams=(param,req)=>{
+   let request=Object.assign({},req);
    //apply params into request body
-     if(param && request.method!='GET'){
-         if(param&&request.headers&&request.headers['Content-Type']){
+     if(param){
+         if(param&&request.headers&&request.headers['Content-Type'] && request.method=='POST'){
              if(request.headers['Content-Type'].indexOf('json')!=-1){
                request.body=JSON.stringify(param);
              }else if(request.headers['Content-Type'].indexOf('x-www-form-urlencoded')!=-1){
-               var keys=Object.keys(param);
-               var usr=new URLSearchParams();
-               for(var i=0; i<keys.length;i++){
-                 var key=keys[i];
-                 usr.append(key,param[key]);
-               }
+               var usr = buildRequestParam(param);
                request.body=usr.toString();
              }
+         }else if(param && request.method=='GET'){
+          var usr = buildRequestParam(param);
+            request.endpoint+=("?"+usr);
          }
      }
  
@@ -100,3 +104,13 @@ const services=Object.assign(
  }
  
  export default apis;
+
+function buildRequestParam(param) {
+  var keys = Object.keys(param);
+  var usr = new URLSearchParams();
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    usr.append(key, param[key]);
+  }
+  return usr;
+}

@@ -18,6 +18,16 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<properties>
+		<dist.dir>${project.build.directory}/dist</dist.dir>
+		<dist.project.id>${project.artifactId}</dist.project.id>
+		<dist.project.name>Sample Spring Boot App</dist.project.name>
+		<dist.project.description>
+			${project.description}
+		</dist.project.description>
+		<dist.start.class>com.github.sawied.microservice.register.MicroserviceEurekaServerApplication</dist.start.class>
+	</properties>
+
 
 	<dependencies>
 		<dependency>
@@ -66,7 +76,20 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		
+		<!-- package  -->
+		
+		<dependency>
+			<groupId>com.sun.winsw</groupId>
+			<artifactId>winsw</artifactId>
+			<classifier>bin</classifier>
+			<type>exe</type>
+			<scope>provided</scope>
+		</dependency>
+		
+		
+		
+		</dependencies>
 
 
 	<build>
@@ -77,6 +100,30 @@
 				<configuration>
 					<executable>true</executable>
 				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${dist.dir}</outputDirectory>
+							<resources>
+								<resource>
+								 	<directory>src/main/dist</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
@@ -99,8 +146,50 @@
 							</artifactItems>
 						</configuration>
 					</execution>
+					
+					<execution>
+					 <id>copy</id>
+					 <phase>package</phase>
+					 <goals>
+					  <goal>copy</goal>
+					 </goals>
+					 <configuration>
+					   <artifactItems>
+					    <artifactItem>
+					     	<groupId>com.sun.winsw</groupId>
+							<artifactId>winsw</artifactId>
+							<classifier>bin</classifier>
+							<type>exe</type>
+							<destFileName>service.exe</destFileName>
+							<outputDirectory>${dist.dir}</outputDirectory>
+					    </artifactItem>
+					   </artifactItems>
+					 </configuration>
+					</execution>
 				</executions>
 			</plugin>
+			
+			
+			<plugin>
+			 <groupId>org.apache.maven.plugins</groupId>
+			 <artifactId>maven-assembly-plugin</artifactId>
+			 <configuration>
+			  <descriptors>
+			   <descriptor>src/main/assembly/unix.xml</descriptor>
+			   <descriptor>src/main/assembly/windows.xml</descriptor>
+			  </descriptors>
+			 </configuration>
+			 <executions>
+			  <execution>
+			   <id>assembly</id>
+			   <phase>package</phase>
+			   <goals>
+			    <goal>single</goal>
+			   </goals>
+			  </execution>
+			 </executions>
+			</plugin>
+			
 
 			<plugin>
 				<groupId>com.spotify</groupId>

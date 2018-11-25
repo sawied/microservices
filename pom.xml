@@ -200,7 +200,23 @@
 			 <artifactId>microservice-commons</artifactId>
 			 <version>${project.version}</version>
 			</dependency>
-
+			
+			
+			<!-- package related dependencies -->
+			
+			<dependency>
+				<groupId>commons-daemon</groupId>
+				<artifactId>commons-daemon</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+			
+			<dependency>
+				 <groupId>com.sun.winsw</groupId>
+				 <artifactId>winsw</artifactId>
+				 <classifier>bin</classifier>
+				 <type>exe</type>
+				 <version>2.1.2</version>
+			</dependency>
 
 		</dependencies>
 
@@ -485,6 +501,15 @@
 				<enabled>true</enabled>
 			</releases>
 			<url>http://repository.openmindonline.it/</url>
+		</repository>
+		
+		<repository>
+			<id>jenkins</id>
+			<name>Jenkins Repository</name>
+			<url>http://repo.jenkins-ci.org/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 
 	</repositories>

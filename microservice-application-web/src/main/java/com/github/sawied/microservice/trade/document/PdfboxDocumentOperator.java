@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.fontbox.ttf.TrueTypeCollection;
+import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -31,8 +33,10 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDType3Font;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
@@ -96,6 +100,13 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 		PDDocument pdf = PDDocument.load(this.template.getInputStream());
 		PDAcroForm form = pdf.getDocumentCatalog().getAcroForm();
 		form.setNeedAppearances(false);
+		
+		
+		//TrueTypeCollection trueTypeCollection = new TrueTypeCollection(fontResource.getFile());
+		
+		//TrueTypeFont trueTypeFont=trueTypeCollection.getFontByName("SourceHanSansSC-Light");
+		
+		// PDFont font = PDType0Font.load(pdf, trueTypeFont,true);
 		
 		PDFont font = PDType0Font.load(pdf, fontResource.getInputStream());
 		

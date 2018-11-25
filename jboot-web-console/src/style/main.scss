@@ -141,3 +141,18 @@ div.face-board{
     }
     
 }
+div.message-panel{
+    position: fixed;
+    z-index: 10000;
+    max-width: 300px;
+    right: 0;
+    display: inline-block;
+    margin: 5px 20px;
+    &.dismiss{
+        transition-property: right;
+        transition-delay: 0s;
+        transition-duration: 1s;
+        transition-timing-function: linear;
+        right: -400px;
+    }
+}

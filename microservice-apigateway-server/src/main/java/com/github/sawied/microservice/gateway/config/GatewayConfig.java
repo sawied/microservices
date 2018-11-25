@@ -7,10 +7,14 @@ import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.jsr107.Eh107Configuration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -51,13 +55,32 @@ public class GatewayConfig {
 
 	@Bean
 	@LoadBalanced
-	public RestTemplate oauth2RestTemplate(@Value(value="${oauth2.service.username:api-gateway}") String oauth2_username,
-			@Value(value="${oauth2.service.password:secret}") String oauth2_password) {
-		 RestTemplate restTemplate = new RestTemplate();
-		 restTemplate.getInterceptors().add(new BasicAuthorizationInterceptor(oauth2_username,oauth2_password));
+	public RestTemplate oauth2RestTemplate(@Autowired BasicAuthorizationInterceptor basicAuthorizationInterceptor) {
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.getInterceptors().add(basicAuthorizationInterceptor);
+		restTemplate.getInterceptors().add(new ForwardHeaderHttpClientInterceptor());
+		return restTemplate;
+	}
+	
+	@Bean
+	public RestTemplate simpleRestTemplate(@Autowired BasicAuthorizationInterceptor basicAuthorizationInterceptor) {
+		RestTemplate restTemplate = new RestTemplate();
+		 restTemplate.getInterceptors().add(basicAuthorizationInterceptor);
 		 restTemplate.getInterceptors().add(new ForwardHeaderHttpClientInterceptor());
 		return restTemplate;
 	}
+	
+	@Bean
+	public BasicAuthorizationInterceptor basicAuthorizationInterceptor(@Value(value="${oauth2.service.username:system}") String oauth2_username,
+			@Value(value="${oauth2.service.password:password}") String oauth2_password) {
+		return new BasicAuthorizationInterceptor(oauth2_username,oauth2_password);
+	}
+	
+	/**
+	public CloseableHttpClient httpClient() {
+		HttpClientBuilder.create().
+	}
+	**/
 	
 	
 	@Bean
@@ -67,8 +90,8 @@ public class GatewayConfig {
 	
 	
 	@Bean 
-	public EurekaAuthenticationHeaderZuulFilte eurekaAuthenticationZuulFilter(@Value(value="${eureka.service.username:admin}") String username,
-			@Value(value="${eureka.service.password:secret}") String password) {
+	public EurekaAuthenticationHeaderZuulFilte eurekaAuthenticationZuulFilter(@Value(value="${eureka.service.username:system}") String username,
+			@Value(value="${eureka.service.password:password}") String password) {
 		return new EurekaAuthenticationHeaderZuulFilte(username,password);
 	}
 	
