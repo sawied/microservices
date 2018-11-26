@@ -75,6 +75,13 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 		</dependency>
+		
+		
+		<!-- own dependencies -->
+		<dependency>
+			<groupId>com.github.sawied</groupId>
+			<artifactId>microservice-commons</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -1,6 +1,8 @@
 import React from 'react';
 import {close,init} from './faceplate/actions';
 import {dsActionCreators} from './actions';
+import {FormattedRelative} from 'react-intl';
+import _ from 'lodash';
 
 
 class AppViewer extends React.Component{
@@ -36,7 +38,7 @@ class AppViewer extends React.Component{
                        <ul>
                         <li className="item-property"><label>Host Name:</label><span>{inst.hostName}</span></li>
                         <li className="item-property"><label>Ip Address:</label><span>{inst.ipAddr}</span></li>
-                        <li className="item-property"><label>last update time:</label><span>{inst.lastUpdatedTimestamp}</span></li>
+                        <li className="item-property"><label>last update time:</label><span><FormattedRelative value={new Date(_.toNumber(inst.lastUpdatedTimestamp))}/></span></li>
                        </ul>
                 </div>
             </div>)

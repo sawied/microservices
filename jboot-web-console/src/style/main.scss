@@ -53,7 +53,8 @@ div.app-context-body{
         }
     }
     .content-body{
-        @include stretch(0,0,0,$list-group-width); 
+        @include stretch(0,0,0,$list-group-width);
+        overflow-y: scroll;
     }
 }
 
@@ -121,11 +122,12 @@ div.instance-detail{
 
 div.face-board-container{
     @include stretch(0); 
+    position: fixed;
     //background-color: #000;
     //opacity: 0.5;
 }
 div.face-board{
-    width: 300px;
+    width: 350px;
     z-index: 100;
     background-color: #ffffff;
     @include stretch(0,0,0,auto); 
@@ -133,11 +135,19 @@ div.face-board{
     div.faceboard-title{
         padding: 10px 20px;
         border-bottom:1px solid #ccc; 
+        height: 50px;
+        color: #004085;
+        background-color: #cce5ff;
+        border-color: #b8daff;
         span{
             font-size: 16px;
             font-weight: bold;
             text-transform: capitalize;
         }
+    }
+    div.face-body{
+        height: 100%;
+        overflow-y: scroll;
     }
     
 }
@@ -154,5 +164,21 @@ div.message-panel{
         transition-duration: 1s;
         transition-timing-function: linear;
         right: -400px;
+    }
+}
+
+p.instance-detail-category{
+    font-weight: bold;
+    text-transform: capitalize;
+    border-bottom: 1px solid #ccc;
+}
+ul.instance-attributes{
+    list-style: none;
+    padding: 0;
+    label{
+        font-weight: bolder;
+    }
+    li{
+        margin: 2px auto;
     }
 }

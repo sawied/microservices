@@ -63,6 +63,12 @@
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 		</dependency>
+		
+			<!-- own dependencies -->
+		<dependency>
+			<groupId>com.github.sawied</groupId>
+			<artifactId>microservice-commons</artifactId>
+		</dependency>
 
 		<!--logging -->
 		<dependency>

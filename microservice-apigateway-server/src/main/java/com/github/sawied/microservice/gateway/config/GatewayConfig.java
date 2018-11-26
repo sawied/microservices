@@ -7,19 +7,17 @@ import javax.cache.CacheManager;
 import javax.cache.Caching;
 import javax.cache.spi.CachingProvider;
 
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
@@ -36,6 +34,7 @@ import com.github.sawied.microservice.gateway.web.ForwardHeaderHttpClientInterce
 @EnableZuulProxy
 @EnableCaching
 @PropertySource("classpath:config/api-gateway-config.properties")
+@ComponentScan(basePackageClasses= {com.github.sawied.microservice.commons.SystemInfoContributor.class,com.github.sawied.microservice.commons.security.SystemAPISecurity.class})
 public class GatewayConfig {
 	
 	public static final String OAUTH2_SERVICE_NAME="MICROSERVICE-OAUTH2-SERVER";
@@ -63,9 +62,8 @@ public class GatewayConfig {
 	}
 	
 	@Bean
-	public RestTemplate simpleRestTemplate(@Autowired BasicAuthorizationInterceptor basicAuthorizationInterceptor) {
+	public RestTemplate simpleRestTemplate() {
 		RestTemplate restTemplate = new RestTemplate();
-		 restTemplate.getInterceptors().add(basicAuthorizationInterceptor);
 		 restTemplate.getInterceptors().add(new ForwardHeaderHttpClientInterceptor());
 		return restTemplate;
 	}

@@ -9,7 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 
 @Configuration
 @EnableWebSecurity(debug=true)
-@ComponentScan(basePackageClasses= {com.github.sawied.microservice.commons.SystemInfoContributor.class})
+@ComponentScan(basePackageClasses= {com.github.sawied.microservice.commons.SystemInfoContributor.class,com.github.sawied.microservice.commons.security.SystemAPISecurity.class})
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override

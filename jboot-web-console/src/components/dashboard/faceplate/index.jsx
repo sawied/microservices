@@ -61,7 +61,7 @@ class Faceboard extends React.Component{
            <Octicon icon={X} size='small' ariaLabel='close' verticalAlign='top'></Octicon>
            </button>
           </div>
-          <div className="card-body">
+          <div className="card-body face-body">
            {component}
           </div>
           </div>

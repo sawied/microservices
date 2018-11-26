@@ -27,3 +27,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://system:password@localhost:9081/eureka/
+  instance:
+    metadata-map:
+      system:
+        security:
+          user:
+            name: system
+            password: password

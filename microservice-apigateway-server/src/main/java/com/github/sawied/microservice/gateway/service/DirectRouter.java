@@ -1,6 +1,8 @@
 package com.github.sawied.microservice.gateway.service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +16,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.RequestEntity.HeadersBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+import org.springframework.util.Base64Utils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +62,16 @@ public class DirectRouter {
 		return new ResponseEntity<String>(response.getBody(),headers,response.getStatusCode());
 	}
 	
+	
+	
+	/**
+	 * build request entity from service instance  
+	 * @param request
+	 * @param serviceInstance
+	 * @return
+	 */
 	private RequestEntity<Void>  buildRequestEntity(HttpServletRequest request,InstanceInfo serviceInstance) {
+		
 		UriComponents uriComponents=UriComponentsBuilder.fromHttpUrl(serviceInstance.getStatusPageUrl()).build();
 		LOG.debug("build call uri {}", uriComponents.toUriString());
 		
@@ -68,8 +80,20 @@ public class DirectRouter {
 				.header(X_FORWORDED_FOR, request.getHeader(X_FORWORDED_FOR) != null ? request.getHeader(X_FORWORDED_FOR)
 						: request.getRemoteHost());
 		
+		Map<String,String> params=serviceInstance.getMetadata();
+		if(params.containsKey("system.security.user.name")) {
+			String system_user = params.get("system.security.user.name");
+			String system_password = params.get("system.security.user.password");
+			
+			String token = Base64Utils.encodeToString(
+					(system_user + ":" + system_password).getBytes(StandardCharsets.UTF_8));
+			headerBuild.header(HttpHeaders.AUTHORIZATION, "Basic "+token);
+		}
+		
 		return headerBuild.build();
 	}
+	
+	
 
 	private InstanceInfo findInstanceById(String id){
 		
@@ -78,21 +102,9 @@ public class DirectRouter {
 		if(!objects.isEmpty()) {
 			return objects.get(0);
 		}
-		
-		/**
-		List<String> services=this.discoveryClient.getServices();
-		ServiceInstance matcher =null;
-		for(String service: services) {
-			List<ServiceInstance> instances=this.discoveryClient.getInstances(service);
-			for(ServiceInstance instance : instances) {
-				if(((EurekaServiceInstance)instance).getInstanceInfo().getInstanceId().equalsIgnoreCase(id)) {					
-					matcher=instance;
-					return matcher;
-				}
-			}
-		}**/
-		
 		return null;
 	}
+	
+	
 	
 }
