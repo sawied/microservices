@@ -21,6 +21,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.client.support.BasicAuthorizationInterceptor;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -49,6 +50,13 @@ public class GatewayConfig {
 			}
 			
 		};
+	}
+
+	
+	@Bean
+	public HttpSessionEventPublisher httpSessionEventPublisher() {
+		return new HttpSessionEventPublisher();
+		
 	}
 	
 
@@ -98,7 +106,6 @@ public class GatewayConfig {
 		
 		CachingProvider provider = Caching.getCachingProvider("org.ehcache.jsr107.EhcacheCachingProvider");
 		CacheManager cacheManager  = provider.getCacheManager();
-		
 		return cacheManager;
 		
 	}
