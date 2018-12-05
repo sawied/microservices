@@ -1,4 +1,4 @@
-package com.github.sawied.microservice.gateway.security;
+package com.github.sawied.microservice.gateway.security.services;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +14,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.github.sawied.microservice.gateway.config.GatewayConfig;
+import com.github.sawied.microservice.gateway.security.AccountAuthenticationToken;
 
 public class RemoteSecureOauth2Service implements RemoteAccountService {
 
@@ -21,9 +22,6 @@ public class RemoteSecureOauth2Service implements RemoteAccountService {
 
 	
 	private RestTemplate restTemplate;
-
-	
-
 	
 
 	public RemoteSecureOauth2Service(RestTemplate restTemplate) {

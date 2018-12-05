@@ -17,6 +17,7 @@ import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.sawied.microservice.gateway.security.services.RemoteAccountService;
 
 public class AccountRemoteAuthenticationProvider  implements AuthenticationProvider,
 InitializingBean{
@@ -37,17 +38,19 @@ InitializingBean{
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 		//oops
-		ResponseEntity<String> oAuth2Response = remoteAccountService.acquireAccount((AccountAuthenticationToken)authentication);
-		
+		String oAuth2Body=null;
 		String accessToken=null;
 		Authentication oauth2Authentication=null;
-		try {
-			accessToken = parseToken(oAuth2Response.getBody());
+		try {			
+			ResponseEntity<String> oAuth2Response = remoteAccountService.acquireAccount((AccountAuthenticationToken)authentication);
+			oAuth2Body = oAuth2Response.getBody();
+			accessToken = parseToken(oAuth2Body);
 			oauth2Authentication = buildAccountFromResponse(accessToken);
-		} catch (IOException e) {
+		}catch(Exception e ) {
 			LOG.error("oops,some error occured when  building access token. ", e);
 			throw new AuthenticationServiceException("maybe system error be going on when building access token", e);
 		}
+		
 		return oauth2Authentication;
 	}
 	
