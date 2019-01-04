@@ -47,7 +47,7 @@ InitializingBean{
 			accessToken = parseToken(oAuth2Body);
 			oauth2Authentication = buildAccountFromResponse(accessToken);
 		}catch(Exception e ) {
-			LOG.error("oops,some error occured when  building access token. ", e);
+			LOG.error("oops,some error occured when  building access token. the message is ", e);
 			throw new AuthenticationServiceException("maybe system error be going on when building access token", e);
 		}
 		

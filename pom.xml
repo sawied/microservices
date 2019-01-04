@@ -65,6 +65,23 @@
 	</properties>
 
 
+
+	<reports>
+		<project>
+			<reporting>
+				<plugins>
+					<plugin>
+						<plugin>
+							<groupId>org.codehaus.mojo</groupId>
+							<artifactId>cobertura-maven-plugin</artifactId>
+							
+						</plugin>
+					</plugin>
+				</plugins>
+			</reporting>
+		</project>
+	</reports>
+
 	<dependencyManagement>
 
 		<dependencies>
@@ -193,29 +210,29 @@
 				<artifactId>ehcache</artifactId>
 				<version>${ehcache.version}</version>
 			</dependency>
-			
+
 			<!-- dependency to itself -->
 			<dependency>
-			 <groupId>com.github.sawied</groupId>
-			 <artifactId>microservice-commons</artifactId>
-			 <version>${project.version}</version>
+				<groupId>com.github.sawied</groupId>
+				<artifactId>microservice-commons</artifactId>
+				<version>${project.version}</version>
 			</dependency>
-			
-			
+
+
 			<!-- package related dependencies -->
-			
+
 			<dependency>
 				<groupId>commons-daemon</groupId>
 				<artifactId>commons-daemon</artifactId>
 				<version>1.1.0</version>
 			</dependency>
-			
+
 			<dependency>
-				 <groupId>com.sun.winsw</groupId>
-				 <artifactId>winsw</artifactId>
-				 <classifier>bin</classifier>
-				 <type>exe</type>
-				 <version>2.1.2</version>
+				<groupId>com.sun.winsw</groupId>
+				<artifactId>winsw</artifactId>
+				<classifier>bin</classifier>
+				<type>exe</type>
+				<version>2.1.2</version>
 			</dependency>
 
 		</dependencies>
@@ -332,15 +349,15 @@
 								<goal>build-info</goal>
 							</goals>
 						</execution>
-					</executions>	
+					</executions>
 					<configuration>
-								<additionalProperties>
-									<project.name>${project.groupId}:${project.artifactId}</project.name>
-									<project.version>${project.version}</project.version>
-									<project.description>${project.description}</project.description>
-									<java.target>${compile.version}</java.target>
-								</additionalProperties>
-							</configuration>
+						<additionalProperties>
+							<project.name>${project.groupId}:${project.artifactId}</project.name>
+							<project.version>${project.version}</project.version>
+							<project.description>${project.description}</project.description>
+							<java.target>${compile.version}</java.target>
+						</additionalProperties>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -502,7 +519,7 @@
 			</releases>
 			<url>http://repository.openmindonline.it/</url>
 		</repository>
-		
+
 		<repository>
 			<id>jenkins</id>
 			<name>Jenkins Repository</name>

@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.TypeUtils;
 
@@ -33,6 +34,7 @@ public class JpaAuthenticationProvider extends DaoAuthenticationProvider{
 			if(authentication.getDetails() instanceof Map) {				
 				Map<String,String> details = (Map<String, String>) authentication.getDetails();
 				String timestamp = details.get(TIMESTAMP);
+				Assert.hasText(timestamp,"the required timestamp is missed.");
 				AccountAuthenticationDetailService service=(AccountAuthenticationDetailService)this.getUserDetailsService();
 				String principal = (String)authentication.getPrincipal();
 				if(!service.check(principal,timestamp)){

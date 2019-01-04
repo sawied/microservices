@@ -3,6 +3,7 @@ import {Provider} from 'react-redux';
 import {
     Router,
     Route,
+    Redirect,
     Switch
   } from 'react-router-dom';
 
@@ -34,10 +35,11 @@ export default () => (
               <Switch>
               <Route path="/logon" component={OAuth}></Route>
               <App>
-              <Route path="/" exact component={Dashboard}></Route>
+              <Route path="/master" exact component={Dashboard}></Route>
+              <Redirect from="/" exact to="/master"></Redirect>
               <Route path="/logger" component={logger}></Route>
-              <Route component={NoMatch} />
               </App>
+              <Route component={NoMatch} />
               </Switch>
           </Router>
     </Provider>

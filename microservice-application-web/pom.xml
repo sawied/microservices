@@ -38,6 +38,7 @@
 
 	</properties>
 
+
 	<dependencies>
 
 		<dependency>
@@ -80,14 +81,14 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk15on</artifactId>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
-		    <groupId>commons-fileupload</groupId>
-		    <artifactId>commons-fileupload</artifactId>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
 		</dependency>
-		
-			<!-- dozer mapper -->
+
+		<!-- dozer mapper -->
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
@@ -99,8 +100,8 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-			<dependency>
+
+		<dependency>
 			<groupId>org.ehcache</groupId>
 			<artifactId>ehcache</artifactId>
 		</dependency>
@@ -165,7 +166,11 @@
 			<scope>test</scope>
 		</dependency>
 
-
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-ws -->
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-ws</artifactId>
+		</dependency>
 
 
 
@@ -173,106 +178,131 @@
 
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
 
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 
 
 		<plugins>
-
-			<!-- generate swagger json spec file in test phase -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-			</plugin>
-
-
-			<!-- First, use the swagger2markup plugin to generate asciidoc -->
-			<plugin>
-				<groupId>io.github.swagger2markup</groupId>
-				<artifactId>swagger2markup-maven-plugin</artifactId>
-				<configuration>
-					<swaggerInput>${swagger.input}</swaggerInput>
-					<outputDir>${generated.asciidoc.directory}</outputDir>
-					<config>
-						<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-						<swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
-
-						<swagger2markup.extensions.dynamicOverview.contentPath>${project.basedir}/src/docs/asciidoc/extensions/overview</swagger2markup.extensions.dynamicOverview.contentPath>
-						<swagger2markup.extensions.dynamicDefinitions.contentPath>${project.basedir}/src/docs/asciidoc/extensions/definitions</swagger2markup.extensions.dynamicDefinitions.contentPath>
-						<swagger2markup.extensions.dynamicPaths.contentPath>${project.basedir}/src/docs/asciidoc/extensions/paths</swagger2markup.extensions.dynamicPaths.contentPath>
-						<swagger2markup.extensions.dynamicSecurity.contentPath>${project.basedir}src/docs/asciidoc/extensions/security/</swagger2markup.extensions.dynamicSecurity.contentPath>
-
-						<swagger2markup.extensions.springRestDocs.snippetBaseUri>${swagger.snippetOutput.dir}</swagger2markup.extensions.springRestDocs.snippetBaseUri>
-						<swagger2markup.extensions.springRestDocs.defaultSnippets>true</swagger2markup.extensions.springRestDocs.defaultSnippets>
-					</config>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>convertSwagger2markup</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-
-			<!-- generate html output -->
-
-
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework.restdocs</groupId>
-						<artifactId>spring-restdocs-asciidoctor</artifactId>
-						<version>2.0.2.RELEASE</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<sourceDirectory>${asciidoctor.input.directory}</sourceDirectory>
-					<sourceDocumentName>index.adoc</sourceDocumentName>
-					<attributes>
-						<doctype>book</doctype>
-						<toc>left</toc>
-						<toclevels>3</toclevels>
-						<numbered></numbered>
-						<hardbreaks></hardbreaks>
-						<sectlinks></sectlinks>
-						<sectanchors></sectanchors>
-						<generated>${generated.asciidoc.directory}</generated>
-					</attributes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>output-html</id>
-						<phase>test</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<backend>html5</backend>
-							<doctype>book</doctype>
-							<outputDirectory>${asciidoctor.html.output.directory}</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<!-- skip swagger test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/Swagger*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<profile>
+			<id>document</id>
+			<build>
+				<plugins>
+					<!-- generate swagger json spec file in test phase -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+						<excludes>
+                                <exclude>none</exclude>
+                            </excludes>
+							<includes>
+								<include>**/Swagger*.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+
+
+					<!-- First, use the swagger2markup plugin to generate asciidoc -->
+					<plugin>
+						<groupId>io.github.swagger2markup</groupId>
+						<artifactId>swagger2markup-maven-plugin</artifactId>
+						<configuration>
+							<swaggerInput>${swagger.input}</swaggerInput>
+							<outputDir>${generated.asciidoc.directory}</outputDir>
+							<config>
+								<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+								<swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
+
+								<swagger2markup.extensions.dynamicOverview.contentPath>${project.basedir}/src/docs/asciidoc/extensions/overview</swagger2markup.extensions.dynamicOverview.contentPath>
+								<swagger2markup.extensions.dynamicDefinitions.contentPath>${project.basedir}/src/docs/asciidoc/extensions/definitions</swagger2markup.extensions.dynamicDefinitions.contentPath>
+								<swagger2markup.extensions.dynamicPaths.contentPath>${project.basedir}/src/docs/asciidoc/extensions/paths</swagger2markup.extensions.dynamicPaths.contentPath>
+								<swagger2markup.extensions.dynamicSecurity.contentPath>${project.basedir}src/docs/asciidoc/extensions/security/</swagger2markup.extensions.dynamicSecurity.contentPath>
+
+								<swagger2markup.extensions.springRestDocs.snippetBaseUri>${swagger.snippetOutput.dir}</swagger2markup.extensions.springRestDocs.snippetBaseUri>
+								<swagger2markup.extensions.springRestDocs.defaultSnippets>true</swagger2markup.extensions.springRestDocs.defaultSnippets>
+							</config>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<configuration>
+								</configuration>
+								<goals>
+									<goal>convertSwagger2markup</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- generate html output -->
+
+
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>org.springframework.restdocs</groupId>
+								<artifactId>spring-restdocs-asciidoctor</artifactId>
+								<version>2.0.2.RELEASE</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<sourceDirectory>${asciidoctor.input.directory}</sourceDirectory>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
+							<attributes>
+								<doctype>book</doctype>
+								<toc>left</toc>
+								<toclevels>3</toclevels>
+								<numbered></numbered>
+								<hardbreaks></hardbreaks>
+								<sectlinks></sectlinks>
+								<sectanchors></sectanchors>
+								<generated>${generated.asciidoc.directory}</generated>
+							</attributes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>output-html</id>
+								<phase>test</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<backend>html5</backend>
+									<doctype>book</doctype>
+									<outputDirectory>${asciidoctor.html.output.directory}</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<repositories>
 		<repository>

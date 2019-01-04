@@ -6,7 +6,7 @@
     </Properties>
     <Appenders>
         <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d ${contextName} [%thread] %-5level %logger{36} - %msg%n" />
+            <PatternLayout pattern="%d ${contextName} [%thread] %-5level %logger{36} %L - %msg%n" />
         </Console>
         <RollingFile name="RollingFileInfo" fileName="logs/${contextName}.txt"
             filePattern="logs/${contextName}-%d{yyyy-MM-dd}-%i.txt">

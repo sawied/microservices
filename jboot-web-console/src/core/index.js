@@ -12,6 +12,7 @@ API('info',{}).then(()=>{
     window.console.error("it seems not logon?",e);
     store.remove("authentication");
 }).finally(()=>{
+    window.console.info("launch main app");
     ReactDOM.render(
         <Root/>,document.getElementById('web-console-ui'));
 });

@@ -38,7 +38,6 @@ public class Swagger2MarkupTest {
 	private MockMvc mockMvc;
 
 	@Test
-	@Ignore
 	public void apiSwaggerJson() throws Exception {
 		MvcResult mvcResult = this.mockMvc.perform(get("/v2/api-docs")
 				.header(HttpHeaders.AUTHORIZATION, "Basic ZGFuYW46cGFzc3dvcmQ=").accept(MediaType.APPLICATION_JSON))

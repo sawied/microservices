@@ -139,6 +139,7 @@
              <repository>microservice/oauth2-server</repository>
              <tag>${project.version}</tag>
              <skip>false</skip>
+             <pullNewerImage>false</pullNewerImage>
              <buildArgs>
                <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
              </buildArgs>

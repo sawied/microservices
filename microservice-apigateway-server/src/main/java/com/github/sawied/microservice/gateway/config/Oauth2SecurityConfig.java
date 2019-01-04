@@ -22,7 +22,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -46,7 +48,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.ForwardAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -54,6 +56,8 @@ import org.springframework.security.web.authentication.session.CompositeSessionA
 import org.springframework.security.web.authentication.session.ConcurrentSessionControlAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.savedrequest.NullRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.session.ConcurrentSessionFilter;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.client.RestTemplate;
@@ -74,6 +78,9 @@ import com.github.sawied.microservice.gateway.security.services.RemoteSecureOaut
 
 @Configuration
 public class Oauth2SecurityConfig{
+	
+	
+	public static final String JSESSIONID = "JSESSIONID";
 	
 	@Bean
 	@Qualifier("principalsCache")
@@ -140,7 +147,8 @@ public class Oauth2SecurityConfig{
 		AccountConcurrentSessionFilter concurrentSessionFilter = new AccountConcurrentSessionFilter(sessionRegistry,new ResponseErrorSessionInformationExpiredStrategy());
 		concurrentSessionFilter.setTokenCache(tokensCache);
 		LogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-		concurrentSessionFilter.setLogoutHandlers(new LogoutHandler[]{logoutHandler});
+		CookieClearingLogoutHandler cookieClearHandler = new CookieClearingLogoutHandler(JSESSIONID);
+		concurrentSessionFilter.setLogoutHandlers(new LogoutHandler[]{logoutHandler,cookieClearHandler});
 		return concurrentSessionFilter;
 	}
 	
@@ -196,7 +204,8 @@ public class Oauth2SecurityConfig{
 		public void configure(HttpSecurity http) throws Exception {
 			//super.configure(http);
 			http.requestMatcher(new NotOauth2RequestMatcher()).authorizeRequests().anyRequest().authenticated().and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-			.and().addFilter(concurrentSessionFilter);
+			.and()
+			.addFilter(concurrentSessionFilter).setSharedObject(RequestCache.class, new NullRequestCache());;
 			;
 			
 		}
@@ -244,7 +253,7 @@ public class Oauth2SecurityConfig{
 	@Order(0)
 	static class Oauth2AuthenticationConfig extends WebSecurityConfigurerAdapter {
 		
-		private static final String JSESSIONID = "JSESSIONID";
+		public static final String JSESSIONID = "JSESSIONID";
 
 
 		@Autowired
@@ -260,9 +269,7 @@ public class Oauth2SecurityConfig{
 		
 		@Autowired 
 		private AuthenticationFailureHandler authenticationFailureHandler;
-		
-		@Autowired
-		private SessionRegistry sessionRegistry;
+	
 		
 		/**
 		@Autowired
@@ -313,7 +320,7 @@ public class Oauth2SecurityConfig{
 			accountAuthenticationFilter.setFilterProcessesUrl("/oauth2/s*");
 			accountAuthenticationFilter.setAuthenticationSuccessHandler(new ForwardAuthenticationSuccessHandler("/security/info"));
 			accountAuthenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
-			
+			accountAuthenticationFilter.setSessionAuthenticationStrategy(sessionTokenAuthenticationStrategy);
 			
 			AccountRemoteAuthenticationProvider authenticationProvider = new AccountRemoteAuthenticationProvider();
 			authenticationProvider.setTokenStore(tokenStore);
@@ -366,7 +373,10 @@ public class Oauth2SecurityConfig{
 				@Override
 				public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 						AuthenticationException exception) throws IOException, ServletException {
-					new HttpStatusEntryPoint(HttpStatus.INTERNAL_SERVER_ERROR).commence(request, response, exception);
+					response.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+					response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+					response.getWriter().print("{\"error\":\"auth_error\"}");
+					response.flushBuffer();
 				}
 				
 			};
@@ -374,6 +384,8 @@ public class Oauth2SecurityConfig{
 
 	}
 	
+	
+
 	
 	
 	
