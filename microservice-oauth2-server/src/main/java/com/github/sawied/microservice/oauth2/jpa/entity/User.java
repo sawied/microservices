@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
+import org.hibernate.envers.Audited;
+
 @Entity
+@Audited
 @DiscriminatorValue(value="U")
 public class User extends Account{
 

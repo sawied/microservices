@@ -43,12 +43,13 @@ public class WordCountTopology {
 		      StormSubmitter.submitTopologyWithProgressBar(args[0], config, topologyBuilder.createTopology());
 		    }
 		    else {
+		    	config.setDebug(true);
 		    config.setMaxTaskParallelism(3);
 
 		      LocalCluster cluster = new LocalCluster();
 		      cluster.submitTopology(TOPOLOGY_WORD_COUNT, config, topologyBuilder.createTopology());
 
-		      Thread.sleep(10000);
+		      Utils.sleep(10000);
 
 		      cluster.shutdown();
 		    }

@@ -120,6 +120,7 @@
 								 	<directory>src/main/dist</directory>
 									<filtering>true</filtering>
 								</resource>
+								
 							</resources>
 						</configuration>
 					</execution>

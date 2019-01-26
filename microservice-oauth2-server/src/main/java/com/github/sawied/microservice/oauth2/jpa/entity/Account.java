@@ -17,10 +17,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
+@Audited
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type",discriminatorType=DiscriminatorType.STRING,length=20)
 @DiscriminatorValue("A")
@@ -41,6 +44,7 @@ public class Account {
 	
 	@OneToMany(targetEntity=Authoritie.class,mappedBy="account")
 	//@JoinColumn(name="account_id")
+	@NotAudited
 	private Set<Authoritie> authorities = new HashSet<Authoritie>();
 	
 	
