@@ -25,3 +25,12 @@ create table logon_log(
   time_stamp timestamp not null,
   ip varchar(50) not null
 )
+
+
+INSERT INTO `trade`.`authorities`
+(
+`authority`)
+VALUES
+(
+"ROLE_MVTM",
+);

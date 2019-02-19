@@ -3,8 +3,6 @@ package com.github.sawied.microservice.jpa.test;
 import java.util.Properties;
 import java.util.Random;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
@@ -15,7 +13,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.annotation.Bean;
@@ -25,21 +22,19 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.orm.hibernate5.SpringBeanContainer;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.github.sawied.microservice.oauth2.UserContext;
-import com.github.sawied.microservice.oauth2.jpa.AccountRevisionEntityListener;
+import com.github.sawied.microservice.oauth2.jpa.AuthoritieRepository;
+import com.github.sawied.microservice.oauth2.jpa.GroupRepository;
 import com.github.sawied.microservice.oauth2.jpa.UserRepository;
+import com.github.sawied.microservice.oauth2.jpa.entity.Authoritie;
+import com.github.sawied.microservice.oauth2.jpa.entity.Group;
 import com.github.sawied.microservice.oauth2.jpa.entity.User;
-import com.github.sawied.microservice.oauth2.jpa.service.AccountService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = { JpaConfig.class })
@@ -47,6 +42,18 @@ public class AuditLogConfigTest {
 
 	@Autowired
 	private UserRepository repository;
+	
+	@Autowired
+	private GroupRepository groupRepository;
+	
+	@Autowired
+	private AuthoritieRepository authoriteRepository;
+	
+	@Test
+	@Ignore
+	public void setup(){
+		repository.findAll();
+	}
 
 	@Test
 	@Ignore
@@ -57,20 +64,49 @@ public class AuditLogConfigTest {
 		user.setEnabled(Boolean.TRUE);
 		user.setEmail("danan.2008@hotmail.com");
 		user.setAddress("district");
-		repository.save(user);
+		repository.createUser(user);
 		Assert.assertNotNull("create User id is null ", user.getId());
+	}
+	
+	@Test
+	@Ignore
+	public void groupAdd() {
+		Group group = new Group();
+		String generateName = generateName();
+	    group.setEntitlementName(generateName);
+	    group.setEntitlementDescription(generateName);
+	    Authoritie authoritie = new Authoritie();
+	    authoritie.setId(1);
+	    group.getAuthorities().add(authoritie);
+	    groupRepository.save(group);
+	    Assert.assertNotNull("create User id is null ", group.getId());
 	}
 
 	@Test
-	// @Ignore
+	//@Ignore
 	public void accountModify() {
-		User account = repository.getUserByName("slgl");
-
+		User account = repository.getUserByName("wfpf");
 		Integer id = account.getId();
 		User u = new User();
 		u.setId(id);
+		u.setName("wfpf");
+		u.setPassword("password");
 		u.setEmail("sawied.2002@gmail.com");
+		u.setEnabled(true);
+		Group group2 = new Group();group2.setId(2);
+		Group group3 = new Group();group3.setId(3);
+		u.getGroups().add(group2);
+		u.getGroups().add(group3);
 		repository.modifyUserByProperties(u);
+	}
+
+	
+	@Test
+	@Ignore
+	public void authorizationAdd() {
+		Authoritie authoritie = new Authoritie();
+		authoritie.setAuthority("admin");
+		System.out.println(authoriteRepository.save(authoritie).getId());
 	}
 
 	private String generateName() {
@@ -118,6 +154,10 @@ class JpaConfig {
 		Properties properties = new Properties();
 		properties.put("hibernate.show_sql", true);
 		properties.put("hibernate.dialect", "org.hibernate.dialect.MySQL57Dialect");
+		//properties.put("hibernate.hbm2ddl.auto", "create-drop");//
+		properties.put("hibernate.hbm2ddl.auto", "update");//
+		properties.put("org.hibernate.envers.revision_on_collection_change", true);
+		properties.put(EnversSettings.AUDIT_STRATEGY,ValidityAuditStrategy.class.getName());
 		properties.put(AvailableSettings.BEAN_CONTAINER,new SpringBeanContainer(beanFactory));
 		LocalSessionFactoryBean localSessionFactory = new LocalSessionFactoryBean();
 		localSessionFactory.setHibernateProperties(properties);

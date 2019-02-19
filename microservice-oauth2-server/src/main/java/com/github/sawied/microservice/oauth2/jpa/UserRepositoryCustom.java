@@ -8,6 +8,8 @@ public interface UserRepositoryCustom {
 	public User getUserByName(String username);
 
 	void modifyUserByProperties(User user);
+	
+	void createUser(User user);
 
 		
 }

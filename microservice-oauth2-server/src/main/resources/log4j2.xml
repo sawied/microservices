@@ -38,7 +38,7 @@
 	<Loggers>
 
 		<logger name="org.springframework.security" level="debug" />
-
+		<logger name="org.hibernate" level="info" />
 		
 
 	

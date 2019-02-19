@@ -12,7 +12,9 @@
 	<description>This project used to do all tasks of building and dependencies management.</description>
 
 
-	<!-- PAO -->
+	<!-- Sonar setting, currently, use oracle as data persistence PAO 
+	install sonar as a docker container,please following below guide: 	
+	-->
 	<profiles>
 		<profile>
 			<id>sonar</id>
@@ -47,9 +49,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.language>java</sonar.language>
 		<spring.boot.version>2.1.2.RELEASE</spring.boot.version>
-
 		<httpclient.version>4.5.2</httpclient.version>
-
 		<swagger.markup.version>1.3.3</swagger.markup.version>
 		<swagger2markup.plugin.version>1.2.0</swagger2markup.plugin.version>
 		<springfox.version>2.9.2</springfox.version>
@@ -60,29 +60,9 @@
 		<ehcache.version>3.6.1</ehcache.version>
 		<hibernate.version>5.3.7.Final</hibernate.version>
 		<derby.version>10.14.1.0</derby.version>
-
 		<fileupload.version>1.3.3</fileupload.version>
-
-
 	</properties>
 
-
-
-	<reports>
-		<project>
-			<reporting>
-				<plugins>
-					<plugin>
-						<plugin>
-							<groupId>org.codehaus.mojo</groupId>
-							<artifactId>cobertura-maven-plugin</artifactId>
-
-						</plugin>
-					</plugin>
-				</plugins>
-			</reporting>
-		</project>
-	</reports>
 
 	<dependencyManagement>
 

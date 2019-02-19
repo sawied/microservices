@@ -1,5 +1,8 @@
 package com.github.sawied.microservice.oauth2.jpa;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -7,6 +10,7 @@ import javax.transaction.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
+import com.github.sawied.microservice.oauth2.jpa.entity.Group;
 import com.github.sawied.microservice.oauth2.jpa.entity.User;
 
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
@@ -16,7 +20,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 
 	@Override
 	public User getUserByName(String username){
-		User account = em.createQuery("from User as a left join fetch a.authorities where a.name=:name", User.class)
+		User account = em.createQuery("from User as a where a.name=:name", User.class)
 				.setParameter("name", username).getSingleResult();
 		return account;
 	}
@@ -37,7 +41,30 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 		if(StringUtils.hasText(user.getName())) {
 			load.setName(user.getName());
 		}
+		
+		List<Group> groups = load.getGroups();
+		Iterator<Group> iterator = groups.iterator();
+		while (iterator.hasNext()) {
+			iterator.next();
+			iterator.remove();
+		}
+		em.flush();
+		for(Group g : user.getGroups()) {			
+			load.getGroups().add(g);
+		}
+		
 		em.persist(load);
+	}
+
+
+
+	@Transactional
+	@Override
+	public void createUser(User user) {
+		Group reference = em.getReference(Group.class, 2);
+		user.getGroups().add(reference);
+		//reference.getAccounts().add(user);
+		em.persist(user);
 	}
 
 
