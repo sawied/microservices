@@ -1,9 +1,33 @@
+###############################
+#  MySQL Configuration  #
+###############################
+
+sql.connection:
+  url: "jdbc:mysql://localhost:3306/crawl"
+  user: "crawler"
+  password: "crawler"
+  
+sql.status.table: "urls"
+
+parsefilters.config.file: "parsefilters.json"
+urlfilters.config.file: "urlfilters.json"
+
+metadata.transfer:
+   - correlationId
+metadata.persist:
+   - _redirTo
+   - error.cause
+   - error.source
+   - isSitemap
+   - isFeed
+   - correlationId
+
+
 # Custom configuration for StormCrawler
 # This is used to override the default values from crawler-default.xml and provide additional ones 
 # for your custom components.
 # Use this file with the parameter -conf when launching your extension of ConfigurableTopology.
 # This file does not contain all the key values but only the most frequently used ones. See crawler-default.xml for an extensive list.
-
 config: 
   topology.workers: 1
   topology.message.timeout.secs: 300
@@ -22,8 +46,8 @@ config:
   # metadata to transfer to the outlinks
   # used by Fetcher for redirections, sitemapparser, etc...
   # these are also persisted for the parent document (see below)
-  # metadata.transfer:
-  # - customMetadataName
+  metadata.transfer:
+   - correlationId
 
   # lists the metadata to persist to storage
   # these are not transfered to the outlinks
@@ -33,6 +57,7 @@ config:
    - error.source
    - isSitemap
    - isFeed
+   - correlationId
 
   http.agent.name: "Anonymous Coward"
   http.agent.version: "1.0"
@@ -52,6 +77,7 @@ config:
 
   parsefilters.config.file: "parsefilters.json"
   urlfilters.config.file: "urlfilters.json"
+
 
   # revisit a page daily (value in minutes)
   # set it to -1 to never refetch a page

@@ -13,17 +13,20 @@
             "//TITLE",
             "//META[@name=\"title\"]/@content"
          ],
-         "parse.keywords": "//META[@name=\"keywords\"]/@content"
+         "parse.keywords": "//META[@name=\"keywords\"]/@content",
+         "parse.image":"//IMG/@src"
       }
     },
     {
       "class": "com.digitalpebble.stormcrawler.parse.filter.ContentFilter",
       "name": "ContentFilter",
       "params": {
-        "pattern": "//DIV[@id=\"maincontent\"]",
-        "pattern2": "//DIV[@itemprop=\"articleBody\"]",
-        "pattern3": "//ARTICLE"
+        "pattern": "//P",
+        "pattern2": "//A",
+        "pattern3": "//H2",
+        "pattern4": "//LI"
        }
+       
     },
     {
       "class": "com.digitalpebble.stormcrawler.parse.filter.DomainParseFilter",

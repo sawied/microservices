@@ -16,9 +16,13 @@ CREATE TABLE crawl.urls (
  PRIMARY KEY(url)
 );
 
+alter table crawl.urls 
+add column correlationId varchar(50) not null;
+
 ALTER TABLE crawl.urls ADD INDEX b (`bucket`);
 ALTER TABLE crawl.urls ADD INDEX t (`nextfetchdate`);
 ALTER TABLE crawl.urls ADD INDEX h (`host`);
+ALTER TABLE crawl.urls ADD INDEX c (`correlationId`);
 
 DROP TABLE crawl.metrics;
 

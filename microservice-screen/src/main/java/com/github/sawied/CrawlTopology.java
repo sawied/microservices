@@ -24,8 +24,11 @@ import com.digitalpebble.stormcrawler.bolt.SiteMapParserBolt;
 import com.digitalpebble.stormcrawler.bolt.URLPartitionerBolt;
 import com.digitalpebble.stormcrawler.bolt.FeedParserBolt;
 import com.digitalpebble.stormcrawler.indexing.StdOutIndexer;
-import com.digitalpebble.stormcrawler.persistence.StdOutStatusUpdater;
-import com.digitalpebble.stormcrawler.spout.MemorySpout;
+import com.digitalpebble.stormcrawler.sql.SQLSpout;
+import com.digitalpebble.stormcrawler.sql.StatusUpdaterBolt;
+import com.github.sawied.crawler.components.FileOutIndexer;
+import com.github.sawied.crawler.components.MySQLSpout;
+import com.github.sawied.crawler.components.MySQLStatusUpdaterBolt;
 
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
@@ -43,9 +46,7 @@ public class CrawlTopology extends ConfigurableTopology {
     protected int run(String[] args) {
         TopologyBuilder builder = new TopologyBuilder();
 
-        String[] testURLs = new String[] { "https://blog.xtechstack.com" };
-
-        builder.setSpout("spout", new MemorySpout(testURLs));
+        builder.setSpout("spout", new MySQLSpout());
 
         builder.setBolt("partitioner", new URLPartitionerBolt())
                 .shuffleGrouping("spout");
@@ -62,13 +63,13 @@ public class CrawlTopology extends ConfigurableTopology {
         builder.setBolt("parse", new JSoupParserBolt())
                 .localOrShuffleGrouping("feeds");
 
-        builder.setBolt("index", new StdOutIndexer())
+        builder.setBolt("index", new FileOutIndexer())
                 .localOrShuffleGrouping("parse");
 
         Fields furl = new Fields("url");
 
         // can also use MemoryStatusUpdater for simple recursive crawls
-        builder.setBolt("status", new StdOutStatusUpdater())
+        builder.setBolt("status", new MySQLStatusUpdaterBolt())
                 .fieldsGrouping("fetch", Constants.StatusStreamName, furl)
                 .fieldsGrouping("sitemap", Constants.StatusStreamName, furl)
                 .fieldsGrouping("feeds", Constants.StatusStreamName, furl)

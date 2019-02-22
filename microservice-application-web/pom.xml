@@ -88,6 +88,13 @@
 			<artifactId>commons-fileupload</artifactId>
 		</dependency>
 
+		<!-- CSV -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.6</version>
+		</dependency>
+
 		<!-- dozer mapper -->
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
@@ -214,9 +221,9 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-						<excludes>
-                                <exclude>none</exclude>
-                            </excludes>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
 							<includes>
 								<include>**/Swagger*.java</include>
 							</includes>
