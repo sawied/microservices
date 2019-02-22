@@ -40,3 +40,7 @@ CREATE TABLE crawl.metrics (
 CREATE USER 'metricsReader' IDENTIFIED BY 'metricsReader';
 GRANT SELECT ON crawl.metrics TO 'metricsReader';
 FLUSH PRIVILEGES;
+
+
+#INSERT INTO `crawl`.`urls` (`url`,`correlationid`) VALUES ('https://www.sawied.top','109fb598-bb17-4ef3-bd36-52354cac02d3');
+#commit;
