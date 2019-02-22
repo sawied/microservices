@@ -113,3 +113,31 @@ After installation , can find default password set in error log, if you want to 
 
 
 #### Install Docker Compose  ####
+
+#### Install supervisor###
+
+supervisor is a client/server system that allows its users to control a number of processes on UNIX-like operating system .it was inspired by the following:
+* Convenience
+* simple
+* centralized
+* efficient
+* compatible
+
+##### supervisor components #####
+* supervisord
+* supervisorctl
+
+> before you install supervisor,make sure python 2.4 or later has been installed ,but not any version of python 3.
+
+type apt install python-pip
+```
+sudo apt install python-pip
+sudo pip install supervisor
+```
+after installing has completed , run 
+```
+echo_supervisord_conf
+```
+this will print a "sample" supervisor configuration file to your terminal's stdout.
+
+

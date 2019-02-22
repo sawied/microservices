@@ -4,7 +4,7 @@ CREATE USER 'crawler' IDENTIFIED BY 'crawler';
 GRANT ALL PRIVILEGES ON crawl.* TO 'crawler' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 
-DROP TABLE crawl.urls;
+# DROP TABLE crawl.urls;
 
 CREATE TABLE crawl.urls (
  url VARCHAR(255),
@@ -24,7 +24,7 @@ ALTER TABLE crawl.urls ADD INDEX t (`nextfetchdate`);
 ALTER TABLE crawl.urls ADD INDEX h (`host`);
 ALTER TABLE crawl.urls ADD INDEX c (`correlationId`);
 
-DROP TABLE crawl.metrics;
+# DROP TABLE crawl.metrics;
 
 CREATE TABLE crawl.metrics (
  srcComponentId VARCHAR(128),
