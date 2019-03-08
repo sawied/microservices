@@ -1,0 +1,38 @@
+version: '3.2'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo-cc
+    restart: always
+    command: --replSet devReplSet
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: password
+    volumes:
+      - type: bind
+        source: /home/sawied/cc/run/data
+        target: /data/db
+#  elasticsearch:
+#    image: "microservice/oauth2-server:${project_version:?err}"
+#    container_name: microservice-oauth2-server-${profile:-default}
+#    restart: always
+#    environment:
+#      SPRING_PROFILES_ACTIVE: ${profile}
+#    volumes:
+#      - type: bind
+#        source: ${log_dir}/logs
+#        target: /logs
+#  geteway: 
+#    image: "microservice/apigateway:${project_version:?err}"
+#    container_name: microservice-apigateway-server-${profile:-default}
+#    restart: always
+#    environment:
+#      SPRING_PROFILES_ACTIVE: ${profile:-default}
+#    volumes:
+#      - type: bind
+#        source: ${log_dir}/logs
+#        target: /logs
+#    ports: 
+#      - "80:80"
+#      - "443:443"
