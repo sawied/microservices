@@ -62,6 +62,49 @@ Server:
  OS/Arch:      linux/amd64
  Experimental: false
 ```
+
+3. Install docker CE for Ubuntu
+
+* remove old version docker
+```
+$ sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+* Install using the repository
+install pakages to allow apt to use a repository over HTTPS
+```
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common
+```
+* Add Docker’s official GPG key:
+```
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+* Add stable repository 
+```
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+
+ * Install docker 
+
+```
+$ sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+```
+
+
+#### Install MongoDB document database
+1. pull latest mongo image from docker hub
+```
+docker pull mongo
+```
+
 #### Install openldap as centre authentiation server
 
 1. Fistly install server library via apt get
@@ -91,6 +134,16 @@ sudo apachectl -k restart
 ```
 
 #### Install openJDK 8 and mysql server in ubuntu server
+
+> before installing mysql,adding the MySQL APT Repository
+1. Go to the download page for MySQL repository at https://dev.mysql.com/downloads/repo/apt/.
+2. Install the downloaded release package with following command,
+```
+sudo dpkg -i /PATH/VERSION-SPECIFIC-PACKAGE-NAME.deb
+sudo apt-get update
+sudo apt search mysql-server
+```
+
 ```
 sudo apt-get install openjdk-8-jdk mysql-server mysql-client
  ```
@@ -140,4 +193,5 @@ echo_supervisord_conf
 ```
 this will print a "sample" supervisor configuration file to your terminal's stdout.
 
+default 
 
