@@ -13,10 +13,11 @@ services:
       - type: bind
         source: /home/sawied/cc/run/data
         target: /data/db
-#  elasticsearch:
-#    image: "microservice/oauth2-server:${project_version:?err}"
-#    container_name: microservice-oauth2-server-${profile:-default}
-#    restart: always
+  elasticsearch:
+    image: elasticsearch:6.6.1
+    container_name: elasticsearch-cc
+    restart: always
+    command: discovery.type=single-node
 #    environment:
 #      SPRING_PROFILES_ACTIVE: ${profile}
 #    volumes:

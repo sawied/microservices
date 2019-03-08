@@ -98,11 +98,27 @@ $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 
 ```
 
+#### Install Docker Compose  ####
+1.  Run this command to download the latest version of Docker Compose:
+```
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+```
+2. Apply executable permissions to the binary:
+```
+chmod +x /usr/local/bin/docker-compose
+```
+
 
 #### Install MongoDB document database
 1. pull latest mongo image from docker hub
 ```
 docker pull mongo
+```
+
+#### Install elasticsearch 
+1. pull the latest image from docker hub
+```
+sudo docker pull elasticsearch:6.6.1
 ```
 
 #### Install openldap as centre authentiation server
@@ -165,7 +181,7 @@ After installation , can find default password set in error log, if you want to 
 
 
 
-#### Install Docker Compose  ####
+
 
 #### Install supervisor###
 
