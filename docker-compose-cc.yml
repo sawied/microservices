@@ -18,6 +18,9 @@ services:
     container_name: elasticsearch-cc
     restart: always
     command: discovery.type=single-node
+    ports: 
+      - "9200:9200"
+#     - "443:443"
 #    environment:
 #      SPRING_PROFILES_ACTIVE: ${profile}
 #    volumes:
