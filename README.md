@@ -273,5 +273,33 @@ echo_supervisord_conf
 ```
 this will print a "sample" supervisor configuration file to your terminal's stdout.
 
-default 
+Configuration File
+The Supervisor configuration file is conventionally named supervisord.conf. It is used by both supervisord and supervisorctl. If either application is started without the -c option (the option which is used to tell the application the configuration filename explicitly), the application will look for a file named supervisord.conf within the following locations, in the specified order. It will use the first file it finds.
+
+1. $CWD/supervisord.conf
+2. $CWD/etc/supervisord.conf
+3. /etc/supervisord.conf
+4. /etc/supervisor/supervisord.conf (since Supervisor 3.3.0)
+5. ../etc/supervisord.conf (Relative to the executable)
+6. ../supervisord.conf (Relative to the executable)
+
+Once you see the file echoed to your terminal, reinvoke the command as echo_supervisord_conf > /etc/supervisord.conf
+copy default supervisord configration
+modify default path
+/tmp/supervisor.sock --> /var/run/supervisor.sock
+/tmp/supervisord.log --> var/log/supervisor.log
+/tmp/supervisord.pid --> /var/run/supervisor.pid
+> remember to make unix_http_server.file program match supervisorctl.serverurl, and default supervisord run as root, don't 
+
+```
+sudo chmod 777 /run
+sudo chmod 777 /var/log
+sudo supervisord -c /etc/supervisor/supervisord.conf
+sudo supervisorctl -c /etc/supervisor/supervisord.conf status
+```
+stop supervisord 
+```
+ps -ef | grep supervisord
+sudo kill -HUP $(cat /var/run/supervisord.pid)
+```
 
