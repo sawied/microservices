@@ -114,13 +114,77 @@ chmod +x /usr/local/bin/docker-compose
 ```
 docker pull mongo
 ```
+and remember run with a one-node replica set
+```
+mongod --repSet devRepSet
+rs.initiate()
+```
+2. add user and create database
+```
+db.createUser(
+  {
+    user: "callcenter",
+    pwd: "elastic",
+    roles: [
+       { role: "readWrite", db: "mongodb_es" }
+    ]
+  }
+)
 
+db.createUser(
+  {
+    user: "root",
+    pwd: "password",
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+```
+
+sudo apt-get install python3.5
+admin user:root/rootpwd
+mongo-connector
+
+mvn spring-boot:run -Dsring-boot.run.profiles=dev
+
+
+install mongo-connector:
+```
+curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+python get-pip.py
+sudo apt-get install python-pip net-tools curl
+sudo pip install mongo-connector[elastic5] 
+```
+try to expose mongo data to elasticsearch engine:
+mongo-connector -m mongodb://root:rootpwd@localhost:27017 -t elasticsearch-cc:9200 -d elastic2_doc_manager
+mongo-connector -c mongo-connector-conf.json
 #### Install elasticsearch 
 1. pull the latest image from docker hub
 ```
 sudo docker pull elasticsearch:6.6.1
 ```
 
+
+#### Install python ####
+pyenv lets you easily switch between multiple versions of Python. It's simple, unobtrusive, and follows the UNIX tradition of single-purpose tools that do one thing well.
+1. install pyenv to manage python version
+```
+$ curl https://pyenv.run | bash
+$ echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bash_profile
+$ echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bash_profile
+```
+2. install python 3.7
+```
+sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+pyenv install 3.7.2
+```
+3. switch to version 3.7.2
+```
+pyenv global 3.7.2
+pyenv versions
+sudo apt install python-pip
+```
 #### Install openldap as centre authentiation server
 
 1. Fistly install server library via apt get
