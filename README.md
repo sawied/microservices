@@ -305,3 +305,16 @@ ps -ef | grep supervisord
 sudo kill -HUP $(cat /var/run/supervisord.pid)
 ```
 
+#### Run Ubuntu ####
+1. pull the latest image
+```
+apt-get install git net-tools curl unzip
+export PATH=$PATH:/usr/share/maven/bin
+docker pull ubuntu
+docker run -it -d --name azure-ubuntu ubuntu
+docker attach azure-ubuntu
+
+git checkout --track origin/dev
+apt-get install build-essential libssl1.0.0 libasound2
+mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
+```
