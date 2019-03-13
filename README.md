@@ -144,8 +144,10 @@ sudo apt-get install python3.5
 admin user:root/rootpwd
 mongo-connector
 
+run spring boot project
+```
 mvn spring-boot:run -Dsring-boot.run.profiles=dev
-
+```
 
 install mongo-connector:
 ```
