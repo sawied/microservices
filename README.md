@@ -118,6 +118,9 @@ and remember run with a one-node replica set
 ```
 mongod --repSet devRepSet
 rs.initiate()
+cf=rs.conf()
+cf.members[0].host="mongo-cc:27017"
+rs.reconfigj(cf)
 ```
 2. add user and create database
 ```
@@ -318,3 +321,9 @@ git checkout --track origin/dev
 apt-get install build-essential libssl1.0.0 libasound2
 mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
 ```
+replace text in vim editor
+```
+:%s/lemon/orange/
+```
+download file via curl
+curl -L -o file url
