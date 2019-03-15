@@ -316,10 +316,18 @@ export PATH=$PATH:/usr/share/maven/bin
 docker pull ubuntu
 docker run -it -d --name azure-ubuntu ubuntu
 docker attach azure-ubuntu
+export PATH=$PATH:/usr/share/maven/bin
 
 git checkout --track origin/dev
+git config --global user.email "danan.2009@gmail.com"
+git config --global user.name "sawied"
 apt-get install build-essential libssl1.0.0 libasound2
+mvn compile exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
 mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
+mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.Main"
+
+vi src/main/java/com/github/sawied/azure/speech/App.java
+vi src/main/java/com/github/sawied/azure/speech/Main.java
 ```
 replace text in vim editor
 ```

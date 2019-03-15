@@ -1,0 +1,50 @@
+version: '3.2'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongo-cc
+    restart: always
+    command: --replSet devReplSet
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - type: bind
+        source: /home/sawied/cc/run/data
+        target: /data/db
+  elasticsearch:
+    image: elasticsearch:6.6.1
+    container_name: elasticsearch-cc
+    restart: always
+    ports: 
+      - "9200:9200"
+#     - "443:443"
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - type: bind
+        source: /home/sawied/cc/run/ik
+        target: /usr/share/elasticsearch/plugins/ik
+      - type: bind
+        source: /home/sawied/cc/run/pinyin
+        target: /usr/share/elasticsearch/plugins/pinyin
+  mongo-connector: 
+    build:
+      context: ./mc
+      dockerfile: Dockerfile
+    restart: "no"
+    container_name: mongo-connector
+#    container_name: microservice-apigateway-server-${profile:-default}
+#    restart: always
+#    environment:
+#      SPRING_PROFILES_ACTIVE: ${profile:-default}
+#    volumes:
+#      - type: bind
+#        source: ${log_dir}/logs
+#        target: /logs
+#    ports: 
+#      - "80:80"
+#      - "443:443"

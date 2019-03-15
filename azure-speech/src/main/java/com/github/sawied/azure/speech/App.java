@@ -19,7 +19,7 @@ public class App {
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
 		int exitCode = 1;
-		SpeechConfig config = SpeechConfig.fromSubscription("38a7b7044e1c43fc862d159374b68a8d", "southeastasia");
+		SpeechConfig config = SpeechConfig.fromSubscription("193b67f02ae94f9996bda218286a2f3c", "southeastasia");
 		config.setSpeechRecognitionLanguage("zh");
 		AudioConfig audioInput = AudioConfig.fromWavFileInput("D:/callCenter/a1.wav");
 		SpeechRecognizer recognizer = new SpeechRecognizer(config, audioInput);
