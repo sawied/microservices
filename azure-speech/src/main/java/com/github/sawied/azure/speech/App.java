@@ -2,9 +2,11 @@ package com.github.sawied.azure.speech;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.Semaphore;
 
 import com.microsoft.cognitiveservices.speech.CancellationDetails;
 import com.microsoft.cognitiveservices.speech.CancellationReason;
+import com.microsoft.cognitiveservices.speech.OutputFormat;
 import com.microsoft.cognitiveservices.speech.ResultReason;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
 import com.microsoft.cognitiveservices.speech.SpeechRecognitionResult;
@@ -18,34 +20,71 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 public class App {
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-		int exitCode = 1;
-		SpeechConfig config = SpeechConfig.fromSubscription("38a7b7044e1c43fc862d159374b68a8d", "southeastasia");
-		config.setSpeechRecognitionLanguage("zh");
-		AudioConfig audioInput = AudioConfig.fromWavFileInput("D:/callCenter/a1.wav");
-		SpeechRecognizer recognizer = new SpeechRecognizer(config, audioInput);
-		Future<SpeechRecognitionResult> recognizeOnceAsync = recognizer.recognizeOnceAsync();
-		SpeechRecognitionResult result = recognizeOnceAsync.get();
-		
-		if (result.getReason() == ResultReason.RecognizedSpeech) {
-            System.out.println("We recognized: " + result.getText());
-            exitCode = 0;
-        }
-        else if (result.getReason() == ResultReason.NoMatch) {
-            System.out.println("NOMATCH: Speech could not be recognized.");
-        }
-        else if (result.getReason() == ResultReason.Canceled) {
-            CancellationDetails cancellation = CancellationDetails.fromResult(result);
-            System.out.println("CANCELED: Reason=" + cancellation.getReason());
+		Semaphore stopRecognitionSemaphore = new Semaphore(0);
 
-            if (cancellation.getReason() == CancellationReason.Error) {
-                System.out.println("CANCELED: ErrorCode=" + cancellation.getErrorCode());
-                System.out.println("CANCELED: ErrorDetails=" + cancellation.getErrorDetails());
-                System.out.println("CANCELED: Did you update the subscription info?");
-            }
+        // Creates an instance of a speech config with specified
+        // subscription key and service region. Replace with your own subscription key
+        // and service region (e.g., "westus").
+        SpeechConfig config = SpeechConfig.fromSubscription("193b67f02ae94f9996bda218286a2f3c", "southeastasia");
+        //config.setSpeechRecognitionLanguage("zh-cn");
+        config.setOutputFormat(OutputFormat.Detailed);
+        // Create an audio stream from a wav file.
+        // Replace with your own audio file name.
+       
+        AudioConfig audioInput = AudioConfig.fromWavFileInput("E:/githome/1a.wav");
+
+        // Creates a speech recognizer using audio stream input.
+        SpeechRecognizer recognizer = new SpeechRecognizer(config, audioInput);
+        {
+            // Subscribes to events.
+            recognizer.recognizing.addEventListener((s, e) -> {
+               // System.out.println("RECOGNIZING: Text=" + e.getResult().getText());
+            });
+
+            recognizer.recognized.addEventListener((s, e) -> {
+                if (e.getResult().getReason() == ResultReason.RecognizedSpeech) {
+                    System.out.println("RECOGNIZED: Text=" + e.getResult().getText());
+                }
+                else if (e.getResult().getReason() == ResultReason.NoMatch) {
+                    System.out.println("NOMATCH: Speech could not be recognized.");
+                }
+            });
+
+            recognizer.canceled.addEventListener((s, e) -> {
+                System.out.println("CANCELED: Reason=" + e.getReason());
+
+                if (e.getReason() == CancellationReason.Error) {
+                    System.out.println("CANCELED: ErrorCode=" + e.getErrorCode());
+                    System.out.println("CANCELED: ErrorDetails=" + e.getErrorDetails());
+                    System.out.println("CANCELED: Did you update the subscription info?");
+                }
+
+                stopRecognitionSemaphore.release();
+            });
+
+            recognizer.sessionStarted.addEventListener((s, e) -> {
+                System.out.println("\nSession started event.");
+            });
+
+            recognizer.sessionStopped.addEventListener((s, e) -> {
+                System.out.println("\nSession stopped event.");
+
+                // Stops translation when session stop is detected.
+                System.out.println("\nStop translation.");
+                stopRecognitionSemaphore.release();
+            });
+
+            // Starts continuous recognition. Uses stopContinuousRecognitionAsync() to stop recognition.
+            recognizer.startContinuousRecognitionAsync().get();
+
+            // Waits for completion.
+            stopRecognitionSemaphore.acquire();
+
+            // Stops recognition.
+            recognizer.stopContinuousRecognitionAsync().get();
+            
+            recognizer.close();
         }
-		
-		recognizer.close();
-		System.exit(exitCode);
 	
 	}
 

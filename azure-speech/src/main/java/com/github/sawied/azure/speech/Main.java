@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Replace below with your own subscription key
-            String speechSubscriptionKey = "38a7b7044e1c43fc862d159374b68a8d";
+            String speechSubscriptionKey = "193b67f02ae94f9996bda218286a2f3c";
             // Replace below with your own service region (e.g., "westus").
             String serviceRegion = "southeastasia";
 
