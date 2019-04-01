@@ -1,0 +1,91 @@
+hello 0.39,0
+hello how 0.99,0
+hello how can 1.21,0
+hello how can i 1.27,0
+hello how can i help 1.45,0
+hello how can i help you 1.59,0
+hello how can i help you today 1.79,0
+hello how can i help you today i'm 3.11,0
+hello how can i help you today i'm very 3.32,0
+hello how can i help you today i'm very uh 3.47,0
+hello how can i help you today i'm very 3.48,0
+hello how can i help you today i'm very upset 3.65,0
+hello how can i help you today i'm very upset with 3.85,0
+hello how can i help you today i'm very upset with the 4.03,0
+hello how can i help you today i'm very upset with the quality 4.37,0
+hello how can i help you today i'm very upset with the quality of 4.46,0
+hello how can i help you today i'm very upset with the quality of your 4.61,0
+hello how can i help you today i'm very upset with the quality of your service 5.19,0
+hello how can i help you today i'm very upset with the quality of your service i'm 5.84,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry 6.17,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what 6.64,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what's 6.75,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what 6.86,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems 7.02,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to 7.09,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be 7.17,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the 7.33,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem 7.69,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my 8.61,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet 8.85,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service 9.35,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did 9.6,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not 9.7,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work 10.01,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not 10.02,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work 10.03,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for 10.13,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three 10.41,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days 10.81,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three 10.82,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days 10.83,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my 11.77,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my records 12.01,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record 12.21,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say 12.38,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a 12.46,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician 12.9,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit 13.17,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit you 13.35,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit 13.4,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your 13.46,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area 13.68,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday 14.23,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes 15.11,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he 15.47,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he is 15.54,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he 15.58,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed 15.9,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed it 16.17,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed 16.24,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new 16.29,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new mode 16.59,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem 16.71,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did 17.53,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it 17.7,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did 17.76,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it 17.81,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it's 17.85,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve 17.95,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solved 18.02,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve 18.07,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the 18.09,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem 18.49,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes 19.25,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but 19.51,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i 19.61,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was 19.9,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i 19.91,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was 19.93,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was over 20.2,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was 20.23,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged 20.48,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for 20.86,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for internet 21.27,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for 21.28,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for internet 21.29,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for 21.3,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for internet 21.31,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for 21.32,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for internet 21.33,0
+hello how can i help you today i'm very upset with the quality of your service i'm sorry what seems to be the problem my internet service did not work for three days my record say a technician visit your area yesterday yes he installed a new modem did it solve the problem yes but i was overcharged for internet service 21.73,0

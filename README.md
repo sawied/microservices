@@ -190,6 +190,17 @@ pyenv global 3.7.2
 pyenv versions
 sudo apt install python-pip
 ```
+
+
+#### ffmpeg ###
+splict multiple audio track channel to single one, the following command means 
+mapping channel 1 track to final0.wav file and channel 0 to final1.wav
+```
+ffmpeg -i final.wav -map_channel 0.0.1  -ac 1 final0.wav -map_channel 0.0.0 final1.wav
+ffmpeg -y -i final.wav -map_channel 0.0.1  -ac 1 -ar 16k final0.wav -ac 1 -ar 16k -map_channel 0.0.0 final1.wav
+```
+
+
 #### Install openldap as centre authentiation server
 
 1. Fistly install server library via apt get
