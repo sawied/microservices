@@ -77,7 +77,7 @@ public class AliyunAudioRecognition {
         // 设置app_key
         taskObject.put(KEY_APP_KEY, appKey);
         // 设置音频文件访问链接
-        taskObject.put(KEY_FILE_LINK, "https://www.sawied.top/track/session6.wav");
+        taskObject.put(KEY_FILE_LINK, "https://www.sawied.top/track/a1.wav");
         
         //设置音轨分析
         //taskObject.put("auto_split", true);
