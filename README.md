@@ -312,12 +312,68 @@ sudo chmod 777 /run
 sudo chmod 777 /var/log
 sudo supervisord -c /etc/supervisor/supervisord.conf
 sudo supervisorctl -c /etc/supervisor/supervisord.conf status
+sudo supervisorctl -c /etc/supervisor/supervisord.conf reload
+sudo supervisorctl -c /etc/supervisor/supervisord.conf stop all
+sudo supervisorctl -c /etc/supervisor/supervisord.conf start all
 ```
+
+
+check supervisord process if exist
 stop supervisord 
+check logs
 ```
+
 ps -ef | grep supervisord
 sudo kill -HUP $(cat /var/run/supervisord.pid)
+tail -f /var/log/call_center.out.log
 ```
+
+start supervisord when system startup
+create init.d script in folder
+``` 
+sudo vi /etc/init.d/supervisord
+```
+and input following:
+```
+#Supervisord auto-start
+# description: Auto-starts supervisord
+# processname: supervisord
+# pidfile: /var/run/supervisord.pid
+ 
+SUPERVISORD=/usr/local/bin/supervisord
+SUPERVISORCTL=/usr/local/bin/supervisorctl
+ 
+case $1 in
+start)
+        echo -n "Starting supervisord: "
+        $SUPERVISORD -c /etc/supervisor/supervisord.conf
+        echo
+        ;;
+stop)
+        echo -n "Stopping supervisord: "
+        $SUPERVISORCTL shutdown
+        echo
+        ;;
+restart)
+        echo -n "Stopping supervisord: "
+        $SUPERVISORCTL shutdown
+        echo
+        echo -n "Starting supervisord: "
+        $SUPERVISORD
+        echo
+        ;;
+esac
+```
+and then
+```
+sudo chmod +x /etc/init.d/supervisord
+sudo update-rc.d supervisord defaults
+sudo /etc/init.d/supervisord start
+sudo /etc/init.d/supervisord stop
+```
+
+
+
 
 #### Run Ubuntu ####
 1. pull the latest image
