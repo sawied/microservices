@@ -392,6 +392,8 @@ apt-get install build-essential libssl1.0.0 libasound2
 mvn compile exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
 mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.App"
 mvn exec:java -Dexec.mainClass="com.github.sawied.azure.speech.Main"
+mvn clean package -Dmaven.test.skip=true
+cp /home/sawied/githome/core/callCenter_hsbc/target/callcenter-0.0.1-SNAPSHOT.jar /home/sawied/cc/run/callcenter
 
 vi src/main/java/com/github/sawied/azure/speech/App.java
 vi src/main/java/com/github/sawied/azure/speech/Main.java
