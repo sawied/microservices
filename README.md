@@ -4,6 +4,25 @@ This document intend to introduce core concepts and demonstrating how to build a
 
 > As a sample, we focus on CentOs system  as test environment, and virtualbox as virtual machine.
 
+#### Change Ubuntu server ip address ####
+
+modify the file /etc/netplan/*.yaml as following
+
+```
+network:
+    ethernets:
+        enp0s3:
+            addresses: [192.168.88.107/24]
+            dhcp4: no
+            gateway4: 192.168.88.1
+    version: 2
+
+```
+do apply new settings:
+```
+$ sudo netplan apply
+```
+
 ### ***Section 1 build development environment***
 
 #### Install Docker CE
