@@ -38,9 +38,9 @@ public class AliyunAudioRecognition {
 	
 	
 	public static void main(String[] args) throws ServerException, ClientException, InterruptedException {
-		 String accessKeyId = "LTAIQzJuDFv2IZSE";
-		 String accessKeySecret = "QzvYHBAAzPFczfRXK2KhbeQqBtZWDw";
-		 String appKey = "0JpxtXgYO5tvTEgj";
+		 String accessKeyId = "";
+		 String accessKeySecret = "";
+		 String appKey = "";
 		if(args.length==3) {
 			 accessKeyId = args[0];
 			 accessKeySecret = args[1];

@@ -1,0 +1,226 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customVmName": {
+            "type": "String",
+            "metadata": {
+                "description": "This is the name of the your VM"
+            }
+        },
+        "bootDiagnosticsStorageAccountName": {
+            "type": "String",
+            "metadata": {
+                "description": "This is the name of the your storage account"
+            }
+        },
+        "bootDiagnosticsStorageAccountResourceGroupName": {
+            "type": "String",
+            "metadata": {
+                "description": "Resource group of the existing storage account"
+            }
+        },
+        "osDiskVhdUri": {
+            "type": "String",
+            "metadata": {
+                "description": "Uri of the your user image"
+            }
+        },
+        "dnsLabelPrefix": {
+            "type": "String",
+            "metadata": {
+                "description": "DNS Label for the Public IP. Must be lowercase. It should match with the following regular expression: ^[a-z][a-z0-9-]{1,61}[a-z0-9]$ or it will raise an error."
+            }
+        },
+        "adminUsername": {
+            "type": "String",
+            "metadata": {
+                "description": "User Name for the Virtual Machine"
+            }
+        },
+        "adminPassword": {
+            "type": "SecureString",
+            "metadata": {
+                "description": "Password for the Virtual Machine"
+            }
+        },
+        "osType": {
+            "allowedValues": [
+                "Windows",
+                "Linux"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "This is the OS that your VM will be running"
+            }
+        },
+        "vmSize": {
+            "type": "String",
+            "metadata": {
+                "description": "This is the size of your VM"
+            }
+        },
+        "newOrExistingVnet": {
+            "allowedValues": [
+                "new",
+                "existing"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Select if this template needs a new VNet or will reference an existing VNet"
+            }
+        },
+        "newOrExistingVnetName": {
+            "defaultValue": "",
+            "type": "String",
+            "metadata": {
+                "description": "New or Existing VNet Name"
+            }
+        },
+        "newOrExistingSubnetName": {
+            "type": "String",
+            "metadata": {
+                "description": "New or Existing subnet Name"
+            }
+        },
+        "existingVnetResourceGroupName": {
+            "type": "String",
+            "metadata": {
+                "description": "Resource group of the existing VNET"
+            }
+        },
+        "location": {
+            "defaultValue": "[resourceGroup().location]",
+            "type": "String",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        }
+    },
+    "variables": {
+        "imageName": "callCenterImage",
+        "publicIPAddressName": "[concat(parameters('customVmName'),'IP')]",
+        "vmName": "[parameters('customVmName')]",
+        "nicName": "[concat(parameters('customVmName'),'Nic')]",
+        "publicIPAddressType": "Dynamic",
+        "apiVersion": "2015-06-15",
+        "templatelink": "[concat('https://raw.githubusercontent.com/singhkay/azure-quickstart-templates/master/101-vm-from-user-image/',parameters('newOrExistingVnet'),'vnet.json')]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Compute/images",
+            "apiVersion": "2016-04-30-preview",
+            "name": "[variables('imageName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "storageProfile": {
+                    "osDisk": {
+                        "osType": "[parameters('osType')]",
+                        "osState": "Generalized",
+                        "blobUri": "[parameters('osDiskVhdUri')]",
+                        "storageAccountType": "Standard_LRS"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "name": "vnet-template",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('templatelink')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('newOrExistingVnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('newOrExistingSubnetName')]"
+                    },
+                    "existingVnetResourceGroupName": {
+                        "value": "[parameters('existingVnetResourceGroupName')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2015-06-15",
+            "name": "[variables('publicIPAddressName')]",
+            "location": "[parameters('location')]",
+            "properties": {
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[parameters('dnsLabelPrefix')]"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2016-03-30",
+            "name": "[variables('nicName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+                "Microsoft.Resources/deployments/vnet-template"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIPAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                            },
+                            "subnet": {
+                                "id": "[reference('vnet-template').outputs.subnet1Ref.value]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2016-04-30-preview",
+            "name": "[variables('vmName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]",
+                "[variables('imageName')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[variables('vmName')]",
+                    "adminUsername": "[parameters('adminUsername')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "id": "[resourceId('Microsoft.Compute/images', variables('imageName'))]"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                        }
+                    ]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": true,
+                        "storageUri": "[concat(reference(resourceId(parameters('bootDiagnosticsStorageAccountResourceGroupName'), 'Microsoft.Storage/storageAccounts/', parameters('bootDiagnosticsStorageAccountName')), variables('apiVersion')).primaryEndpoints.blob)]"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -13,7 +13,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - type: bind
-        source: /home/sawied/cc/run/data
+        source: /cc/run/data
         target: /data/db
   elasticsearch:
     image: elasticsearch:6.6.1
@@ -24,18 +24,23 @@ services:
 #     - "443:443"
     environment:
       - discovery.type=single-node
+      - http.cors.enabled=true
+      - http.cors.allow-origin=*
     volumes:
       - type: bind
-        source: /home/sawied/cc/run/ik
+        source: /cc/run/ik
         target: /usr/share/elasticsearch/plugins/ik
       - type: bind
-        source: /home/sawied/cc/run/pinyin
+        source: /cc/run/pinyin
         target: /usr/share/elasticsearch/plugins/pinyin
+      - type: bind
+        source: /cc/run/edata
+        target: /usr/share/elasticsearch/data
   mongo-connector: 
     build:
-      context: ./mc
+      context: ./mongo-connector
       dockerfile: Dockerfile
-    restart: "no"
+    restart: always
     container_name: mongo-connector
 #    container_name: microservice-apigateway-server-${profile:-default}
 #    restart: always
@@ -48,3 +53,9 @@ services:
 #    ports: 
 #      - "80:80"
 #      - "443:443"
+  elasticsearch-header:
+    image: mobz/elasticsearch-head:5
+    container_name: elasticsearch-head
+    restart: always
+    ports:
+      - "9100:9100"      

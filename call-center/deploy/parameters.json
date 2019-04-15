@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "customVmName": {
+            "value": "vmdp"
+        },
+        "bootDiagnosticsStorageAccountName": {
+            "value": "imagedisks001"
+        },
+        "bootDiagnosticsStorageAccountResourceGroupName": {
+            "value": "image-creator"
+        },
+        "osDiskVhdUri": {
+            "value": "https://imagedisks001.blob.core.chinacloudapi.cn/call-center-container/vhdimage20190412112221.vhd"
+        },
+        "dnsLabelPrefix": {
+            "value": "call-center-p"
+        },
+        "adminUsername": {
+            "value": "danan"
+        },
+        "adminPassword": {
+            "value": null
+        },
+        "osType": {
+            "value": "Linux"
+        },
+        "vmSize": {
+            "value": "Standard_A2_v2"
+        },
+        "newOrExistingVnet": {
+            "value": "new"
+        },
+        "newOrExistingVnetName": {
+            "value": "wmdp-net"
+        },
+        "newOrExistingSubnetName": {
+            "value": "default"
+        },
+        "existingVnetResourceGroupName": {
+            "value": "deployment-p"
+        },
+        "location": {
+            "value": "chinanorth"
+        }
+    }
+}
