@@ -390,6 +390,13 @@ sudo /etc/init.d/supervisord start
 sudo /etc/init.d/supervisord stop
 ```
 
+change dirctory owner and group:
+```
+sudo chown -R root supervisor  
+sudo chgrp -R root supervisor
+sudo chmod g-w supervisord
+```
+
 Spring boot application autostartup script for supervisord, Assume you have a spring boot application, you want to startup with operator system,
 create a ini configuration file in /etc/supervisor/application.ini, input text as following:
 ```
@@ -489,6 +496,19 @@ After all the facilities setup completed and successed, do Azure image certifica
 
 3. use Azure CLI to create custom Linux VM 
 
+    Before creating image from Azure CLI,SSH to the VM and Deprovision the VM
+    > **Note** 
+    >the account and entire home directory will be deleted running this command.
+    root password will be disabled. You will not be able to login as root.
+
+    ```
+    $ sudo waagent -deprovision+user -force
+    $ history -c
+    $ exit
+
+    ```
+
+
     Install Azure CLI for your operatoring system, switch to corresponding region variable, 
     ```
     az cloud set -n AzureChinaCloud # for China
@@ -503,3 +523,26 @@ After all the facilities setup completed and successed, do Azure image certifica
     ```
     az vm create --resource-group CC --name CALL-CENTER --image core-service-image --admin-username sawied --generate-ssh-keys
     ```
+
+    >How to copy image from one Azure account from another account?
+    >Firstly, create storage account in target Azure Account
+
+
+    powershell script:
+    * set execution policy allow local ps1 script can be executing.
+    * Maybe you need to install AzureRM module
+    * get installed module as this: 
+    ```
+    Get-Module PowerShellGet -list | Select-Object Name,Version,Path
+    Name          Version Path
+    ----          ------- ----
+    PowerShellGet 1.0.0.1 C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PowerShellGet.psd1
+    ```
+    * install azureRM module, during the installing ,it will inquiry some question. 
+    ```
+    set-ExecutionPolicy RemoteSigned
+    Install-Module AzureRM -AllowClobber
+    ```
+    
+
+
