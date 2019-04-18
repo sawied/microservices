@@ -543,6 +543,16 @@ After all the facilities setup completed and successed, do Azure image certifica
     set-ExecutionPolicy RemoteSigned
     Install-Module AzureRM -AllowClobber
     ```
+
+# About License #
+
+Creating a license protecte CC from illegal using. 
+
+1. creating a RSA key pair. and convert key format from PKCS1 to PKCS8, in order to this can use it directly.
+```bash
+ $ openssl genrsa -out rsa.key 2018
+ $ openssl pkcs8 -in rsa.key -inform PEM  -nocrypt -topk8 -outform PEM -out pkcs8-private.key
+```
     
 
 
