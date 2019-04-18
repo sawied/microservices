@@ -195,8 +195,9 @@
         ],
         "properties": {
           "hardwareProfile": {
-            "vmSize": "[parameters('vmSize')]"
+            "vmSize": "Standard_A2_v2"
           },
+          
           "osProfile": {
             "computerName": "[variables('vmName')]",
             "adminUsername": "[parameters('adminUsername')]",
