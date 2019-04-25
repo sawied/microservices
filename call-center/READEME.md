@@ -83,7 +83,11 @@ sudo docker-compose up -d
 > and do that ,you maybe not the mongo-connector does not startup successfully, then do step for **mongoDB initiate**. add user for DB visiting.
 you can add work user to group docker, so that remove sudo prefix.
 
-
+package  exist package and extract it in remote machine.
+```bash
+sudo tar -zcvpf cc.tar.gz /cc
+sudo tar -zxvf cc.tar.gz
+```
 
 #### Install MongoDB document database
 1. pull latest mongo image from docker hub
@@ -401,9 +405,9 @@ Spring boot application autostartup script for supervisord, Assume you have a sp
 create a ini configuration file in /etc/supervisor/application.ini, input text as following:
 ```
 [program:call-center]
-command =java -Xmx1024m -jar -Dspring.profiles.active=en  callcenter-0.0.1-SNAPSHOT.jar
+command =java -Xmx1024m -jar  -Dspring.profiles.active=en  callcenter-0.0.1-SNAPSHOT.jar
 directory=/home/sawied/cc/run/callcenter
-user=sawied
+user=root
 stopsignal = TERM
 autostart = true
 autorestart = true
@@ -553,6 +557,16 @@ Creating a license protecte CC from illegal using.
  $ openssl genrsa -out rsa.key 2018
  $ openssl pkcs8 -in rsa.key -inform PEM  -nocrypt -topk8 -outform PEM -out pkcs8-private.key
 ```
-    
 
+2. extension for custom script executing.
+visit: [VirtualMachine extension](https://docs.azure.cn/zh-cn/virtual-machines/extensions/custom-script-linux)
 
+```bash
+cat script | gzip -9 | base64 -w 0
+```    
+
+3. install the license and subscribe key like this
+
+```bash
+sudo bash /cc/script/azure_params_replace.sh 193b67f02ae94f9996bda218286a2f3c southeastasia Tl7OIQAAABYAAAACAAAABAAAAAZiaWxsYWJjZGVmAAAAHgAAAAsAAAAKZXhwaXJ5RGF0ZQAAAWwDXgbkAAAAAAAAARkAAAABAAAAEAAAAP1saWNlbnNlU2lnbmF0dXJlAzU2dpNywdMBBCU2PAL5ok0xhRiC1rc5Lou6jk4chO1e02QAEkjcZ+wkC/yqFMoa1NgTQ4y/xZL3BqtXzo+VuMvQhBwazqj0M5v/4/60R//jqXw6LLVRrOsoxBGjleMrJuGDUV8ZR6drm2wOGf+25WkToi20cfJ57h3ts5OWdxyv+jitGYf+pynC7cix/omBfauqOXTzmg+PhL8ng+QJEfqdrAosxaN/YKUJ9ahvnVzlabrGe1oVxP0nKyn0QSU+8ZwwRRNfwGs9en0Q+R2T+1Bh7y5CxedRRYrrQ/7uW4ms8ZjS1dgi3suZL3zy2u0hl0ysVzFcldDvh7nDCgAAACUAAAAMAAAACWxpY2Vuc2VpZJvuNifTntYYvV5cH9x3QgMAAAAAAAAAIgAAAAIAAAAPAAAAB3NpZ25hdHVyZURpZ2VzdFNIQS0yNTY=
+```

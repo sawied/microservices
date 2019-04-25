@@ -4,9 +4,9 @@ $sourceContainerName = "vhds" #VHD所在容器名称
 $fileName="vhdimage20190412112221.vhd" #VHD文件名称
 
 #目标存储信息，参数请修改 https://azurecreatingiamgedisks.blob.core.chinacloudapi.cn/vhds/vhdimage20190412112221.vhd
-$destStorageAccountName ="imagedisks001" #VHD目标存储账号
-$destStorageAccountKey ="" #VHD目标存储账号KEY
-$destContainerName ="call-center-container" #VHD目标容器名称
+$destStorageAccountName ="imagesv2account" #VHD目标存储账号
+$destStorageAccountKey ="S0B85vPXG6BFVbe8owpNJtlbOp414aII8p7LJYZDl4yyDIc546xy8j/5/H8OSv/cU44AqtUpTehzMu7gnC2CjQ==" #VHD目标存储账号KEY
+$destContainerName ="images-container" #VHD目标容器名称
 
 #Uri配置信息
 $endpoint="core.chinacloudapi.cn"
