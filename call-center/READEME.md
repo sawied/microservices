@@ -464,27 +464,29 @@ java -Xmx1024m -jar -Dspring.profiles.active=en  callcenter-0.0.1-SNAPSHOT.jar
 -------------
 #### Azure resource manager ####
 
-1. 
+1. How to generate License from key pair. 
 
-* First, prepare key pair . use ssh-keygen tool to create secret key pair
-```
-ssh-keygen -t rsa -b 2048
-```
+* First, prepare key pair . use openssl tool to create secret key pair
+  ```bash
+  openssl genrsa -out rsa.key 2018
+  ```
 
-and check the public key
-```
-cat id_rsa.pub
-```
+  The default format of  openssl output is  PEM, convert private key format from PEM to pkcs8 that can be recognized by Java ,and export public key
+  ```
+  openssl pkcs8 -in rsa.key -inform PEM  -nocrypt -topk8 -outform PEM -out pkcs8-private.key
+  openssl rsa -in rsa.key -pubout -out rsa_pub.key
+  ```
+  those key is used to generate License,
 
 
 * The second, create Linux VM from Azure platform, login in Azure 
 
-Choose 'Ubuntu Server 18.04 LTS',and create VM, wait the VM creating successfully.
-remember to input public key generated in step 1.
-
-then you will get a VM Server,and output information contains public IP. use putty tool try to connect. 139.219.15.1**
-
-do the image setup. 
+  Choose 'Ubuntu Server 18.04 LTS',and create VM, wait the VM creating    successfully.
+ remember to input public key generated in step 1.
+ 
+  then you will get a VM Server,and output information contains public    IP. use putty tool try to connect. 139.219.15.1**
+ 
+ do the image setup. 
 
 After all the facilities setup completed and successed, do Azure image certification.
 
@@ -530,23 +532,29 @@ After all the facilities setup completed and successed, do Azure image certifica
 
     >How to copy image from one Azure account from another account?
     >Firstly, create storage account in target Azure Account
-
-
-    powershell script:
-    * set execution policy allow local ps1 script can be executing.
-    * Maybe you need to install AzureRM module
-    * get installed module as this: 
-    ```
-    Get-Module PowerShellGet -list | Select-Object Name,Version,Path
-    Name          Version Path
-    ----          ------- ----
-    PowerShellGet 1.0.0.1 C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PowerShellGet.psd1
-    ```
+    >
+    >powershell script:
+    >* set execution policy allow local ps1 script can be executing.
+    >* Maybe you need to install AzureRM module
+    >* get installed module as this: 
+    >```
+    >Get-Module PowerShellGet -list | Select-Object Name,Version,Path
+    >Name          Version Path
+    >----          ------- ----
+    >PowerShellGet 1.0.0.1 C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PowerShellGet.psd1
+    
     * install azureRM module, during the installing ,it will inquiry some question. 
     ```
     set-ExecutionPolicy RemoteSigned
     Install-Module AzureRM -AllowClobber
     ```
+
+    Create VM from ARM template
+
+   >**Important**
+   >
+   > While the Azure documentation is being updated to reflect the new module cmdlet names, articles      may still use the AzureRM commands. After installing the Az module, it's recommended that you      enable the AzureRM cmdlet aliases with **Enable-AzureRmAlias**. See the Migrate from AzureRM to Az      article for more details.
+    
 
 # About License #
 

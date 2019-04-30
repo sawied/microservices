@@ -1,0 +1,220 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+            {}
+        ],
+        "steps": [
+            {
+                "name": "vmCredentials",
+                "label": "Azure Managed Application",
+                "bladeTitle": "Application credentials",
+                "subLabel": {
+                    "preValidation": "Provide VM credentials",
+                    "postValidation": "Great - let's move on!"
+                },
+                "elements": [
+                    {
+                        "name": "adminUserName",
+                        "type": "Microsoft.Compute.UserNameTextBox",
+                        "label": "Admin username",
+                        "osPlatform": "Linux",
+                        "constraints": {
+                            "required": true
+                        },
+                        "toolTip": "Provide admin username for the virtual machine"
+                    },
+                    {
+                        "name": "adminPassword",
+                        "type": "Microsoft.Compute.CredentialsCombo",
+                        "label": {
+                            "authenticationType": "Authentication type",
+                            "password": "Password",
+                            "confirmPassword": "Confirm password",
+                            "sshPublicKey": "SSH public key"
+                        },
+                        "osPlatform": "Linux",
+                        "constraints": {
+                            "customPasswordRegex": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$",
+                            "customValidationMessage": "The password must contain at least 8 characters",
+                            "required": true
+                        },
+                        "options": {
+                            "hideConfirmation": false
+                        },
+                        "toolTip": {
+                            "authenticationType": "",
+                            "sshPublicKey": "",
+                            "password": "Provide admin password for the virtual machine"
+                        },
+                        "visible": true
+                    }
+                ]
+            },
+            {
+                "name": "appSettings",
+                "label": "Application settings",
+                "subLabel": {
+                    "preValidation": "Configure the managed application",
+                    "postValidation": "Done!"
+                },
+                "bladeTitle": "Settings",
+                "elements": [
+                    {
+                        "name": "customVmName",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Application name",
+                        "toolTip": "Assign a name to your Azure application",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true,
+                            "regex": "[a-z][a-z0-9-]{2,5}[a-z0-9]$",
+                            "validationMessage": "Must be 3-5 characters."
+                        }
+                    },
+                    {
+                        "name": "vmSize",
+                        "type": "Microsoft.Compute.SizeSelector",
+                        "label": "Size",
+                        "toolTip": "",
+                        "recommendedSizes": [
+                            "Standard_A1",
+                            "Standard_A1_v2",
+                            "Standard_A2_v2",
+                            "Standard_A3"
+                        ],
+                        "constraints": {
+                          "allowedSizes": []
+                        },
+                        "options": {
+                          "hideDiskTypeFilter": false
+                        },
+                        "osPlatform": "Linux",
+                        "count": 1,
+                        "visible": true
+                      },
+                    {
+                        "name": "subscriptionKey",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Azure Speech to Text Subscription key",
+                        "toolTip": "Assign a subscription key to your Azure application",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true,
+                            "regex": "",
+                            "validationMessage": "Must be a Base 64 characters."
+                        }
+                    },
+                    {
+                        "name": "region",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "The location of Azure Speech to Text Subscription key own ",
+                        "toolTip": "Choose the subscription owned location",
+                        "defaultValue": "",
+                        "constraints": {
+                            "required": true,
+                            "allowedValues": [
+                                {
+                                    "label": "westus",
+                                    "value": "westus"
+                                },
+                                {
+                                    "label": "westus2",
+                                    "value": "westus2"
+                                },
+                                {
+                                    "label": "eastus",
+                                    "value": "eastus"
+                                },
+                                {
+                                    "label": "eastus2",
+                                    "value": "eastus2"
+                                },
+                                {
+                                    "label": "centralus",
+                                    "value": "centralus"
+                                },
+                                {
+                                    "label": "northcentralus",
+                                    "value": "northcentralus"
+                                },
+                                {
+                                    "label": "southcentralus",
+                                    "value": "southcentralus"
+                                },
+                                {
+                                    "label": "centralindia",
+                                    "value": "centralindia"
+                                },
+                                {
+                                    "label": "eastasia",
+                                    "value": "eastasia"
+                                },
+                                {
+                                    "label": "southeastasia",
+                                    "value": "southeastasia"
+                                },
+                                {
+                                    "label": "japaneast",
+                                    "value": "japaneast"
+                                },
+                                {
+                                    "label": "koreacentral",
+                                    "value": "koreacentral"
+                                },
+                                {
+                                    "label": "australiaeast",
+                                    "value": "australiaeast"
+                                },
+                                {
+                                    "label": "canadacentral",
+                                    "value": "canadacentral"
+                                },
+                                {
+                                    "label": "northeurope",
+                                    "value": "northeurope"
+                                },
+                                {
+                                    "label": "westeurope",
+                                    "value": "westeurope"
+                                },
+                                {
+                                    "label": "uksouth",
+                                    "value": "uksouth"
+                                },
+                                {
+                                    "label": "francecentral",
+                                    "value": "francecentral"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "license",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "License",
+                        "defaultValue": "",
+                        "toolTip": "The license from CSCC.",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{4}|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)$"
+                        },
+                        "visible": true
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "customVmName": "[steps('appSettings').customVmName]",
+            "adminUsername": "[steps('vmCredentials').adminUserName]",
+            "authenticationType":"[steps('vmCredentials').adminPassword.authenticationType]",
+            "adminPasswordOrKey":"[coalesce(steps('vmCredentials').adminPassword.password, steps('vmCredentials').adminPassword.sshPublicKey)]",
+            "subscriptionKey": "[steps('appSettings').subscriptionKey]",
+            "region": "[steps('appSettings').region]",
+            "license": "[steps('appSettings').license]",
+            "vmSize":"[steps('appSettings').vmSize]"
+        }
+    }
+}
