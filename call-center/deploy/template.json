@@ -181,7 +181,10 @@
             "name": "[variables('publicIPAddressName')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
+                "dnsSettings": {
+                    "domainNameLabel": "[uniqueString(variables('publicIPAddressName'))]"
+                  }
             }
         },
         {
@@ -276,7 +279,7 @@
           "value": "admin"
         },
         "address": {
-            "value": "[concat('http://',reference(concat('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName')), '2016-03-30').ipAddress)]",
+            "value": "[concat('http://',reference(resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))).dnsSettings.fqdn)]",
             "type" : "string"
         }
       }

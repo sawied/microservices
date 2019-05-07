@@ -43,11 +43,11 @@ public class LicenseTest {
 		License license = new License();
 		license.setLicenseId();
 		
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.MONTH, 3);
-		license.setExpiry(calendar.getTime());
+		//Calendar calendar = Calendar.getInstance();
+		//calendar.add(Calendar.MONTH, 3);
+		//license.setExpiry(calendar.getTime());
 		
-		license.add(Feature.Create.stringFeature("bill", "abcdef"));
+		license.add(Feature.Create.stringFeature("sawied", "license"));
 		license.sign(privateKey, "SHA-256");
 		
 		byte[] result=license.serialized();
