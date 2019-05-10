@@ -31,44 +31,6 @@
             },
             "type": "securestring"
         },
-        "subscriptionKey": {
-            "type": "string",
-            "metadata": {
-                "description": "subscription key for Azure speech to text service "
-            }
-        },
-        "region": {
-            "allowedValues": [
-                "westus",
-                "westus2",
-                "eastus",
-                "eastus2",
-                "centralus",
-                "northcentralus",
-                "southcentralus",
-                "centralindia",
-                "eastasia",
-                "southeastasia",
-                "japaneast",
-                "koreacentral",
-                "australiaeast",
-                "canadacentral",
-                "northeurope",
-                "westeurope",
-                "uksouth",
-                "francecentral"
-            ],
-            "type": "string",
-            "metadata": {
-                "description": "subscription key service location"
-            }
-        },
-        "license": {
-            "type": "string",
-            "metadata": {
-                "description": "license base64 string "
-            }
-        },
         "vmSize": {
             "defaultValue": "Standard_A2_v2",
             "allowedValues": [
@@ -90,7 +52,7 @@
         "nicName": "[concat(parameters('customVmName'),'Nic')]",
         "networkSecurityGroupName": "[concat(parameters('customVmName'),'-','nsg')]",
         "virtualNetworkName": "[concat(resourceGroup().name,'-','vnet')]",
-        "osDiskVhdUri":"https://imagerundisks.blob.core.chinacloudapi.cn/vmfromrun-807e04252ce14eef82bd7e9ff2cf62a5/vmfromrun-osdisk-20190430-022306.vhd",
+        "osDiskVhdUri":"https://imagesv2account.blob.core.chinacloudapi.cn/vmfromrun-7b1709e755eb483b91f8cf02a6aa8245/vmfromrun-osdisk-20190509-090938.vhd",
         "osType": "Linux",
         "linuxConfiguration": {
             "disablePasswordAuthentication": true,
@@ -249,38 +211,12 @@
                     ]
                 }
             }
-        },
-        {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "apiVersion": "2015-06-15",
-            "name": "[concat(parameters('customVmName'), '/', 'customscript')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', variables('vmName'))]"
-            ],
-            "tags": {
-                "displayName": "config-app"
-            },
-            "properties": {
-                "publisher": "Microsoft.Azure.Extensions",
-                "type": "CustomScript",
-                "typeHandlerVersion": "2.0",
-                "autoUpgradeMinorVersion": true,
-                "protectedSettings": {
-                    "commandToExecute": "[concat('sh /cc/script/azure_params_replace.sh',' ',parameters('subscriptionKey'),' ',parameters('region'),' ',parameters('license'))]"
-                },
-                "settings": {}
-            }
         }
     ],
     "outputs": {
         "adminUsername": {
           "type": "string",
           "value": "admin"
-        },
-        "address": {
-            "value": "[concat('http://',reference(resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))).dnsSettings.fqdn)]",
-            "type" : "string"
         }
       }
 }
