@@ -7,11 +7,16 @@ import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.BodyPart;
+import javax.mail.Multipart;
 import javax.mail.Part;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.mail.util.MimeMessageParser;
+import org.apache.james.mime4j.parser.AbstractContentHandler;
+import org.apache.james.mime4j.parser.MimeStreamParser;
+import org.apache.james.mime4j.stream.MimeConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +30,7 @@ import org.springframework.integration.mail.dsl.Mail;
 import org.springframework.integration.mail.support.DefaultMailHeaderMapper;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.MessagingException;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -32,81 +38,62 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @Configuration
 @EnableIntegration
 public class MailConfig {
-	
-	
-	//@Bean
+
+	// @Bean
 	public IntegrationFlow mailPop3Receiving(@Qualifier("emailMessageHandler") MessageHandler emailMessageHandler) {
 		return IntegrationFlows
-				.from(Mail.pop3InboundAdapter("pop3.mxhichina.com",110,"ghost@sawied.top","Welcome123")
-						.headerMapper(new DefaultMailHeaderMapper())
-						.embeddedPartsAsBytes(true).shouldDeleteMessages(true).get(),e->e.poller(Pollers.fixedRate(5000)))
-				.handle(emailMessageHandler)
-				.get();
+				.from(Mail.pop3InboundAdapter("pop3.mxhichina.com", 110, "ghost@sawied.top", "Welcome123")
+						.headerMapper(new DefaultMailHeaderMapper()).embeddedPartsAsBytes(true)
+						.shouldDeleteMessages(true).get(), e -> e.poller(Pollers.fixedRate(5000)))
+				.handle(emailMessageHandler).get();
 	}
-	
-	
+
 	@Bean
-	public IntegrationFlow mailImapReceiving(ImapMailReceiver mailReceiver,@Qualifier("emailMessageHandler") MessageHandler emailMessageHandler) {
-		
+	public IntegrationFlow mailImapReceiving(ImapMailReceiver mailReceiver,
+			@Qualifier("emailMessageHandler") MessageHandler emailMessageHandler) {
+
 		Properties javaMailProperties = new Properties();
 		javaMailProperties.put("mail.debug", "true");
 
-		
-		return IntegrationFlows
-				.from(Mail.imapIdleAdapter(mailReceiver)
-						.autoStartup(true)
-						.get())
-				.handle(emailMessageHandler)
-				.get();
+		return IntegrationFlows.from(Mail.imapIdleAdapter(mailReceiver).autoStartup(true).get())
+				.handle(emailMessageHandler).get();
 	}
-	
+
 	@Bean
 	public ImapMailReceiver mailReceiver() {
-		ImapMailReceiver mailReceiver=new ImapMailReceiver("imaps://danan.2009%40hotmail.com:0311711w@outlook.office365.com/INBOX");
-		
+		ImapMailReceiver mailReceiver = new ImapMailReceiver(
+				"imaps://danan.2009%40hotmail.com:0311711w@outlook.office365.com/INBOX");
+
 		Properties javaMailProperties = new Properties();
 		javaMailProperties.put("mail.debug", "true");
 		mailReceiver.setJavaMailProperties(javaMailProperties);
+		mailReceiver.setSimpleContent(false);
 		mailReceiver.setShouldMarkMessagesAsRead(true);
-		mailReceiver.setEmbeddedPartsAsBytes(true);
+		mailReceiver.setEmbeddedPartsAsBytes(false);
 		mailReceiver.setMaxFetchSize(10);
-		mailReceiver.setHeaderMapper(new DefaultMailHeaderMapper());
+		mailReceiver.setHeaderMapper(new MailContentHeaderMapper());
 		return mailReceiver;
 	}
-	
-	
+
 	@Bean
 	public TaskScheduler taskScheduler() {
 		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
-      threadPoolTaskScheduler.setPoolSize(5);
-      threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
-      return threadPoolTaskScheduler;
+		threadPoolTaskScheduler.setPoolSize(5);
+		threadPoolTaskScheduler.setThreadNamePrefix("ThreadPoolTaskScheduler");
+		return threadPoolTaskScheduler;
 	}
-	
 
-	
-	
 	@Bean
 	public MessageHandler emailMessageHandler() {
 		return new MessageHandler() {
 
 			@Override
 			public void handleMessage(Message<?> message) throws MessagingException {
-				Object part =message.getPayload();
-				if(part instanceof byte[]) {
-					byte[] data = (byte[]) part;
-					try {
-						IOUtils.write(data, new FileOutputStream(new File("mail")));
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-				
+				 MessageHeaders headers = message.getHeaders();
+				 System.out.println("headers");
 			}
-			
+
 		};
 	}
-	
+
 }
