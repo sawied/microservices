@@ -38,6 +38,7 @@
 		<module>microservice-eureka-server</module>
 		<module>microservice-oauth2-server</module>
 		<module>microservice-apigateway-server</module>
+		<module>microservice-application-web</module>
 	</modules>
 
 	<properties>
