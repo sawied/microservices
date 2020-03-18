@@ -52,7 +52,7 @@
         "nicName": "[concat(parameters('customVmName'),'Nic')]",
         "networkSecurityGroupName": "[concat(parameters('customVmName'),'-','nsg')]",
         "virtualNetworkName": "[concat(resourceGroup().name,'-','vnet')]",
-        "osDiskVhdUri":"https://imagesv2account.blob.core.chinacloudapi.cn/vmfromrun-7b1709e755eb483b91f8cf02a6aa8245/vmfromrun-osdisk-20190509-090938.vhd",
+        "osDiskVhdUri":"https://imagesv2account.blob.core.chinacloudapi.cn/vmfromrun-602135d493e5451a9cfbd2c8ae292187/vmfromrun-osdisk-20190517-052438.vhd",
         "osType": "Linux",
         "linuxConfiguration": {
             "disablePasswordAuthentication": true,
@@ -143,10 +143,7 @@
             "name": "[variables('publicIPAddressName')]",
             "location": "[resourceGroup().location]",
             "properties": {
-                "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
-                "dnsSettings": {
-                    "domainNameLabel": "[uniqueString(variables('publicIPAddressName'))]"
-                  }
+                "publicIPAllocationMethod": "[variables('publicIPAddressType')]"
             }
         },
         {
