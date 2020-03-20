@@ -28,7 +28,7 @@ named ***master-k8s***, with ***2GB RAM and 2 Cores*** (at least). It's better t
 * Disable Swap 
 comment the line contain swap in file '/etc/fstab' so that can take effect permanently.
    ```sh
-   swapoff -a && sed -i '/ swap / s/^/#/' /etc/fstab
+   swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
     ```
 * Enable net.bridge.bridge-nf-call-iptables core option
    ```sh
