@@ -132,13 +132,15 @@ install pakages to allow apt to use a repository over HTTPS
 * using bash script pullK8sImages.sh to download config images
 
     ```bash
-     #!/bin/bash
-     images=(kube-proxy:v1.17.4 kube-scheduler:v1.17.4 kube-controller-manager:v1.17.4 kube-apiserver:v1.17.4 etcd:3.4.3-0 pause:3.1 coredns:1.6.5)
-     for imageName in ${images[@]} ; do
-       docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
-       docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName
-       docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
-     done
+    cat <<'EOF'>./pullK8sImages.sh
+#!/bin/bash
+ images=(kube-proxy:v1.17.4 kube-scheduler:v1.17.4 kube-controller-manager:v1.17.4 kube-apiserver:v1.17.4 etcd:3.4.3-0 pause:3.1 coredns:1.6.5)
+ for imageName in ${images[@]} ; do
+   docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+   docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName k8s.gcr.io/$imageName
+   docker rmi registry.cn-hangzhou.aliyuncs.com/google_containers/$imageName
+ done
+EOF
     ```
     we just download the config images from aliyun and re-tagged with origin name. the downloaded images be removed after tagged.
     
