@@ -37,7 +37,7 @@ comment the line contain swap in file '/etc/fstab' so that can take effect perma
    net.bridge.bridge-nf-call-iptables = 1
    EOF
    ```
-* Enable packet forwarding for IPv4
+* Enable packet forwarding for IPv4 in /etc/sysctl.conf
    just uncomment the above line:
    ```
    net.ipv4.ip_forward = 1
