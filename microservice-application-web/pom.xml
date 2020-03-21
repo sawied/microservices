@@ -38,6 +38,7 @@
 
 	</properties>
 
+
 	<dependencies>
 
 		<dependency>
@@ -47,6 +48,39 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-batch</artifactId>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mail -->
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-mail</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba.spring.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
+			<version>2.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-pandora</artifactId>
+			<version>1.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
 		</dependency>
 
 		<dependency>
@@ -80,12 +114,43 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk15on</artifactId>
 		</dependency>
-		
+
 		<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 		<dependency>
-		    <groupId>commons-fileupload</groupId>
-		    <artifactId>commons-fileupload</artifactId>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
 		</dependency>
+
+		<!-- CSV -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-csv</artifactId>
+			<version>1.6</version>
+		</dependency>
+
+		<!-- dozer mapper -->
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>5.5.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.ehcache</groupId>
+			<artifactId>ehcache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+
 
 
 
@@ -147,7 +212,38 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-ws -->
+		<dependency>
+			<groupId>org.springframework.integration</groupId>
+			<artifactId>spring-integration-ws</artifactId>
+		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.james/apache-mime4j-core -->
+<dependency>
+    <groupId>org.apache.james</groupId>
+    <artifactId>apache-mime4j-core</artifactId>
+    <version>0.8.3</version>
+</dependency>
+
+<dependency>
+	<groupId>com.microsoft.ews-java-api</groupId>
+	<artifactId>ews-java-api</artifactId>
+	<version>2.0</version>
+</dependency>
+
+<dependency>
+<groupId>com.aliyun.oss</groupId>
+    <artifactId>aliyun-sdk-oss</artifactId>
+    <version>3.7.0</version>
+</dependency>
+		
 
 
 
@@ -155,106 +251,131 @@
 
 	</dependencies>
 
-	<dependencyManagement>
-		<dependencies>
 
-		</dependencies>
-	</dependencyManagement>
 
 	<build>
 
 
 		<plugins>
-
-			<!-- generate swagger json spec file in test phase -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-			</plugin>
-
-
-			<!-- First, use the swagger2markup plugin to generate asciidoc -->
-			<plugin>
-				<groupId>io.github.swagger2markup</groupId>
-				<artifactId>swagger2markup-maven-plugin</artifactId>
-				<configuration>
-					<swaggerInput>${swagger.input}</swaggerInput>
-					<outputDir>${generated.asciidoc.directory}</outputDir>
-					<config>
-						<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-						<swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
-
-						<swagger2markup.extensions.dynamicOverview.contentPath>${project.basedir}/src/docs/asciidoc/extensions/overview</swagger2markup.extensions.dynamicOverview.contentPath>
-						<swagger2markup.extensions.dynamicDefinitions.contentPath>${project.basedir}/src/docs/asciidoc/extensions/definitions</swagger2markup.extensions.dynamicDefinitions.contentPath>
-						<swagger2markup.extensions.dynamicPaths.contentPath>${project.basedir}/src/docs/asciidoc/extensions/paths</swagger2markup.extensions.dynamicPaths.contentPath>
-						<swagger2markup.extensions.dynamicSecurity.contentPath>${project.basedir}src/docs/asciidoc/extensions/security/</swagger2markup.extensions.dynamicSecurity.contentPath>
-
-						<swagger2markup.extensions.springRestDocs.snippetBaseUri>${swagger.snippetOutput.dir}</swagger2markup.extensions.springRestDocs.snippetBaseUri>
-						<swagger2markup.extensions.springRestDocs.defaultSnippets>true</swagger2markup.extensions.springRestDocs.defaultSnippets>
-					</config>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>deploy</phase>
-						<goals>
-							<goal>convertSwagger2markup</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-
-			<!-- generate html output -->
-
-
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<dependencies>
-					<dependency>
-						<groupId>org.springframework.restdocs</groupId>
-						<artifactId>spring-restdocs-asciidoctor</artifactId>
-						<version>2.0.2.RELEASE</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<sourceDirectory>${asciidoctor.input.directory}</sourceDirectory>
-					<sourceDocumentName>index.adoc</sourceDocumentName>
-					<attributes>
-						<doctype>book</doctype>
-						<toc>left</toc>
-						<toclevels>3</toclevels>
-						<numbered></numbered>
-						<hardbreaks></hardbreaks>
-						<sectlinks></sectlinks>
-						<sectanchors></sectanchors>
-						<generated>${generated.asciidoc.directory}</generated>
-					</attributes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>output-html</id>
-						<phase>test</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
-						<configuration>
-							<backend>html5</backend>
-							<doctype>book</doctype>
-							<outputDirectory>${asciidoctor.html.output.directory}</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<!-- skip swagger test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/Swagger*</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
+
+
+	<profiles>
+		<profile>
+			<id>document</id>
+			<build>
+				<plugins>
+					<!-- generate swagger json spec file in test phase -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>none</exclude>
+							</excludes>
+							<includes>
+								<include>**/Swagger*.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+
+
+					<!-- First, use the swagger2markup plugin to generate asciidoc -->
+					<plugin>
+						<groupId>io.github.swagger2markup</groupId>
+						<artifactId>swagger2markup-maven-plugin</artifactId>
+						<configuration>
+							<swaggerInput>${swagger.input}</swaggerInput>
+							<outputDir>${generated.asciidoc.directory}</outputDir>
+							<config>
+								<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+								<swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
+
+								<swagger2markup.extensions.dynamicOverview.contentPath>${project.basedir}/src/docs/asciidoc/extensions/overview</swagger2markup.extensions.dynamicOverview.contentPath>
+								<swagger2markup.extensions.dynamicDefinitions.contentPath>${project.basedir}/src/docs/asciidoc/extensions/definitions</swagger2markup.extensions.dynamicDefinitions.contentPath>
+								<swagger2markup.extensions.dynamicPaths.contentPath>${project.basedir}/src/docs/asciidoc/extensions/paths</swagger2markup.extensions.dynamicPaths.contentPath>
+								<swagger2markup.extensions.dynamicSecurity.contentPath>${project.basedir}src/docs/asciidoc/extensions/security/</swagger2markup.extensions.dynamicSecurity.contentPath>
+
+								<swagger2markup.extensions.springRestDocs.snippetBaseUri>${swagger.snippetOutput.dir}</swagger2markup.extensions.springRestDocs.snippetBaseUri>
+								<swagger2markup.extensions.springRestDocs.defaultSnippets>true</swagger2markup.extensions.springRestDocs.defaultSnippets>
+							</config>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>test</phase>
+								<configuration>
+								</configuration>
+								<goals>
+									<goal>convertSwagger2markup</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- generate html output -->
+
+
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>org.springframework.restdocs</groupId>
+								<artifactId>spring-restdocs-asciidoctor</artifactId>
+								<version>2.0.2.RELEASE</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<sourceDirectory>${asciidoctor.input.directory}</sourceDirectory>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
+							<attributes>
+								<doctype>book</doctype>
+								<toc>left</toc>
+								<toclevels>3</toclevels>
+								<numbered></numbered>
+								<hardbreaks></hardbreaks>
+								<sectlinks></sectlinks>
+								<sectanchors></sectanchors>
+								<generated>${generated.asciidoc.directory}</generated>
+							</attributes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>output-html</id>
+								<phase>test</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<backend>html5</backend>
+									<doctype>book</doctype>
+									<outputDirectory>${asciidoctor.html.output.directory}</outputDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<repositories>
 		<repository>

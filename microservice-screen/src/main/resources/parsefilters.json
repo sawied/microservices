@@ -1,0 +1,47 @@
+{
+  "com.digitalpebble.stormcrawler.parse.ParseFilters": [
+    {
+      "class": "com.digitalpebble.stormcrawler.parse.filter.XPathFilter",
+      "name": "XPathFilter",
+      "params": {
+        "canonical": "//*[@rel=\"canonical\"]/@href",
+        "parse.description": [
+            "//*[@name=\"description\"]/@content",
+            "//*[@name=\"Description\"]/@content"
+         ],
+        "parse.title": [
+            "//TITLE",
+            "//META[@name=\"title\"]/@content"
+         ],
+         "parse.keywords": "//META[@name=\"keywords\"]/@content",
+         "parse.image":"//IMG/@src"
+      }
+    },
+    {
+      "class": "com.digitalpebble.stormcrawler.parse.filter.ContentFilter",
+      "name": "ContentFilter",
+      "params": {
+        "pattern": "//P",
+        "pattern2": "//A",
+        "pattern3": "//H2",
+        "pattern4": "//LI"
+       }
+       
+    },
+    {
+      "class": "com.digitalpebble.stormcrawler.parse.filter.DomainParseFilter",
+      "name": "DomainParseFilter",
+      "params": {
+        "key": "domain",
+        "byHost": false
+       }
+    },
+    {
+      "class": "com.digitalpebble.stormcrawler.parse.filter.CommaSeparatedToMultivaluedMetadata",
+      "name": "CommaSeparatedToMultivaluedMetadata",
+      "params": {
+        "keys": ["parse.keywords"]
+       }
+    }
+  ]
+}

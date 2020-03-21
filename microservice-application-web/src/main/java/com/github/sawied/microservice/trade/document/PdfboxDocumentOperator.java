@@ -19,6 +19,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.fontbox.ttf.TrueTypeCollection;
+import org.apache.fontbox.ttf.TrueTypeFont;
 import org.apache.pdfbox.cos.COSArray;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSDictionary;
@@ -31,7 +33,10 @@ import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.common.PDStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDTrueTypeFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.PDType3Font;
 import org.apache.pdfbox.pdmodel.graphics.form.PDFormXObject;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationWidget;
@@ -60,7 +65,6 @@ import org.bouncycastle.util.Store;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 public class PdfboxDocumentOperator implements DocumentOperator, InitializingBean, SignatureInterface {
@@ -81,13 +85,15 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 
 	private int[] positions = { 45, 565, 253, 64 };
 	
+	
+	
 	/**
 	 * default sign postiotion is first page,notice ,the index begin with zero.
 	 */
 	private int signPage = 0;
 	
 	
-	Resource resource = new ClassPathResource("/template/ARIALUNI.TTF");
+	Resource fontResource = null;
 
 	@Override
 	public void fillInForm(Map<String, String> data, OutputStream os) throws Exception {
@@ -95,8 +101,18 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 		PDAcroForm form = pdf.getDocumentCatalog().getAcroForm();
 		form.setNeedAppearances(false);
 		
-		PDFont font = PDType0Font.load(pdf, resource.getInputStream());
 		
+		//TrueTypeCollection trueTypeCollection = new TrueTypeCollection(fontResource.getFile());
+		
+		//TrueTypeFont trueTypeFont=trueTypeCollection.getFontByName("SourceHanSansSC-Light");
+		
+		// PDFont font = PDType0Font.load(pdf, trueTypeFont,true);
+		
+		PDFont font = PDType0Font.load(pdf, fontResource.getInputStream());
+		
+		//PDFont font = PDType1Font.HELVETICA;
+		
+		log.debug("the form sheet is XFA :{}",form.hasXFA());
 		
 		//PDFont font = new PDType1AfmPfbFont(pdf,"cfm.afm");
 		if (form != null) {
@@ -112,10 +128,11 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 							field.getFullyQualifiedName());
 					PDTextField textField = (PDTextField) field;
 					textField.setDefaultAppearance("/" + fontName + " 10 Tf 0 g");
-					textField.setValue("0");
+					textField.setValue("郑");
+					
 				}
 				if(field instanceof PDCheckBox && !field.getFullyQualifiedName().startsWith("Check Box")) {
-					field.setValue("On");
+					field.setValue("Yes");
 				}
 			}
 			form.flatten();
@@ -459,5 +476,8 @@ public class PdfboxDocumentOperator implements DocumentOperator, InitializingBea
 		this.positions = positions;
 	}
 
-
+	public void setFontResource(Resource fontResource) {
+		this.fontResource = fontResource;
+	}
+	
 }

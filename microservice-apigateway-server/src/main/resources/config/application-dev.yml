@@ -1,8 +1,15 @@
 spring:
   application:
     name: micorservice-api-gateway
+  security:
+    user:
+      name: system
+      password: password
+      roles:
+      - system
 server:
   port: 9000
+
   
 zuul:
   trace-request-body: true
@@ -19,4 +26,11 @@ zuul:
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:secret@localhost:9081/eureka/
+      defaultZone: http://system:password@localhost:9081/eureka/
+  instance:
+    metadata-map:
+      system:
+        security:
+          user:
+            name: system
+            password: password

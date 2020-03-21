@@ -17,7 +17,8 @@ public class AccountUserAuthenticationConverter extends DefaultUserAuthenticatio
 		
 		Account account= null;
 		if(map.containsKey("user_name") && authentication instanceof UsernamePasswordAuthenticationToken) {
-			account= new Account(map.get("user_name").toString(),"N/A");
+			account= new Account(map.get("user_name").toString(),"N/A",authentication.getAuthorities());
+			//account.setAccess_token(authentication.);
 			Map<String, Object> additionInfo = new HashMap<String,Object>();
 			additionInfo.put("user_name", (String)map.get("user_name"));
 			if(map.containsKey("email")) {

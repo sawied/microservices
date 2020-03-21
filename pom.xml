@@ -12,7 +12,9 @@
 	<description>This project used to do all tasks of building and dependencies management.</description>
 
 
-	<!-- PAO -->
+	<!-- Sonar setting, currently, use oracle as data persistence PAO 
+	install sonar as a docker container,please following below guide: 	
+	-->
 	<profiles>
 		<profile>
 			<id>sonar</id>
@@ -32,9 +34,11 @@
 
 
 	<modules>
+		<module>microservice-commons</module>
 		<module>microservice-eureka-server</module>
 		<module>microservice-oauth2-server</module>
 		<module>microservice-apigateway-server</module>
+		<module>microservice-application-web</module>
 	</modules>
 
 	<properties>
@@ -45,10 +49,8 @@
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.language>java</sonar.language>
-		<spring.boot.version>2.0.5.RELEASE</spring.boot.version>
-
+		<spring.boot.version>2.1.2.RELEASE</spring.boot.version>
 		<httpclient.version>4.5.2</httpclient.version>
-
 		<swagger.markup.version>1.3.3</swagger.markup.version>
 		<swagger2markup.plugin.version>1.2.0</swagger2markup.plugin.version>
 		<springfox.version>2.9.2</springfox.version>
@@ -57,10 +59,9 @@
 		<bouncycastle.version>1.54</bouncycastle.version>
 		<dockerfile.version>1.4.8</dockerfile.version>
 		<ehcache.version>3.6.1</ehcache.version>
-
+		<hibernate.version>5.3.7.Final</hibernate.version>
+		<derby.version>10.14.1.0</derby.version>
 		<fileupload.version>1.3.3</fileupload.version>
-
-
 	</properties>
 
 
@@ -136,6 +137,8 @@
 				<version>${httpclient.version}</version>
 			</dependency>
 
+
+
 			<!-- mysql driver -->
 			<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 			<dependency>
@@ -144,11 +147,39 @@
 				<version>8.0.12</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.apache.derby</groupId>
+				<artifactId>derby</artifactId>
+				<version>${derby.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-envers -->
+
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-core</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-envers</artifactId>
+				<version>${hibernate.version}</version>
+			</dependency>
+
+
 			<!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
 			<dependency>
 				<groupId>commons-fileupload</groupId>
 				<artifactId>commons-fileupload</artifactId>
 				<version>${fileupload.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.2</version>
 			</dependency>
 
 
@@ -193,6 +224,29 @@
 				<version>${ehcache.version}</version>
 			</dependency>
 
+			<!-- dependency to itself -->
+			<dependency>
+				<groupId>com.github.sawied</groupId>
+				<artifactId>microservice-commons</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<!-- package related dependencies -->
+
+			<dependency>
+				<groupId>commons-daemon</groupId>
+				<artifactId>commons-daemon</artifactId>
+				<version>1.1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.sun.winsw</groupId>
+				<artifactId>winsw</artifactId>
+				<classifier>bin</classifier>
+				<type>exe</type>
+				<version>2.1.2</version>
+			</dependency>
 
 		</dependencies>
 
@@ -308,15 +362,15 @@
 								<goal>build-info</goal>
 							</goals>
 						</execution>
-					</executions>	
+					</executions>
 					<configuration>
-								<additionalProperties>
-									<project.name>${project.groupId}:${project.artifactId}</project.name>
-									<project.version>${project.version}</project.version>
-									<project.description>${project.description}</project.description>
-									<java.target>${compile.version}</java.target>
-								</additionalProperties>
-							</configuration>
+						<additionalProperties>
+							<project.name>${project.groupId}:${project.artifactId}</project.name>
+							<project.version>${project.version}</project.version>
+							<project.description>${project.description}</project.description>
+							<java.target>${compile.version}</java.target>
+						</additionalProperties>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -477,6 +531,15 @@
 				<enabled>true</enabled>
 			</releases>
 			<url>http://repository.openmindonline.it/</url>
+		</repository>
+
+		<repository>
+			<id>jenkins</id>
+			<name>Jenkins Repository</name>
+			<url>http://repo.jenkins-ci.org/releases</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 
 	</repositories>

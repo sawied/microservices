@@ -1,4 +1,3 @@
-import {intlReducer} from './intl-provider'
 import { combineReducers } from "redux-immutable"
 import { createAction, handleAction } from 'redux-actions';
 import Immutable from 'immutable';
@@ -12,7 +11,7 @@ const defaultState=Immutable.fromJS({
 })
 
 const errorReducer = handleAction(ge,(state,action)=>{
-    return state.set('error',action.payload);
+    return state.setIn(['error'],action.payload);
 },defaultState);
 
 const rootReducers = combineReducers({

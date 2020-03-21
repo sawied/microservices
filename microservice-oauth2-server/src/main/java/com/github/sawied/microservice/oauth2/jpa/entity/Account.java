@@ -1,9 +1,7 @@
 package com.github.sawied.microservice.oauth2.jpa.entity;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -15,12 +13,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.envers.AuditJoinTable;
+import org.hibernate.envers.AuditMappedBy;
+import org.hibernate.envers.Audited;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Entity
+@Audited
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="type",discriminatorType=DiscriminatorType.STRING,length=20)
 @DiscriminatorValue("A")
@@ -39,14 +44,26 @@ public class Account {
 	@Column(name="enabled",nullable=false)
 	private Boolean enabled;
 	
+	/**
 	@OneToMany(targetEntity=Authoritie.class,mappedBy="account")
 	//@JoinColumn(name="account_id")
+	@NotAudited
 	private Set<Authoritie> authorities = new HashSet<Authoritie>();
+	**/
 	
+	@ManyToMany()
+	@JoinTable(name = "account_group",  joinColumns = {
+			@JoinColumn(name = "account_id", referencedColumnName = "ID") }, inverseJoinColumns = {
+					@JoinColumn(name = "group_id", referencedColumnName = "ID")})
+	//@AuditMappedBy(mappedBy="accounts")
+	//@AuditJoinTable(name="account_group",inverseJoinColumns= {@JoinColumn(name = "group_id", referencedColumnName = "ID",insertable=false,updatable=false)})
+	//@NotFound(action=NotFoundAction.IGNORE)
+	private List<Group> groups = new ArrayList<Group>();
 	
+	/**
 	public List<GrantedAuthority> getGrantedAuthorities(){
 		return this.authorities.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority())).collect(Collectors.toList());
-	}
+	}**/
 
 	public Integer getId() {
 		return id;
@@ -80,14 +97,27 @@ public class Account {
 		this.enabled = enabled;
 	}
 
+	public List<GrantedAuthority> getGrantedAuthorities(){
+		return null;
+	}
+
+	public List<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+	
+	
+
+	/**
 	public Set<Authoritie> getAuthorities() {
 		return authorities;
 	}
 
 	public void setAuthorities(Set<Authoritie> authorities) {
 		this.authorities = authorities;
-	}
-	
-	
+	}**/
 
 }

@@ -1,0 +1,51 @@
+{
+    "template": "mongodb_*",
+    "settings": {
+        "number_of_shards": "5",
+        "index.refresh_interval": "15s",
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "ik_pinyin_analyzer": {
+                        "type": "custom",
+                        "tokenizer": "ik_max_word",
+                        "filter": "pinyin_filter"
+                    }
+                },
+                "filter": {
+                    "pinyin_filter": {
+                        "type": "pinyin",
+                        "keep_full_pinyin": false,
+                        "keep_first_letter": false,
+                        "keep_joined_full_pinyin": true,
+                        "keep_original": true
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "_default_": {
+            "dynamic_templates": [
+                {
+                    "strings": {
+                        "path_match": "result.text",
+                        "mapping": {
+                            "type": "text",
+                            "analyzer": "ik_max_word",
+                            "search_analyzer": "ik_max_word",
+                            "ignore_above": 256,
+                            "fields": {
+                                "my_pinyin": {
+                                    "type": "text",
+                                    "analyzer": "ik_pinyin_analyzer",
+                                    "search_analyzer": "ik_pinyin_analyzer"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

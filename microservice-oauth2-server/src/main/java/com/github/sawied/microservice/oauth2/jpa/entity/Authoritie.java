@@ -5,10 +5,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import org.hibernate.envers.Audited;
+
 
 @Entity(name="authorities")
+@Audited
 public class Authoritie {
 
 	
@@ -16,10 +18,11 @@ public class Authoritie {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+	/**
 	@ManyToOne(targetEntity=Account.class)
 	@JoinColumn(name="account_id")
 	private  Account account;
-	
+	**/
 	@Column(name="authority")
 	private String authority;
 
@@ -31,13 +34,14 @@ public class Authoritie {
 		this.id = id;
 	}
 
+	/**
 	public Account getAccount() {
 		return account;
 	}
 
 	public void setAccount(Account account) {
 		this.account = account;
-	}
+	}**/
 
 	public String getAuthority() {
 		return authority;

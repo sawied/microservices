@@ -1,20 +1,19 @@
 package com.github.sawied.microservice.gateway.security;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
-public class Account implements Serializable {
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+
+public class Account extends User implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 96982119034970680L;
-	
-
-	private String principle;
-	
-	private String username;
 	
 	private String access_token;
 	
@@ -22,17 +21,16 @@ public class Account implements Serializable {
 	
 	private int expiresIn;
 	
+	private String refresh_token;
+	
 	private Map<String,Object> additionalInfo;
 
 
-	public Account() {
-		super();
-	}
 
-	public Account(String username,String principle) {
-		super();
-		this.principle = principle;
-		this.username = username;
+	public Account(String username, String password,
+			Collection<? extends GrantedAuthority> authorities) {
+		super(username,password,authorities);
+		
 	}
 
 	public Map<String, Object> getAdditionalInfo() {
@@ -42,16 +40,6 @@ public class Account implements Serializable {
 	public void setAdditionalInfo(Map<String, Object> additionalInfo) {
 		this.additionalInfo = additionalInfo;
 	}
-
-	public String getPrinciple() {
-		return principle;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-		
-	
 
 	public String getAccess_token() {
 		return access_token;
@@ -77,35 +65,14 @@ public class Account implements Serializable {
 		this.expiresIn = expiresIn;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((principle == null) ? 0 : principle.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
+	public String getRefresh_token() {
+		return refresh_token;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Account other = (Account) obj;
-		if (principle == null) {
-			if (other.principle != null)
-				return false;
-		} else if (!principle.equals(other.principle))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
+	public void setRefresh_token(String refresh_token) {
+		this.refresh_token = refresh_token;
 	}
+	
+	
 	
 }

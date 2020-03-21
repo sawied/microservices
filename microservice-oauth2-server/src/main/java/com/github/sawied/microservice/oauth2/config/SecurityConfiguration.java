@@ -20,13 +20,13 @@ public class SecurityConfiguration {
 		@Override
 		public void configure(ResourceServerSecurityConfigurer resources) {
 
-			resources.resourceId("OAUTH2_RESOURCE_ID").stateless(true).tokenExtractor(new CookieTokenExtractor());
+			resources.resourceId("OAUTH2_RESOURCE_ID").stateless(true).tokenExtractor(new CookieTokenExtractor()).stateless(false);
 
 		}
 
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
-			http.authorizeRequests().antMatchers("/**").access("hasRole('USER')").and().csrf().disable()
+			http.httpBasic().and().authorizeRequests().antMatchers("/**").access("hasRole('USER') or hasRole('SYSTEM')").and().csrf().disable()
 					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 		}
 

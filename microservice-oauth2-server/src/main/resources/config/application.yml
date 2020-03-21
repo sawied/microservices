@@ -3,11 +3,19 @@ server:
 spring:
   application:
     name: microservice-oauth2-server
+  security:
+    user:
+      name: system
+      password: password
+      roles:
+      - system
   jpa:
     database: MYSQL
     show-sql: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL57Dialect
   datasource:
     name: trade
     data-username: trade
@@ -19,4 +27,11 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:secret@localhost:9081/eureka/
+      defaultZone: http://system:password@localhost:9081/eureka/
+  instance:
+    metadata-map:
+      system:
+        security:
+          user:
+            name: system
+            password: password

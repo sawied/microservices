@@ -1,0 +1,23 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        
+            "customVmName": {
+              "value": "smartQulityControl"
+            },
+            "adminUsername": {
+              "value": "sawied"
+            },
+            "authenticationType": {
+              "value": "sshPublicKey"
+            },
+            "adminPasswordOrKey": {
+              "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDXMhtNIWkGO5JC3JKjeGEJSoMr7kdT9U4+EeFiCrVElm+K1DJUPOcLbAaFqu02rFZ7Ad+9EaQ8P0cAPQRskt3dI8i2ehoMdN/+nOQv3NKu/m3oNuNM3c+u5TMqh8aavzu4mU9+XCHJ0M9KeWe3FOArWWM4Mj2zP55jE+BrSauuF5VxLF0q2qwrVBQl47zinxUdOWGAss7+Tu11DeBET73STRhsB/O9UIRkMIoX+Bdb98yWBOi0EpLlUczDS1wllupns3K6Ng/sNpvLIsPex/apqMROzKA940s2yBZQvW9+gYaMN4K176K+GCODjMCfjEj9SUWAq1JlVql6vWVZU4Gb"
+            },
+            "vmSize": {
+              "value": "Standard_A2_v2"
+            }  
+            
+        }
+}

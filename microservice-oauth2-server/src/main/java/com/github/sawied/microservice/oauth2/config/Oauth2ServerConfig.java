@@ -1,6 +1,7 @@
 package com.github.sawied.microservice.oauth2.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.authentication.configurers.ldap.LdapAuthenticationProviderConfigurer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.ldap.authentication.BindAuthenticator;
+import org.springframework.security.ldap.authentication.LdapAuthenticationProvider;
+import org.springframework.security.ldap.authentication.LdapAuthenticator;
+import org.springframework.security.ldap.userdetails.LdapAuthoritiesPopulator;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -88,19 +96,13 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 		jpaAuthenticationProvider.setUserDetailsService(userDetailService);
 		return jpaAuthenticationProvider;
 	}
-	/**
-	public JpaAuthenticationProvider jpaAuthenticationProvider(){
-		JpaAuthenticationProvider jpaAuthenticationProvider= new JpaAuthenticationProvider();
-		jpaAuthenticationProvider.setUserDetailsService(new UserDetailsService() {
-			
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				
-				return new User(username, "{noop}password", AuthorityUtils.createAuthorityList("ROLE_USER"));
-			}
-		});
-		return jpaAuthenticationProvider;
-	}**/
+	
+	
+	public LdapAuthenticationProvider ldapAuthenticationProvider() {
+		//LdapAuthenticator authenticator=new BindAuthenticator();
+		//new LdapAuthenticationProvider(authenticator);
+		return null;
+	}
 
 	/**
 	 * specific client detail service
@@ -165,9 +167,9 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
 	@Bean
 	public ClientDetailsService clientDetailsService() throws Exception {
 		InMemoryClientDetailsServiceBuilder clientDetailsBuilder = new InMemoryClientDetailsServiceBuilder();
-		clientDetailsBuilder.withClient("api-gateway").resourceIds("OAUTH2_RESOURCE_ID","API_GATEWAY_RESOURCE").autoApprove(true).authorities("ROLE_CLIENT")
+		clientDetailsBuilder.withClient("system").resourceIds("OAUTH2_RESOURCE_ID","API_GATEWAY_RESOURCE").autoApprove(true).authorities("ROLE_CLIENT")
 				.authorizedGrantTypes("authorization_code", "refresh_token", "password").scopes("read", "write", "user")
-				.secret("{noop}secret");
+				.secret("{noop}password");
 		return clientDetailsBuilder.build();
 	}
 

@@ -1,0 +1,16 @@
+{
+	"properties":{
+		"groupId":{
+			"type":"text",
+			"fielddata":true
+		},
+		"businessNameBig":{
+			"type":"text",
+			"fielddata":true
+		},
+		"businessName":{
+			"type":"text",
+			"fielddata":true
+		}
+	}
+}

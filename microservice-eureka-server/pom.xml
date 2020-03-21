@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
@@ -17,24 +18,39 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<properties>
+		<dist.dir>${project.build.directory}/dist</dist.dir>
+		<dist.project.id>${project.artifactId}</dist.project.id>
+		<dist.project.name>Sample Spring Boot App</dist.project.name>
+		<dist.project.description>
+			${project.description}
+		</dist.project.description>
+		<dist.start.class>com.github.sawied.microservice.register.MicroserviceEurekaServerApplication</dist.start.class>
+	</properties>
+
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		 <groupId>org.springframework.boot</groupId>
-		 <artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		
+
 		<dependency>
-		 <groupId>org.springframework.boot</groupId>
-		 <artifactId>spring-boot-starter-actuator</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-		
-			<!--logging -->
+
+		<dependency>
+			<groupId>com.github.sawied</groupId>
+			<artifactId>microservice-commons</artifactId>
+		</dependency>
+
+		<!--logging -->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
@@ -60,50 +76,133 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+		
+		<!-- package  -->
+		
+		<dependency>
+			<groupId>com.sun.winsw</groupId>
+			<artifactId>winsw</artifactId>
+			<classifier>bin</classifier>
+			<type>exe</type>
+			<scope>provided</scope>
+		</dependency>
+		
+		
+		
+		</dependencies>
 
 
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>	
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${dist.dir}</outputDirectory>
+							<resources>
+								<resource>
+								 	<directory>src/main/dist</directory>
+									<filtering>true</filtering>
+								</resource>
+								
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+					
+					<execution>
+					 <id>copy</id>
+					 <phase>package</phase>
+					 <goals>
+					  <goal>copy</goal>
+					 </goals>
+					 <configuration>
+					   <artifactItems>
+					    <artifactItem>
+					     	<groupId>com.sun.winsw</groupId>
+							<artifactId>winsw</artifactId>
+							<classifier>bin</classifier>
+							<type>exe</type>
+							<destFileName>service.exe</destFileName>
+							<outputDirectory>${dist.dir}</outputDirectory>
+					    </artifactItem>
+					   </artifactItems>
+					 </configuration>
+					</execution>
+				</executions>
 			</plugin>
 			
-			<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-dependency-plugin</artifactId>
-			<executions>
-				<execution>
-				    <id>unpack</id>
-				    <phase>package</phase>
-					<goals>
-						<goal>unpack</goal>
-					</goals>
-					<configuration>
-						<artifactItems>
-							<artifactItem>
-								<groupId>${project.groupId}</groupId>
-								<artifactId>${project.artifactId}</artifactId>
-								<version>${project.version}</version>
-							</artifactItem>
-						</artifactItems>
-					</configuration>
-				</execution>
-			</executions>
-		</plugin>
 			
 			<plugin>
-			<groupId>com.spotify</groupId>
-            <artifactId>dockerfile-maven-plugin</artifactId>
-            <configuration>
-             <repository>microservice/eureka-server</repository>
-             <tag>${project.version}</tag>
-             <skip>false</skip>
-             <buildArgs>
-               <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-             </buildArgs>
-            </configuration>
+			 <groupId>org.apache.maven.plugins</groupId>
+			 <artifactId>maven-assembly-plugin</artifactId>
+			 <configuration>
+			  <descriptors>
+			   <descriptor>src/main/assembly/unix.xml</descriptor>
+			   <descriptor>src/main/assembly/windows.xml</descriptor>
+			  </descriptors>
+			 </configuration>
+			 <executions>
+			  <execution>
+			   <id>assembly</id>
+			   <phase>package</phase>
+			   <goals>
+			    <goal>single</goal>
+			   </goals>
+			  </execution>
+			 </executions>
+			</plugin>
+			
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>dockerfile-maven-plugin</artifactId>
+				<configuration>
+					<repository>microservice/eureka-server</repository>
+					<tag>${project.version}</tag>
+					<skip>false</skip>
+					<buildArgs>
+						<JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+					</buildArgs>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

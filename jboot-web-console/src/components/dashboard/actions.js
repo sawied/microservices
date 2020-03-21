@@ -3,7 +3,7 @@ import {fromJS} from 'immutable';
 import { combineReducers } from "redux-immutable"
 import apis from '../../core/apis';
 import { isArray } from 'util';
-import  facePlateReducer from './faceplate/actions';
+import  {facePlateReducer,init} from './faceplate/actions';
 
 const defaultState=fromJS({
     applicationCount:0,
@@ -16,8 +16,9 @@ export const dsActionCreators = createActions({
       return result;
       },
     getInstanceDetails : async (instanceId)=>{
-        const result = await apis('instance-details',{instanceId})
-    }
+        const result = await apis('instance-details',{instanceId});
+        return result;
+      }
       }); 
 
  const bootReducer = handleActions({
@@ -41,6 +42,6 @@ defaultState
 );
 
 
-export const dsReducer = combineReducers({ds:bootReducer,faceplate:facePlateReducer});
+export const  dsReducer = combineReducers({ds:bootReducer,faceplate:facePlateReducer});
 
 

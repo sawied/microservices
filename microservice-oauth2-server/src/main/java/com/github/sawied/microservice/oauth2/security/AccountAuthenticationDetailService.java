@@ -18,8 +18,7 @@ public class AccountAuthenticationDetailService implements UserDetailsService {
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
-		return new AccountDetails(accountService.getAccountByName(username));
+		return new AccountDetails(accountService.getUserByName(username));
 	}
 
 
