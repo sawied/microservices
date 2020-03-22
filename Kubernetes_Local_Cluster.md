@@ -77,10 +77,11 @@ install pakages to allow apt to use a repository over HTTPS
     $ sudo apt-get install docker-ce
     ```
 
-* change the default Cgroup drivers
+* change the default Cgroup drivers and using aliyun to accelerate downloading image. you must change to your account. 
     ```sh
     cat > /etc/docker/daemon.json <<EOF
     {
+      "registry-mirrors": ["https://assigned_account.mirror.aliyuncs.com"],
       "exec-opts": ["native.cgroupdriver=systemd"],
       "log-driver": "json-file",
       "log-opts": {
@@ -94,6 +95,23 @@ install pakages to allow apt to use a repository over HTTPS
     systemctl enable docker 
     systemctl restart docker
     ```
+  
+##### persistence ip address 
+let's us to use static ip address instead of dynamic address, edit file in /etc/netplan 
+remember changing ip address in second machine.
+```
+network:
+    ethernets:
+        enp0s3:
+            addresses: [10.0.2.5/24]
+            gateway4: 10.0.2.1
+            nameservers:
+               addresses: [114.114.114.114]
+            dhcp4: true
+    version: 2
+```
+
+
 
 #####Install Kubernetes for Ubuntu
 
@@ -148,6 +166,7 @@ install pakages to allow apt to use a repository over HTTPS
     chmod +X pullK8sImages.sh
     bash pull pullK8sImages.sh
     ```
+  
 
  ###Clone a new virtual machine from master
  So for we have installed all the packages for kubernetes. then we could clone a new machine as Kubernetes node.we don't want to install all the packages in a new machine again. 
@@ -163,6 +182,16 @@ after the node machine clone completed,start it and change hostname
 
 ```
 hostnamectl --static set-hostname node1-k8s
+```
+
+Make sure the host name of second machine has been changed successfully, sometime it doesn't take effect due to
+***cloud-init***  package is installed, To check if the package is installed run the following:
+```
+ls -l /etc/cloud/cloud.cfg
+```
+if it returns file, then edit it , change the ***preserve_hostname** to true
+```
+preserve_hostname: true
 ```
 
 ###Using kubeadm to config master node
@@ -193,6 +222,10 @@ kubeadm join 10.0.2.4:6443 --token j3miii.p5q8tnew96pggm6q \
 ```
 
 * check kubectl works or not, the following command prints the running pods
+before do that ,export environment variable:
+```
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
 ```
 kubectl get po -n kube-system
 ```
@@ -204,14 +237,14 @@ just now, you get the nodes but the status must be ***NotReady***.
 
 * Configurate container network
 
-Many container network plugin available , here we use Weave Net. install network plugin in each machine
+Many container network plugin available , here we use Weave Net. install network plugin in master
 
 ```
 
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
 
-after then , re-check node status,the status should be ***Ready***
+after a while(depend your network), re-check node status,the status should be ***Ready***
 ```
 kubectl get node
 NAME         STATUS   ROLES    AGE   VERSION
