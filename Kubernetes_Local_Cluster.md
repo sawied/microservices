@@ -236,7 +236,7 @@ copy admin.conf into remote machine or local user home dir. and export environme
 ```
 mkdir -p ~/.kube/
 sudo cp /etc/kubernetes/admin.conf  ~/.kube/config
-echo "export KUBECONFIG=~/config/config" >> ~/.bash_profile
+echo "export KUBECONFIG=~/.kube/config" >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
