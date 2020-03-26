@@ -1,15 +1,11 @@
 package com.github.sawied.microservice.trade.config;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import microsoft.exchange.webservices.data.core.ExchangeService;
 import microsoft.exchange.webservices.data.core.PropertySet;
-import microsoft.exchange.webservices.data.core.enumeration.notification.EventType;
 import microsoft.exchange.webservices.data.core.enumeration.property.BasePropertySet;
 import microsoft.exchange.webservices.data.core.enumeration.property.BodyType;
 import microsoft.exchange.webservices.data.core.enumeration.property.MapiPropertyType;
@@ -20,12 +16,6 @@ import microsoft.exchange.webservices.data.core.enumeration.service.MessageDispo
 import microsoft.exchange.webservices.data.core.service.item.EmailMessage;
 import microsoft.exchange.webservices.data.core.service.item.Item;
 import microsoft.exchange.webservices.data.core.service.schema.ItemSchema;
-import microsoft.exchange.webservices.data.notification.NotificationEventArgs;
-import microsoft.exchange.webservices.data.notification.StreamingSubscription;
-import microsoft.exchange.webservices.data.notification.StreamingSubscriptionConnection;
-import microsoft.exchange.webservices.data.notification.StreamingSubscriptionConnection.INotificationEventDelegate;
-import microsoft.exchange.webservices.data.notification.StreamingSubscriptionConnection.ISubscriptionErrorDelegate;
-import microsoft.exchange.webservices.data.notification.SubscriptionErrorEventArgs;
 import microsoft.exchange.webservices.data.property.complex.AttachmentCollection;
 import microsoft.exchange.webservices.data.property.complex.ExtendedProperty;
 import microsoft.exchange.webservices.data.property.complex.ExtendedPropertyCollection;
@@ -38,7 +28,9 @@ import microsoft.exchange.webservices.data.search.filter.SearchFilter;
 
 public class ExchangeAPI {
 	
-	private static final UUID uuid = UUID.fromString("01638372-9F96-43b2-A403-B504ED14A910");
+	private static final UUID CASE_UUID = UUID.fromString("01638372-9F96-43b2-A403-B504ED14A910");
+	
+	private String MAIL_RETRIEVED = "CASE_MAIL_RETRIEVED";
 
 	@Autowired
 	private ExchangeService service;
@@ -47,52 +39,13 @@ public class ExchangeAPI {
 		EmailMessage msg;
 		try {
 			msg = new EmailMessage(service);
+			//msg.setFrom(new EmailAddress("noreply@chinasoft.com"));
 			msg.setSubject("Hello EWS_T world!");
-			msg.setExtendedProperty(new ExtendedPropertyDefinition(uuid,"case-management", MapiPropertyType.Integer), 1);
 			msg.setBody(MessageBody.getMessageBodyFromText("Sent using the EWS Java API."));
-			msg.getToRecipients().add("danan.2009@hotmail.com");
+			msg.getToRecipients().add("zhangxiaowei@chinasofti.com");
 			msg.send();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-	}
-
-	public void startup() {
-		List<FolderId> folder = new ArrayList<FolderId>();
-		folder.add(FolderId.getFolderIdFromWellKnownFolderName(WellKnownFolderName.Inbox));
-		StreamingSubscriptionConnection connection = null;
-		try {
-			StreamingSubscription subscribeToStreamingNotifications = service.subscribeToStreamingNotifications(folder,
-					EventType.NewMail);
-			connection = new StreamingSubscriptionConnection(service, 30);
-			connection.addSubscription(subscribeToStreamingNotifications);
-			// if the event arrive
-			connection.addOnNotificationEvent(new INotificationEventDelegate() {
-
-				@Override
-				public void notificationEventDelegate(Object sender, NotificationEventArgs args) {
-
-					System.out.println("the event arrived.");
-
-				}
-			});
-			// if the event arrive
-			connection.addOnDisconnect(new ISubscriptionErrorDelegate() {
-
-				@Override
-				public void subscriptionErrorDelegate(Object sender, SubscriptionErrorEventArgs args) {
-
-					System.out.println("the disconnection event.");
-				}
-			});
-
-			connection.open();
-
-		} catch (Exception e) {
-			e.fillInStackTrace();
-		} finally {
-			connection.close();
 		}
 
 	}
@@ -106,14 +59,19 @@ public class ExchangeAPI {
 		// fetch mail list
 		try {
 			
-			ItemView view = new ItemView(2);
+			ItemView view = new ItemView(10);
 			FindItemsResults<Item> findResults;
-			ExtendedPropertyDefinition cmProperty = new ExtendedPropertyDefinition(uuid,"case-management", MapiPropertyType.Integer);
+			ExtendedPropertyDefinition cmProperty = new ExtendedPropertyDefinition(CASE_UUID,MAIL_RETRIEVED, MapiPropertyType.Integer);
 			view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Descending);
 			view.setPropertySet(new PropertySet(BasePropertySet.IdOnly, cmProperty,ItemSchema.Subject, ItemSchema.DateTimeReceived));
-				findResults = service.findItems(WellKnownFolderName.Inbox,view);
+			
+			 SearchFilter  filter= new SearchFilter.Not(new SearchFilter.Exists(cmProperty));
+				findResults = service.findItems(WellKnownFolderName.Inbox,filter,view);
+				System.out.println("get_mail_list:" + findResults.getTotalCount());
+				if(findResults.getTotalCount()==0) {
+					return null;
+				}
 				service.loadPropertiesForItems(findResults, PropertySet.FirstClassProperties);
-				
 				for(Item item : findResults.getItems())
 				{
 					// Any process Email
@@ -125,7 +83,7 @@ public class ExchangeAPI {
 				}
 				
 		}catch(Exception ex) {
-			ex.fillInStackTrace();
+			ex.printStackTrace();
 		}
 		
 		return null;
@@ -140,9 +98,9 @@ public class ExchangeAPI {
 		// fetch mail list
 		try {
 			
-			ItemView view = new ItemView(2);
+			ItemView view = new ItemView(10);
 			FindItemsResults<Item> findResults;
-			ExtendedPropertyDefinition cmProperty = new ExtendedPropertyDefinition(uuid,"case-management", MapiPropertyType.Integer);
+			ExtendedPropertyDefinition cmProperty = new ExtendedPropertyDefinition(CASE_UUID,MAIL_RETRIEVED, MapiPropertyType.Integer);
 			view.getOrderBy().add(ItemSchema.DateTimeReceived, SortDirection.Descending);
 			
 			PropertySet propertySet = new PropertySet(BasePropertySet.FirstClassProperties,cmProperty);
@@ -151,8 +109,7 @@ public class ExchangeAPI {
 			//new SearchFilter.Not(new ExtendedPropertyDefinition(0x00000003, MapiPropertyType.Integer));
 			   SearchFilter searchFilter = new SearchFilter.IsEqualTo(cmProperty, 1);
 	
-				findResults = service.findItems(WellKnownFolderName.Inbox,searchFilter, 
-						view);
+				findResults = service.findItems(WellKnownFolderName.Inbox,searchFilter, view);
 				service.loadPropertiesForItems(findResults, propertySet);
 				
 				for(Item item : findResults.getItems())
