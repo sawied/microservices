@@ -34,22 +34,25 @@
 
 
 	<modules>
+		<!-- -->
 		<module>microservice-commons</module>
 		<module>microservice-eureka-server</module>
 		<module>microservice-oauth2-server</module>
 		<module>microservice-apigateway-server</module>
 		<module>microservice-application-web</module>
+
+		<module>microservice-social-cloud</module>
 	</modules>
 
 	<properties>
 		<project.phase>SNAPSHOT</project.phase>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<compile.version>1.8</compile.version>
 		<maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 		<dependency.locations.enabled>false</dependency.locations.enabled>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<sonar.language>java</sonar.language>
-		<spring.boot.version>2.1.2.RELEASE</spring.boot.version>
 		<httpclient.version>4.5.2</httpclient.version>
 		<swagger.markup.version>1.3.3</swagger.markup.version>
 		<swagger2markup.plugin.version>1.2.0</swagger2markup.plugin.version>
@@ -62,17 +65,30 @@
 		<hibernate.version>5.3.7.Final</hibernate.version>
 		<derby.version>10.14.1.0</derby.version>
 		<fileupload.version>1.3.3</fileupload.version>
+		<java.version>1.8</java.version>
+		<spring-cloud.version>Hoxton.SR3</spring-cloud.version>
+		<spring-boot.version>2.2.5.RELEASE</spring-boot.version>
 	</properties>
 
 
 	<dependencyManagement>
 
 		<dependencies>
-			<!-- spring boot major version -->
+
 			<dependency>
+				<!-- Import dependency management from Spring Boot -->
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-parent</artifactId>
-				<version>${spring.boot.version}</version>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- spring cloud major version -->
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -80,7 +96,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter</artifactId>
-				<version>${spring.boot.version}</version>
+				<version>${spring-boot.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>ch.qos.logback</groupId>
@@ -96,7 +112,7 @@
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-starter-web</artifactId>
-				<version>${spring.boot.version}</version>
+				<version>${spring-boot.version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>ch.qos.logback</groupId>
@@ -107,15 +123,6 @@
 						<artifactId>spring-boot-starter-logging</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-
-			<!-- spring cloud major version -->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Finchley.SR1</version>
-				<type>pom</type>
-				<scope>import</scope>
 			</dependency>
 
 			<!-- httpclient -->
@@ -180,6 +187,13 @@
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
 				<version>2.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
+				<scope>provided</scope>
 			</dependency>
 
 
@@ -308,7 +322,7 @@
 
 
 	<build>
-		<finalName>${artifactId}-${project.phase}</finalName>
+		<finalName>${project.artifactId}-${project.phase}</finalName>
 		<plugins>
 
 			<plugin>
@@ -321,6 +335,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
+				<version>2.6</version>
 				<configuration>
 					<warSourceDirectory>webapp</warSourceDirectory>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
@@ -354,6 +369,7 @@
 				<plugin>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${spring-boot.version}</version>
 					<inherited>true</inherited>
 					<executions>
 						<execution>
@@ -384,12 +400,6 @@
 							<version>2.10</version>
 						</dependency>
 					</dependencies>
-				</plugin>
-
-				<plugin>
-					<groupId>org.asciidoctor</groupId>
-					<artifactId>asciidoctor-maven-plugin</artifactId>
-					<version>1.5.3</version>
 				</plugin>
 
 				<!-- docker file maven plugin version -->

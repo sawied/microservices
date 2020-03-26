@@ -1,8 +1,9 @@
 package com.github.sawied.microservice.application.mail;
 
-import org.junit.Ignore;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -12,23 +13,25 @@ import com.github.sawied.microservice.trade.config.ExchangeAPI;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes= {EWSConfig.class})
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ExchangeTest {
 
 	@Autowired
 	private ExchangeAPI exchangeApi;
 	
 	@Test
-	@Ignore
-	public void receiveMailSuccess() throws InterruptedException {
+	public void aSendMailSuccess() throws InterruptedException {
 		exchangeApi.sendMessage();
-		exchangeApi.startup();
 	}
 	
 	@Test
-	public void pullMailSuccess() throws InterruptedException {
-		//exchangeApi.sendMessage();
+	public void bMarkMailListSuccess() throws InterruptedException {
 		//exchangeApi.markMailList();
-		exchangeApi.retrieveMarkedMailList();
+	}
+	@Test
+	public void cretrieveMarkedMailSuccess() throws InterruptedException {
+		//exchangeApi.retrieveMarkedMailList();
 	}
 	
+
 }

@@ -1,4 +1,4 @@
-### Kubernetes Installation
+#### Kubernetes Installation
 The following step aim to demonstrate how to setup a Kubernetes cluster in local with ***VirtualBox***. 
  ***Before your beginning :***
  
@@ -10,48 +10,57 @@ The following step aim to demonstrate how to setup a Kubernetes cluster in local
 * Swap disabled. You MUST disable swap in order for the kubelet to work properly
 
 
-###Creating Virtual machine
+### Creating Virtual machine
  Install an Ubuntu Operating System in VirtualBox , 
 named ***master-k8s***, with ***2GB RAM and 2 Cores*** (at least). It's better to use ***NAT*** network adapter(create a NAT network before you installing
 ) so that we are able to get a constant ip address.
 
-###Install Docker and Kubernetes
+### Install Docker and Kubernetes
 
 * Disable SELinux if system has installed
-  ```bash
+
+  ```shell script
    setenforce 0
    ```
 * Disable firewall
+
    ```
    sudo ufw disable
    ```
 * Disable Swap 
 comment the line contain swap in file '/etc/fstab' so that can take effect permanently.
-   ```sh
+
+   ```shell script
    swapoff -a && sed -i '/swap/s/^/#/' /etc/fstab
-    ```
+    ````
 * Enable net.bridge.bridge-nf-call-iptables core option
-   ```sh
-   tee /etc/sysctl.d/k8s.conf <<-'EOF'
-   net.bridge.bridge-nf-call-ip6tables = 1
-   net.bridge.bridge-nf-call-iptables = 1
-   EOF
+
+   ```shell script
+    tee /etc/sysctl.d/k8s.conf <<-'EOF'
+    net.bridge.bridge-nf-call-ip6tables = 1
+    net.bridge.bridge-nf-call-iptables = 1
+    EOF
    ```
+  
+   
 * Enable packet forwarding for IPv4 in /etc/sysctl.conf
    just uncomment the above line:
-   ```
+   
+   ```shell script
    net.ipv4.ip_forward = 1
    ```
    
-#####Install docker CE for Ubuntu
+##### Install docker CE for Ubuntu
 
 * remove old version docker
-    ```bash
+
+    ```shell script
     $ sudo apt-get remove docker docker-engine docker.io containerd runc
     ```
 * Install using the repository
 install pakages to allow apt to use a repository over HTTPS
-    ```bash
+
+    ```shell script
     $ sudo apt-get install \
         apt-transport-https \
         ca-certificates \
@@ -60,11 +69,13 @@ install pakages to allow apt to use a repository over HTTPS
         software-properties-common
     ```
 * Add Docker’s official GPG key:
-    ```bash
+
+    ```shell script
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     ```
 * Add stable repository 
-    ```bash
+
+    ```shell script
     sudo add-apt-repository \
        "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
        $(lsb_release -cs) \
@@ -73,14 +84,16 @@ install pakages to allow apt to use a repository over HTTPS
 
  * Install docker 
 
-    ```bash
+    ```shell script
     $ sudo apt-get install docker-ce
     ```
 
-* change the default Cgroup drivers
-    ```sh
+* change the default Cgroup drivers and using aliyun to accelerate downloading image. you must change to your account. 
+
+    ```shell script
     cat > /etc/docker/daemon.json <<EOF
     {
+      "registry-mirrors": ["https://assigned_account.mirror.aliyuncs.com"],
       "exec-opts": ["native.cgroupdriver=systemd"],
       "log-driver": "json-file",
       "log-opts": {
@@ -94,22 +107,42 @@ install pakages to allow apt to use a repository over HTTPS
     systemctl enable docker 
     systemctl restart docker
     ```
+  
+##### persistence ip address 
+let's us to use static ip address instead of dynamic address, edit file in /etc/netplan 
+remember changing ip address in second machine.
 
-#####Install Kubernetes for Ubuntu
+```shell script
+network:
+    ethernets:
+        enp0s3:
+            addresses: [10.0.2.5/24]
+            gateway4: 10.0.2.1
+            nameservers:
+               addresses: [114.114.114.114]
+            dhcp4: true
+    version: 2
+```
+
+
+
+##### Install Kubernetes for Ubuntu
 
 * add Kubernetes deb mirrors source into APT repository:
 
   **Note: we added aliyun mirrors source here in order to download dependency packages available.** 
-    ```sh
+  
+    ```shell script
     apt-get update && apt-get install -y apt-transport-https
     curl https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg | apt-key add - 
     cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
     deb https://mirrors.aliyun.com/kubernetes/apt/ kubernetes-xenial main
     EOF
     ```
+    
 * install kubernetes
 
-    ```
+    ```shell script
     apt-get update
     apt-get install -y kubelet kubeadm kubectl kubernetes-cni
     systemctl start kubelet
@@ -118,7 +151,8 @@ install pakages to allow apt to use a repository over HTTPS
     systemctl restart kubelet
     ```
 * list the config images
-    ```bash
+
+    ```shell script
     kubeadm config images list
     
     k8s.gcr.io/kube-apiserver:v1.17.4
@@ -131,7 +165,7 @@ install pakages to allow apt to use a repository over HTTPS
    ```
 * using bash script pullK8sImages.sh to download config images
 
-    ```bash
+    ```shell script
     cat <<'EOF'>./pullK8sImages.sh
     #!/bin/bash
      images=(kube-proxy:v1.17.4 kube-scheduler:v1.17.4 kube-controller-manager:v1.17.4 kube-apiserver:v1.17.4 etcd:3.4.3-0 pause:3.1 coredns:1.6.5)
@@ -142,17 +176,20 @@ install pakages to allow apt to use a repository over HTTPS
      done
     EOF
     ```
+    
     we just download the config images from aliyun and re-tagged with origin name. the downloaded images be removed after tagged.
     
-    ```bash
+    ```shell script
     chmod +X pullK8sImages.sh
     bash pull pullK8sImages.sh
     ```
+  
 
- ###Clone a new virtual machine from master
- So for we have installed all the packages for kubernetes. then we could clone a new machine as Kubernetes node.we don't want to install all the packages in a new machine again. 
+### Clone a new virtual machine from master
+ So far, we have installed all the packages for kubernetes. then we could clone a new machine as Kubernetes node.we don't want to install all the packages in a new machine again. 
  Stop the master virtual machine.
-```bash
+ 
+```shell script
 shutdown now
 ```
 
@@ -161,20 +198,34 @@ named the node machine as ***node1-k8s***.
 
 after the node machine clone completed,start it and change hostname 
 
-```
+```shell script
 hostnamectl --static set-hostname node1-k8s
+```
+
+Make sure the host name of second machine has been changed successfully, sometime it doesn't take effect due to
+***cloud-init***  package is installed, To check if the package is installed run the following:
+
+```shell script
+ls -l /etc/cloud/cloud.cfg
+```
+
+if it returns a file, then edit it , change the ***preserve_hostname** to true
+
+```shell script
+preserve_hostname: true
 ```
 
 ###Using kubeadm to config master node
 
 come back master node to config master node,this will create a Kubernetes cluster,and start some system containers.
 
-```
+```shell script
  kubeadm init
-``` 
+```
+
 after then,  If everything goes right,we will get the message as following :
 
-```
+```shell script
 You should now deploy a pod network to the cluster.
 Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
   https://kubernetes.io/docs/concepts/cluster-administration/addons/
@@ -187,61 +238,75 @@ kubeadm join 10.0.2.4:6443 --token j3miii.p5q8tnew96pggm6q \
 
 mark down  the output, because you will use that command to join a node. switch to node machine and execute the join node command
 
-```
+```shell script
 kubeadm join 10.0.2.4:6443 --token j3miii.p5q8tnew96pggm6q \
     --discovery-token-ca-cert-hash sha256:c077177242196ff18617b1b172e39da6a2ad615d0e401e2215d4c11fba3aaf2c
 ```
 
 * check kubectl works or not, the following command prints the running pods
+before do that ,export environment variable:
+
+```shell script
+export KUBECONFIG=/etc/kubernetes/admin.conf
 ```
+
+
+```shell script
 kubectl get po -n kube-system
 ```
+
 * list nodes
-```
+
+```shell script
 kubectl get node
 ```
+
 just now, you get the nodes but the status must be ***NotReady***.
 
 * Configurate container network
 
-Many container network plugin available , here we use Weave Net. install network plugin in each machine
+Many container network plugin available , here we use Weave Net. install network plugin in master
 
-```
-
+```shell script
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 ```
 
-after then , re-check node status,the status should be ***Ready***
-```
+after a while(depend your network), re-check node status,the status should be ***Ready***
+
+```shell script
 kubectl get node
 NAME         STATUS   ROLES    AGE   VERSION
 master-k8s   Ready    master   20h   v1.17.4
 node1-k8s    Ready    <none>   20h   v1.17.4
+``` 
 
-```  
+*How to re-get a ip address:*
 
-***How to re-get a ip address***
-```
+```shell script
 dhclient -r
 dhclient
 ```
+
 * useful commands
 
-```
+```shell script
 kubectl describe node node1-k8s
 systemctl  status kubelet
 ```
-###Using local cluster
+
+### Using local cluster
 copy admin.conf into remote machine or local user home dir. and export environment variable.
-```
+
+```shell script
 mkdir -p ~/.kube/
 sudo cp /etc/kubernetes/admin.conf  ~/.kube/config
-echo "export KUBECONFIG=~/config/config" >> ~/.bash_profile
+echo "export KUBECONFIG=~/.kube/config" >> ~/.bash_profile
 source ~/.bash_profile
 ```
 
 * trying do deployment via local cluster
-```bash
+
+```yaml
 cat nginx-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -265,14 +330,24 @@ spec:
         ports:
         - containerPort: 80
 ```
+
+
 * check nginx pod
-```
+
+```shell script
 kubectl get pods
 NAME                                READY   STATUS    RESTARTS   AGE
 nginx-deployment-574b87c764-2clkn   1/1     Running   0          2m49s
-# enter nginx container
+```
+
+* enter nginx container
+```shell script
 kubectl exec -it nginx-deployment-574b87c764-2clkn -- /bin/bash
-# try to access nginx server
+```
+
+* try to access nginx server
+
+```shell script
 curl -v http://localhost
 ```
 

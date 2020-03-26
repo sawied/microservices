@@ -1,22 +1,7 @@
 package com.github.sawied.microservice.trade.config;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+
 import java.util.Properties;
-
-import javax.mail.BodyPart;
-import javax.mail.Multipart;
-import javax.mail.Part;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.mail.util.MimeMessageParser;
-import org.apache.james.mime4j.parser.AbstractContentHandler;
-import org.apache.james.mime4j.parser.MimeStreamParser;
-import org.apache.james.mime4j.stream.MimeConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +10,6 @@ import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 import org.springframework.integration.dsl.Pollers;
 import org.springframework.integration.mail.ImapMailReceiver;
-import org.springframework.integration.mail.MailReceiver;
 import org.springframework.integration.mail.dsl.Mail;
 import org.springframework.integration.mail.support.DefaultMailHeaderMapper;
 import org.springframework.messaging.Message;
@@ -42,7 +26,7 @@ public class MailConfig {
 	// @Bean
 	public IntegrationFlow mailPop3Receiving(@Qualifier("emailMessageHandler") MessageHandler emailMessageHandler) {
 		return IntegrationFlows
-				.from(Mail.pop3InboundAdapter("pop3.mxhichina.com", 110, "ghost@sawied.top", "Welcome123")
+				.from(Mail.pop3InboundAdapter("pop3.mxhichina.com", 110, "ghost@sawied.top", "")
 						.headerMapper(new DefaultMailHeaderMapper()).embeddedPartsAsBytes(true)
 						.shouldDeleteMessages(true).get(), e -> e.poller(Pollers.fixedRate(5000)))
 				.handle(emailMessageHandler).get();

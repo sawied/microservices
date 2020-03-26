@@ -37,7 +37,7 @@
         <logger name="org.springframework.security" level="debug" />
          <logger name="com.github.sawied" level="debug" />
         
-        <Root level="info">
+        <Root level="DEBUG">
             <appender-ref ref="STDOUT" />
         </Root>
     </Loggers>
