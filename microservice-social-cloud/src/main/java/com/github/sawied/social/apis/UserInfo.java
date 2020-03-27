@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserInfo {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserInfo.class);
-	
-	@RequestMapping(produces= {MediaType.APPLICATION_JSON.APPLICATION_JSON_VALUE},method=RequestMethod.GET)
+
+	@RequestMapping(produces= {MediaType.APPLICATION_JSON_VALUE},method=RequestMethod.GET)
 	public String get(Principal principal) {
 		LOG.info("obtain user info success.");
 		System.out.println("hello world");
