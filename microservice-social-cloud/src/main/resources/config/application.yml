@@ -12,6 +12,7 @@ server:
     servlet:
       session: 
         persistent: true
+    port: 80
 security:
   oauth2:
     client:
