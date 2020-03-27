@@ -108,6 +108,18 @@ install pakages to allow apt to use a repository over HTTPS
     systemctl restart docker
     ```
   
+  add current user to docker group:
+  The docker daemon binds to a Unix socket instead of a TCP port. By default that Unix socket is owned by the user root and other users can access it with sudo. For this reason, docker daemon always runs as the root user. 
+  To avoid having to use sudo when you use the docker command, create a Unix group called docker and add users to it. When the docker daemon starts, it makes the ownership of the Unix socket read/writable by the docker group.
+  
+  ```shell script
+  sudo groupadd docker
+  sudo gpasswd -a ${USER} docker
+  sudo systemctl restart docker
+   ```
+  re-login with current user and try again.
+  
+  
 ##### persistence ip address 
 let's us to use static ip address instead of dynamic address, edit file in /etc/netplan 
 remember changing ip address in second machine.
