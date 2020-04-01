@@ -363,4 +363,16 @@ kubectl exec -it nginx-deployment-574b87c764-2clkn -- /bin/bash
 curl -v http://localhost
 ```
 
+* useful command
+
+```shell script
+kubectl explain pods
+kubectl get pods
+kubectl get nodes
+kubectl get secrets
+kubectl create secret
+kubectl get ns
+kubectl create namespace custom-namespace
+```
+
 

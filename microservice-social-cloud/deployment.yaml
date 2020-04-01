@@ -1,21 +1,15 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Pod
 metadata:
   name: microservice-social-cloud
-  labels:
-    app: microservice-social-cloud
+  namespace: sawied
+  annotations: github_login
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: microservice-social-cloud
-  template:
-    metadata:
-      labels:
-        app: microservice-social-cloud
-    spec:
-      containers:
-        - name: microservice-social-cloud
-          image: microservice-social-cloud:0.0.1-SNAPSHOT
-          ports:
-            - containerPort: 80
+  containers:
+    - image: microservice-social-cloud:0.0.1-SNAPSHOT
+      name: microservice-social-cloud
+      ports:
+        - containerPort: 80
+      envFrom:
+        secretRef:
+          name: git-secret
