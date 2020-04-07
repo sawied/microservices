@@ -3,13 +3,13 @@ kind: Pod
 metadata:
   name: microservice-social-cloud
   namespace: sawied
-  annotations: github_login
 spec:
   containers:
-    - image: microservice-social-cloud:0.0.1-SNAPSHOT
+    - image: microservice/microservice-oauth2-social:0.0.1-SNAPSHOT
       name: microservice-social-cloud
+      imagePullPolicy: ifNotPresent
       ports:
         - containerPort: 80
       envFrom:
-        secretRef:
-          name: git-secret
+        - secretRef:
+           name: git-secret
