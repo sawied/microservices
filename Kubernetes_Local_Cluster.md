@@ -363,6 +363,22 @@ kubectl exec -it nginx-deployment-574b87c764-2clkn -- /bin/bash
 curl -v http://localhost
 ```
 
+* Install maven for building
+
+```shell script
+curl -o maven.3.6.3.tar.gz https://mirror.bit.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+tar -xvf maven.3.6.3.tar.gz
+sudo mv apache-maven-3.6.3 /usr/share/
+sudo chown -R root:root /usr/share/maven-3.6.3
+sudo ln -s /usr/share/maven-3.6.3 /usr/share/maven
+echo "export PATH=$PATH:/usr/share/maven/bin" >> ~/.bash_profile
+source ~/.bash_profile
+sudo apt-get install -y git openjdk-8-jdk
+git checkout --track 'origin/dev'
+sudo groupadd docker
+sudo gpasswd -a sawied docker
+```
+
 * useful command
 
 ```shell script
@@ -374,5 +390,6 @@ kubectl create secret
 kubectl get ns
 kubectl create namespace custom-namespace
 ```
+
 
 
