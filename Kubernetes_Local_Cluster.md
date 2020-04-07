@@ -377,6 +377,8 @@ sudo apt-get install -y git openjdk-8-jdk
 git checkout --track 'origin/dev'
 sudo groupadd docker
 sudo gpasswd -a sawied docker
+git config --global user.email "danan.2009@gmail.com"
+git config --global user.name "sawied"
 ```
 
 * useful command
