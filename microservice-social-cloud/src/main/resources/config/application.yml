@@ -8,23 +8,19 @@ spring:
     
   mvc:
     static-path-pattern: /**
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${clientId}
+            client-secret: ${clientSecret}
 server:
     servlet:
       session: 
         persistent: true
-security:
-  oauth2:
-    client:
-      access-token-uri: https://github.com/login/oauth/access_token
-      user-authorization-uri: https://github.com/login/oauth/authorize
-      client-id:
-      client-secret:
-      authentication-scheme: query
-      token-name: access_token
-      client-authentication-scheme: query
-    resource:
-      user-info-uri: https://api.github.com/user
+    port: 80
 logging:
   level:
     root: INFO
-    org.springframework.security: info
+    org.springframework.security: debug

@@ -1,4 +1,7 @@
 #### Kubernetes Installation
+
+This document from [document address](https://github.com/sawied/microservices/blob/master/Kubernetes_Local_Cluster.md)
+
 The following step aim to demonstrate how to setup a Kubernetes cluster in local with ***VirtualBox***. 
  ***Before your beginning :***
  
@@ -107,6 +110,18 @@ install pakages to allow apt to use a repository over HTTPS
     systemctl enable docker 
     systemctl restart docker
     ```
+  
+  add current user to docker group:
+  The docker daemon binds to a Unix socket instead of a TCP port. By default that Unix socket is owned by the user root and other users can access it with sudo. For this reason, docker daemon always runs as the root user. 
+  To avoid having to use sudo when you use the docker command, create a Unix group called docker and add users to it. When the docker daemon starts, it makes the ownership of the Unix socket read/writable by the docker group.
+  
+  ```shell script
+  sudo groupadd docker
+  sudo gpasswd -a ${USER} docker
+  sudo systemctl restart docker
+   ```
+  re-login with current user and try again.
+  
   
 ##### persistence ip address 
 let's us to use static ip address instead of dynamic address, edit file in /etc/netplan 
@@ -350,5 +365,36 @@ kubectl exec -it nginx-deployment-574b87c764-2clkn -- /bin/bash
 ```shell script
 curl -v http://localhost
 ```
+
+* Install maven for building
+
+```shell script
+curl -o maven.3.6.3.tar.gz https://mirror.bit.edu.cn/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz
+tar -xvf maven.3.6.3.tar.gz
+sudo mv apache-maven-3.6.3 /usr/share/
+sudo chown -R root:root /usr/share/maven-3.6.3
+sudo ln -s /usr/share/maven-3.6.3 /usr/share/maven
+echo "export PATH=$PATH:/usr/share/maven/bin" >> ~/.bash_profile
+source ~/.bash_profile
+sudo apt-get install -y git openjdk-8-jdk
+git checkout --track 'origin/dev'
+sudo groupadd docker
+sudo gpasswd -a sawied docker
+git config --global user.email "danan.2009@gmail.com"
+git config --global user.name "sawied"
+```
+
+* useful command
+
+```shell script
+kubectl explain pods
+kubectl get pods
+kubectl get nodes
+kubectl get secrets
+kubectl create secret
+kubectl get ns
+kubectl create namespace custom-namespace
+```
+
 
 
