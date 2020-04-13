@@ -43,39 +43,19 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-batch</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-mail -->
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-mail</artifactId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-config-server</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
 
 
         <!-- itext -->
@@ -161,11 +141,17 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
 
+        <!-- spring test -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
         </dependency>
 
         <!-- restdocs dependencies -->
@@ -197,33 +183,6 @@
             <version>${springfox.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.integration/spring-integration-ws -->
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-ws</artifactId>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-email</artifactId>
-            <version>1.5</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>com.microsoft.ews-java-api</groupId>
-            <artifactId>ews-java-api</artifactId>
-            <version>2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>3.7.0</version>
-        </dependency>
-
 
     </dependencies>
 

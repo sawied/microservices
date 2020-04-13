@@ -1,4 +1,4 @@
-package com.github.sawied.microservice.application.document;
+package com.github.sawied.microservice.trade.document;
 
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;

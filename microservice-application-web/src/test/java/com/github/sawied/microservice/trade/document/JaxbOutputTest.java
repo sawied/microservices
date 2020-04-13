@@ -1,4 +1,4 @@
-package com.github.sawied.microservice.application.document;
+package com.github.sawied.microservice.trade.document;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

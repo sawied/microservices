@@ -1,4 +1,4 @@
-package com.github.sawied.microservice.trade.api.bean;
+package com.github.sawied.microservice.trade.component;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
