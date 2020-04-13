@@ -20,7 +20,7 @@ public class EWSConfig {
 	@Bean(destroyMethod = "close")
 	public ExchangeService exchangeService() throws Exception {
 		ExchangeService service = new ExchangeService(ExchangeVersion.Exchange2010_SP2);
-		ExchangeCredentials credentials = new WebCredentials("danan.2009@hotmail.com", "0311711w");
+		ExchangeCredentials credentials = new WebCredentials("", "");
 		service.setCredentials(credentials);
 		service.setUrl(new URI("https://outlook.office365.com/EWS/Exchange.asmx"));
 		/**
