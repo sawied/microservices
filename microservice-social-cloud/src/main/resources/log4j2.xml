@@ -34,7 +34,7 @@
     </Appenders>
     <Loggers>
 
-        <logger name="org.springframework" level="debug" />
+        <logger name="org.springframework.security" level="debug" />
         
         <Root level="error">
             <appender-ref ref="STDOUT" />

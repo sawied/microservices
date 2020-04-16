@@ -24,3 +24,4 @@ logging:
   level:
     root: INFO
     org.springframework.security: debug
+info.feature: github open connect api

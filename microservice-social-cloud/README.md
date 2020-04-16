@@ -11,3 +11,12 @@ kubectl get ns
 kubectl create secret generic git-secret --from-literal=clientId=[clientId] --from-literal=clientSecret=[clientSecret] --namespace sawied
 kubectl get secrets
 ```
+
+access [Project Info](http://localhost/actuator/info),and run in local
+```shell script
+mvn spring-boot:run
+mvn release:prepare
+mvn release:perform
+mvn release:rollback
+```
+

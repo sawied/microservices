@@ -1,28 +1,13 @@
-apiVersion: apps/v1
-kind: ReplicaSet
-metadata:
-  name: social-cloud-replicaset
-  namespace: sawied
-  labels:
-    app: social-cloud
-    tier: backend
-spec:
-  # modify replicas according to your case
-  replicas: 3
-  selector:
-    matchLabels:
-      app: social-cloud
-  template:
-    metadata:
-      labels:
-        app: social-cloud
-    spec:
-      containers:
-        - image: microservice/microservice-oauth2-social:0.0.1-SNAPSHOT
-          name: microservice-social-cloud
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 80
-          envFrom:
-            - secretRef:
-                name: git-secret
+apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: pi
+  spec:
+    template:
+      spec:
+        containers:
+          - name: pi
+            image: perl
+            command: ["perl",  "-Mbignum=bpi", "-wle", "print bpi(2000)"]
+        restartPolicy: Never
+    backoffLimit: 4
