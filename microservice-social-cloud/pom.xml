@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>com.github.sawied</groupId>
 		<artifactId>microservice</artifactId>
-		<version>1.0.0</version>
+		<version>1.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<artifactId>microservice-oauth2-social</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>microservice-oauth2-social</name>
@@ -179,6 +179,7 @@
 
 
   <scm>
-    <tag>microservice-1.0.0</tag>
+    <tag>HEAD</tag>
+    <connection>scm:git:https://github.com/sawied/microservices.git</connection>
   </scm>
 </project>
