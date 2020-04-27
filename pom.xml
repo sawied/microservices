@@ -478,6 +478,16 @@
 	  <tag>HEAD</tag>
   </scm>
 
+	<distributionManagement>
+		<repository>
+			<id>rdc-releases</id>
+			<url>https://repo.rdc.aliyun.com/repository/128933-release-qynpGD/</url>
+		</repository>
+		<snapshotRepository>
+			<id>rdc-snapshots</id>
+			<url>https://repo.rdc.aliyun.com/repository/128933-snapshot-yCzdLz/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 
 	<pluginRepositories>
