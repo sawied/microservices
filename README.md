@@ -2,6 +2,11 @@
 
 This document intend to introduce core concepts and demonstrating how to build a typical service components,include oauth2, Application, API gateway, configuration center.
 
+```
+mvn release:prepare -Darguments="-DskipTests"
+mvn release:perform -Darguments="-DskipTests"
+```
+
 > As a sample, we focus on CentOs system  as test environment, and virtualbox as virtual machine.
 
 #### Change Ubuntu server ip address ####
