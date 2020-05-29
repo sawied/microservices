@@ -156,15 +156,25 @@ network:
     ```
     
 * install kubernetes
+   search kubernetes available version to install 
+   
+   
+   ```shell script
+     apt-cache madison kubeadm
+  ```
+   
+   install packages:  
 
-    ```shell script
+   ```shell script
     apt-get update
     apt-get install -y kubelet kubeadm kubectl kubernetes-cni
     systemctl start kubelet
     systemctl status kubelet
     systemctl enable kubelet
     systemctl restart kubelet
-    ```
+  ```
+
+
 * list the config images
 
     ```shell script
@@ -178,6 +188,8 @@ network:
     k8s.gcr.io/etcd:3.4.3-0
     k8s.gcr.io/coredns:1.6.5
    ```
+
+
 * using bash script pullK8sImages.sh to download config images
 
     ```shell script
@@ -199,6 +211,7 @@ network:
     bash pull pullK8sImages.sh
     ```
   
+  *you also can use [daocloud](https://hub.daocloud.io/) to accelerate the image downloading. *
 
 ### Clone a new virtual machine from master
  So far, we have installed all the packages for kubernetes. then we could clone a new machine as Kubernetes node.we don't want to install all the packages in a new machine again. 
