@@ -135,7 +135,7 @@ network:
             gateway4: 10.0.2.1
             nameservers:
                addresses: [114.114.114.114]
-            dhcp4: true
+            dhcp4: no
     version: 2
 ```
 
@@ -287,6 +287,38 @@ kubectl get po -n kube-system
 
 ```shell script
 kubectl get node
+```
+
+if you enable the firewall, please add following rules into iptables for master node:
+```shell script
+firewall-cmd --permanent --add-port=6443/tcp
+firewall-cmd --permanent --add-port=2379-2380/tcp
+firewall-cmd --permanent --add-port=10250/tcp
+firewall-cmd --permanent --add-port=10251/tcp
+firewall-cmd --permanent --add-port=10252/tcp
+firewall-cmd --permanent --add-port=10255/tcp
+firewall-cmd --permanent --add-port=8472/udp
+firewall-cmd --permanent --add-port=443/udp
+firewall-cmd --permanent --add-port=53/udp
+firewall-cmd --permanent --add-port=53/tcp
+firewall-cmd --permanent --add-port=9153/tcp
+firewall-cmd --add-masquerade --permanent
+# only if you want NodePorts exposed on control plane IP as well
+firewall-cmd --permanent --add-port=30000-32767/tcp
+systemctl restart firewalld
+```
+and those work node :
+```shell script
+firewall-cmd --permanent --add-port=10250/tcp
+firewall-cmd --permanent --add-port=10255/tcp
+firewall-cmd --permanent --add-port=8472/udp
+firewall-cmd --permanent --add-port=443/udp
+firewall-cmd --permanent --add-port=30000-32767/tcp
+firewall-cmd --permanent --add-port=53/udp
+firewall-cmd --permanent --add-port=53/tcp
+firewall-cmd --permanent --add-port=9153/tcp
+firewall-cmd --add-masquerade --permanent
+systemctl restart firewalld　　
 ```
 
 just now, you get the nodes but the status must be ***NotReady***.
