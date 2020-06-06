@@ -421,6 +421,7 @@ sudo chown -R root:root /usr/share/maven-3.6.3
 sudo ln -s /usr/share/maven-3.6.3 /usr/share/maven
 echo "export PATH=$PATH:/usr/share/maven/bin" >> ~/.bash_profile
 source ~/.bash_profile
+sudo add-apt-repository universe
 sudo apt-get install -y git openjdk-8-jdk
 git checkout --track 'origin/dev'
 sudo groupadd docker
