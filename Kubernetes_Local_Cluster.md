@@ -213,6 +213,24 @@ network:
   
   *you also can use [daocloud](https://hub.daocloud.io/) to accelerate the image downloading. *
 
+  ```shell script
+  curl -sSL https://get.daocloud.io/daotools/set_mirror.sh | sh -s http://f1361db2.m.daocloud.io
+  ```
+
+  then run the script below:
+
+  ```shell script
+  cat <<'EOF'>./pullK8sImages.sh
+    #!/bin/bash
+     images=(kube-proxy:v1.18.3 kube-scheduler:v1.18.3 kube-controller-manager:v1.18.3 kube-apiserver:v1.18.3 etcd:3.4.3-0 pause:3.2 coredns:1.6.7)
+     for imageName in ${images[@]} ; do
+       docker pull daocloud.io/daocloud/$imageName
+       docker tag daocloud.io/daocloud/$imageName k8s.gcr.io/$imageName
+       docker rmi daocloud.io/daocloud/$imageName
+     done
+  EOF
+  ```
+
 ### Clone a new virtual machine from master
  So far, we have installed all the packages for kubernetes. then we could clone a new machine as Kubernetes node.we don't want to install all the packages in a new machine again. 
  Stop the master virtual machine.
